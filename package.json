@@ -8,6 +8,10 @@
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "api": "yarn workspace @shio/api",
+    "client": "yarn workspace @shio/client"
+  },
   "dependencies": {
     "dotenv": "16.0.3",
     "ts-pattern": "4.0.6",
