@@ -1,4 +1,7 @@
 {
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": true,
   "editor.formatOnSave": true,
