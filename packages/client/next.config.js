@@ -1,9 +1,11 @@
 const removeImports = require('next-remove-imports');
-const transpileModules = require('next-transpile-modules')(['@shio/client']);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  experimental: {
+    appDir: true,
+  },
 };
 
-module.exports = removeImports()(transpileModules(nextConfig));
+module.exports = removeImports()(nextConfig);
