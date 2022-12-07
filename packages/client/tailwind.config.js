@@ -1,7 +1,9 @@
+const plugin = require('tailwindcss/plugin');
+
 /** @type {import('tailwindcss').Config} */
 const config = {
   mode: 'jit',
-  content: ['./src/**/*.{ts, tsx}'],
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     fontFamily: {
       body: ['Inter', 'Rakkas', 'Noto Sans JP'],
