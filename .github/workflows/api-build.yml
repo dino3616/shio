@@ -2,15 +2,14 @@ name: api build
 on: [push, pull_request]
 
 env:
-  workdir: client
   node-version: lts/*
 
 jobs:
   filter:
     runs-on: ubuntu-latest
     permissions:
-      contents: 'read'
-      pull-requests: 'read'
+      contents: read
+      pull-requests: read
     outputs:
       api: ${{ steps.changes.outputs.api }}
     steps:
