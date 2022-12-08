@@ -1,9 +1,9 @@
-name: test
+name: api test
 
 on: [push, pull_request]
 
 env:
-  node-version: lts/*
+  node-version: 18
 
 jobs:
   filter:
@@ -13,7 +13,6 @@ jobs:
       pull-requests: read
     outputs:
       api: ${{ steps.changes.outputs.api }}
-      client: ${{ steps.changes.outputs.client }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -50,31 +49,9 @@ jobs:
       - name: e2e test
         run: yarn api test:e2e
 
-  test-client:
-    runs-on: ubuntu-latest
-    needs: filter
-    if: ${{ steps.changes.outputs.client == 'true' }}
-    steps:
-      - name: checkout
-        uses: actions/checkout@v3
-
-      - name: setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ env.node-version }}
-
-      - name: install
-        run: yarn install --immutable
-
-      - name: unit test
-        run: yarn client test
-
-      - name: e2e test
-        run: yarn client test:e2e
-
   test-check:
     if: ${{ ! failure() }}
-    needs: [test-api, test-client]
+    needs: test-api
     runs-on: ubuntu-latest
     steps:
       - run: echo "test is successfully executed."
