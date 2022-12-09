@@ -118,7 +118,7 @@ const config = {
     },
   },
   plugins: [
-    require('tailwind-scrollbar'),
+    require('tailwind-scrollbar')({ nocompatible: true }),
     plugin(({ addUtilities }) => {
       const gradientColorNames = ['cosmic'];
       const resolveColorObjectByName = (name) => name.split('-').reduce((acc, current) => acc[current] || undefined, config.theme.extend.colors);
