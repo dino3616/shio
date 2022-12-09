@@ -1,3 +1,4 @@
+const { fontFamily } = require('tailwindcss/defaultTheme');
 const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
@@ -6,8 +7,9 @@ const config = {
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
     fontFamily: {
-      body: ['Inter', 'Rakkas', 'Noto Sans JP'],
-      code: ['Consolas'],
+      sans: ['var(--font-inter)', 'var(--font-noto-sans-jp)', ...fontFamily.sans],
+      rakkas: ['var(--font-rakkas)'],
+      code: ['var(--font-inconsolata)'],
     },
     extend: {
       colors: {
