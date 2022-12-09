@@ -1,4 +1,0 @@
-{
-  "*.ts": "yarn lint:fix",
-  "*.{js,ts,json}": "yarn fmt:fix"
-}

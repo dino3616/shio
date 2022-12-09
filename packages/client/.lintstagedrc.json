@@ -1,5 +1,0 @@
-{
-  "*.{js,ts,tsx}": "yarn lint:fix",
-  "*.{js,ts,json}": "yarn fmt:fix",
-  "*.{css,scss}": "yarn style:fix"
-}
