@@ -18,7 +18,7 @@ export const Header: FC<HeaderProps> = ({ className, ...props }) => (
         </Link>
       </li>
       <li>
-        <Link href="/" className="text-lg font-semibold uppercase">
+        <Link href="/" className="text-lg font-semibold uppercase tracking-wide">
           Shio.dev
         </Link>
       </li>
