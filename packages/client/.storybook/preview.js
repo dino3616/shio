@@ -1,10 +1,10 @@
-import * as NextImage from 'next/image';
-import { RouterContext } from 'next/dist/shared/lib/router-context';
-import 'tailwindcss/tailwind.css';
-import '../src/presentation/style/stylesheet/storybook.scss';
 import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { addDecorator } from '@storybook/react';
 import { urqlDecorator } from '@urql/storybook-addon';
+import * as NextImage from 'next/image';
+import { RouterContext } from 'next/dist/shared/lib/router-context';
+import '../src/style/global.css';
+import '../src/style/storybook.css';
 
 const OriginalNextImage = NextImage.default;
 
