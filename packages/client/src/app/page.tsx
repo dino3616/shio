@@ -1,6 +1,6 @@
-import type { NextPage } from 'next';
+import type { FC } from 'react';
 
-const RootPage: NextPage = () => (
+const RootPage: FC = () => (
   <div>
     <h1 className="text-primary">Hello, shio World!</h1>
   </div>
