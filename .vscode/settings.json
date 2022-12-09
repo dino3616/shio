@@ -1,10 +1,15 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": true,
+    "source.fixAll.prettier": true,
+    "source.fixAll.stylelint": true
   },
   "editor.cursorBlinking": "phase",
   "editor.cursorSmoothCaretAnimation": true,
   "editor.formatOnSave": true,
+  "editor.quickSuggestions": {
+    "strings": true
+  },
   "files.autoSave": "off",
   "files.encoding": "utf8",
   "commit-message-editor.view.defaultView": "form",
