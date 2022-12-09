@@ -48,8 +48,15 @@
     {
       "files": ["./src/app/**"],
       "rules": {
-        "import/no-default-export": "off",
-        "import/prefer-default-export": "error"
+        "import/prefer-default-export": "error",
+        "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["./src/**/*.story.*"],
+      "rules": {
+        "import/prefer-default-export": "off",
+        "import/no-default-export": "off"
       }
     }
   ]
