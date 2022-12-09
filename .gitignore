@@ -39,7 +39,7 @@ yarn-error.log*
 *.code-workspace
 
 # storybook static 
-.storybook/static/
+**/.storybook/static/
 
 # GraphQL config for development
 graphql.config.json
