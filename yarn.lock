@@ -4523,6 +4523,11 @@
   resolved "https://registry.yarnpkg.com/@types/uuid/-/uuid-9.0.0.tgz#53ef263e5239728b56096b0a869595135b7952d2"
   integrity sha512-kr90f+ERiQtKWMz5rP32ltJ/BtULDI5RVO0uavn1HQUOwjx0R1h0rnDYNL0CepF1zL5bSY6FISAfd9tOdDhU5Q==
 
+"@types/validator@^13.7.10":
+  version "13.7.10"
+  resolved "https://registry.yarnpkg.com/@types/validator/-/validator-13.7.10.tgz#f9763dc0933f8324920afa9c0790308eedf55ca7"
+  integrity sha512-t1yxFAR2n0+VO6hd/FJ9F2uezAZVWHLmpmlJzm1eX03+H7+HsuTAp7L8QJs+2pQCfWkP1+EXsGK9Z9v7o/qPVQ==
+
 "@types/webpack-env@^1.16.0", "@types/webpack-env@^1.17.0":
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.18.0.tgz#ed6ecaa8e5ed5dfe8b2b3d00181702c9925f13fb"
@@ -6537,10 +6542,10 @@ chownr@^2.0.0:
   resolved "https://registry.yarnpkg.com/chownr/-/chownr-2.0.0.tgz#15bfbe53d2eab4cf70f18a8cd68ebe5b3cb1dece"
   integrity sha512-bIomtDF5KGpdogkLd9VspvFzk9KfpyyGlS8YFVZl7TGPBHL5snIOnxeshwVgPteQ9b4Eydl+pVbIyE1DcvCWgQ==
 
-chromatic@6.11.4:
-  version "6.11.4"
-  resolved "https://registry.yarnpkg.com/chromatic/-/chromatic-6.11.4.tgz#1bb72bceb8f4455694e9e27db86c585e8b7cb7cd"
-  integrity sha512-f1TcuIXKjGUuOjPuwFF44kzbuEcESFcDxHzrzWPLmHuC90dV8HLxbufqYaTOBYMO/rJ32Zftb7S9pXuF/Rhfog==
+chromatic@6.12.0:
+  version "6.12.0"
+  resolved "https://registry.yarnpkg.com/chromatic/-/chromatic-6.12.0.tgz#017aa9919e621c7e900ecd926d5362733bbb2f8c"
+  integrity sha512-Xm+GeBzaRFeTeqZb07Tx9FjkP63PTbVmX1FA8HPJq1dpthgUKATX7g53cw6ZET6+gCogGKuvsfIcB+naAqTQDQ==
   dependencies:
     "@discoveryjs/json-ext" "^0.5.7"
     "@types/webpack-env" "^1.17.0"
@@ -6588,12 +6593,13 @@ class-utils@^0.3.5:
     isobject "^3.0.0"
     static-extend "^0.1.1"
 
-class-validator@0.13.2:
-  version "0.13.2"
-  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.13.2.tgz#64b031e9f3f81a1e1dcd04a5d604734608b24143"
-  integrity sha512-yBUcQy07FPlGzUjoLuUfIOXzgynnQPPruyK1Ge2B74k9ROwnle1E+NxLWnUv5OLU8hA/qL5leAE9XnXq3byaBw==
+class-validator@0.14.0:
+  version "0.14.0"
+  resolved "https://registry.yarnpkg.com/class-validator/-/class-validator-0.14.0.tgz#40ed0ecf3c83b2a8a6a320f4edb607be0f0df159"
+  integrity sha512-ct3ltplN8I9fOwUd8GrP8UQixwff129BkEtuWDKL5W45cQuLd19xqmTLu5ge78YDm/fdje6FMt0hGOhl0lii3A==
   dependencies:
-    libphonenumber-js "^1.9.43"
+    "@types/validator" "^13.7.10"
+    libphonenumber-js "^1.10.14"
     validator "^13.7.0"
 
 classnames@^2.3.2:
@@ -11325,7 +11331,7 @@ levn@~0.3.0:
     prelude-ls "~1.1.2"
     type-check "~0.3.2"
 
-libphonenumber-js@^1.9.43:
+libphonenumber-js@^1.10.14:
   version "1.10.15"
   resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.15.tgz#cad454adb5bf271bc820bbf7dd66776afcda7be6"
   integrity sha512-sLeVLmWX17VCKKulc+aDIRHS95TxoTsKMRJi5s5gJdwlqNzMWcBCtSHHruVyXjqfi67daXM2SnLf2juSrdx5Sg==
@@ -12182,10 +12188,10 @@ next-transpile-modules@10.0.0:
   dependencies:
     enhanced-resolve "^5.10.0"
 
-next-urql@4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/next-urql/-/next-urql-4.0.1.tgz#413607bbaefa8ea3ba2de2b67ecd80988f456f5e"
-  integrity sha512-9LXbmG+YXsSIQxA+fICUWG2a/nL2bol/qEa2wceDEIHzMGLe3UPOmYzfP5dEKMQhSzqQm+h4RsbsdIlxdtOqZA==
+next-urql@4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/next-urql/-/next-urql-4.0.2.tgz#fdce44fc6c622b59d1813896d1c4e249275fd5c8"
+  integrity sha512-kxVMyk/angixsNjXSib2dabU1fGlidRgk7B9B+WOz+0yIZw9XPcrq1xwwgehfQe2n1O0gboBSQE8reP5LPGk7w==
   dependencies:
     react-ssr-prepass "^1.4.0"
 
@@ -13652,10 +13658,10 @@ react-is@^18.0.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.2.0.tgz#199431eeaaa2e09f86427efbb4f1473edb47609b"
   integrity sha512-xWGDIW6x921xtzPkhiULtthJHoJvBbF3q26fzloPCK0hsvxtPVelvftw3zjbHWSkR2km9Z+4uxbDDK/6Zw9B8w==
 
-react-magnetic-di@2.2.8:
-  version "2.2.8"
-  resolved "https://registry.yarnpkg.com/react-magnetic-di/-/react-magnetic-di-2.2.8.tgz#effa61e70cf0e208d198ae5dcf7ba1055ea335a4"
-  integrity sha512-4MksIO9Cu2oLSdQ5wK/hYlJmwt7Gwo8blIVMAGHiTCOitPkD7JX4vfl5QOeTamfDJ47PVi0g8g0UgdY4y1/E/Q==
+react-magnetic-di@2.2.11:
+  version "2.2.11"
+  resolved "https://registry.yarnpkg.com/react-magnetic-di/-/react-magnetic-di-2.2.11.tgz#a016afa0d2797332a4cb9bf96a2575aea118ae30"
+  integrity sha512-sydMdv/Pi72EUnEt6GvvarSS5LDVYJrAYsKN/dQb05dqz90y60VvsH+ZbAGwUDuyBMDMhnMJ97tLksxtrcO78A==
 
 react-merge-refs@2.0.1:
   version "2.0.1"
@@ -15719,11 +15725,6 @@ ts-node@10.9.1, ts-node@^10.8.1:
     make-error "^1.1.1"
     v8-compile-cache-lib "^3.0.1"
     yn "3.1.1"
-
-ts-pattern@4.0.5:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/ts-pattern/-/ts-pattern-4.0.5.tgz#8e87db265b890ddb0dfc10deda36568296ebd5c3"
-  integrity sha512-Bq44KCEt7JVaNLa148mBCJkcQf4l7jtLEBDuDdeuLynWDA+1a60P4D0rMkqSM9mOKLQbIWUddE9h3XKyKwBeqA==
 
 ts-pattern@4.0.6:
   version "4.0.6"
