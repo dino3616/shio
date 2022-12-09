@@ -118,6 +118,7 @@ const config = {
     },
   },
   plugins: [
+    require('tailwind-scrollbar'),
     plugin(({ addUtilities }) => {
       const gradientColorNames = ['cosmic'];
       const resolveColorObjectByName = (name) => name.split('-').reduce((acc, current) => acc[current] || undefined, config.theme.extend.colors);
@@ -142,6 +143,9 @@ const config = {
       });
     }),
   ],
+  variants: {
+    scrollbar: ['rounded'],
+  },
 };
 
 module.exports = config;
