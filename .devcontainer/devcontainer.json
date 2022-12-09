@@ -4,6 +4,7 @@
   "dockerComposeFile": ["../docker/docker-compose.development.yml"],
   "service": "app",
   "extensions": [
+    "formulahendry.auto-complete-tag",
     "adam-bender.commit-message-editor",
     "mikestead.dotenv",
     "usernamehw.errorlens",
