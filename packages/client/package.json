@@ -25,6 +25,7 @@
     "chromatic": "npx chromatic --project-token=$CHROMATIC_PROJECT_TOKEN"
   },
   "dependencies": {
+    "@next/font": "^13.0.6",
     "@radix-ui/react-navigation-menu": "1.1.1",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-auth": "1.0.0",
