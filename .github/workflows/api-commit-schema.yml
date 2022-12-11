@@ -71,18 +71,17 @@ jobs:
       - name: commit
         run: |
           COMMIT_LIST=$(git rev-list ${GITHUB_SHA})
-          COMMIT_LIST=$(echo "${COMMIT_LIST}" | sed 's/ /\n/g')
-          COMMIT_LIST=$(echo "${COMMIT_LIST}" | tr '\n' ' ')
+          COMMIT_LIST=$(sed -e 's/ /\n/g' -e 's/^/- /g')
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           changed_files=$(git diff-tree -r --name-only --no-commit-id HEAD)
           if [ -n "$changed_files" ]; then \
             git add ./schema.gql; \
-            git commit -m "actions: 🤖 (graphql) updated graphql schema\n${COMMIT_LIST}"; \
+            git commit -m "actions: 🤖 (graphql) updated graphql schema\n\nchanged by:\n${COMMIT_LIST}"; \
             git push origin HEAD:${GITHUB_REF}; \
           fi
 
-  apollo-studio-check:
+  commit-schema-check:
     if: ${{ ! failure() }}
     needs: commit
     runs-on: ubuntu-latest
