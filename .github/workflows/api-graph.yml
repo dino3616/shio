@@ -1,0 +1,83 @@
+name: api commit schema
+on:
+  push:
+    branches:
+      - main
+
+env:
+  node-version: 18
+  mongodb-version: 6
+
+jobs:
+  filter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      api: ${{ steps.changes.outputs.api }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: check for file changes
+        uses: dorny/paths-filter@v2
+        id: changes
+        with:
+          token: ${{ github.token }}
+          filters: .github/filter.yml
+
+  commit:
+    runs-on: ubuntu-latest
+    env:
+      APOLLO_KEY: ${{secrets.APOLLO_KEY}}
+    needs: filter
+    if: needs.filter.outputs.api == 'true'
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.node-version }}
+
+      - name: setup mongodb
+        uses: supercharge/mongodb-github-action@v2
+        with:
+          mongodb-version: ${{ env.mongodb-version }}
+
+      - name: install
+        run: yarn install --immutable
+
+      - name: setup prisma
+        run: yarn api prisma:gen
+
+      - name: generate graphql schema
+        run: timeout 60 yarn api dev
+        continue-on-error: true
+
+      - name: move schema
+        run: mv ./packages/api/schema.gql ./schema.gql
+
+      - name: commit
+        run: |
+          git config --global user.name "${GITHUB_ACTOR}"
+          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          if (git diff --shortstat | grep '[0-9]'); then \
+            git add ./schema.gql; \
+            git commit -m "actions: 🤖 (graphql) updated graphql schema"; \
+            git push origin HEAD:${GITHUB_REF}; \
+          fi
+
+  apollo-studio-check:
+    if: ${{ ! failure() }}
+    needs: publish
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "commit is successfully executed."
