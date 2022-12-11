@@ -62,7 +62,7 @@ jobs:
         run: yarn api prisma:gen
 
       - name: generate graphql schema
-        run: timeout 60 yarn api dev
+        run: timeout 30 yarn api dev
         continue-on-error: true
 
       - name: move schema
@@ -71,7 +71,7 @@ jobs:
       - name: commit
         run: |
           COMMIT_LIST=$(git rev-list ${GITHUB_SHA})
-          COMMIT_LIST=$(sed -e 's/ /\n/g' -e 's/^/- /g')
+          COMMIT_LIST=$(echo $COMMIT_LIST | sed -e 's/ /\n/g' -e 's/^/- /g')
           git config --global user.name "${GITHUB_ACTOR}"
           git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
           changed_files=$(git diff-tree -r --name-only --no-commit-id HEAD)
