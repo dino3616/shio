@@ -51,6 +51,10 @@ jobs:
         uses: supercharge/mongodb-github-action@v1.8.0
         with:
           mongodb-version: ${{ env.mongodb-version }}
+          mongodb-port: 27017
+
+      - name: set database url
+        run: export DATABASE_URL=mongodb://localhost:27017
 
       - name: install
         run: yarn install --immutable
