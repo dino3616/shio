@@ -48,7 +48,7 @@ jobs:
           node-version: ${{ env.node-version }}
 
       - name: setup mongodb
-        uses: supercharge/mongodb-github-action@v2
+        uses: supercharge/mongodb-github-action@v1.8.0
         with:
           mongodb-version: ${{ env.mongodb-version }}
 
