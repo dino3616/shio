@@ -35,11 +35,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-# VScode workspace
-*.code-workspace
-
 # storybook static 
 **/.storybook/static/
-
-# GraphQL config for development
-graphql.config.json
