@@ -17,7 +17,7 @@ RUN yarn install --immutable --immutable-cache --check-cache --network-timeout 6
 COPY ./tsconfig.base.json ./tsconfig.base.json
 COPY ./packages/api ./packages/api
 RUN yarn workspace @shio/api build && \
-    pkg --target node18-linux --output ./bin/shio-api ./packages/api/dist/main.js
+    pkg --target node18-linux-arm64 --output ./bin/shio-api ./packages/api/dist/main.js
 
 ###########
 # Run Phase
