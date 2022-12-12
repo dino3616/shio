@@ -26,7 +26,7 @@ RUN yarn install --immutable --immutable-cache --check-cache --network-timeout 6
 
 COPY ./tsconfig.base.json ./tsconfig.base.json
 COPY ./packages/client ./packages/client
-RUN yarn workspace @shio/client build
+RUN yarn client build
 
 ###########
 # Run Phase
