@@ -30,8 +30,8 @@
     "prisma:studio:dev": "cross-env NODE_ENV=development prisma studio --schema ./src/infra/prisma/schema.prisma",
     "prisma:studio:prod": "cross-env NODE_ENV=production prisma studio --schema ./src/infra/prisma/schema.prisma",
     "apollo:rover": "rover graph publish shio@current --schema ./schema.gql",
-    "pkg": "pkg . -t node18-linux-x64",
-    "pkg:debug": "pkg . -t node18-linux-x64 -d"
+    "pkg": "pkg . -t node18-linux-arm64",
+    "pkg:debug": "pkg . -t node18-linux-arm64 -d"
   },
   "dependencies": {
     "@nestjs/apollo": "10.1.7",
