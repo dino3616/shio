@@ -21,7 +21,7 @@ RUN yarn api build && yarn api pkg -o /bin/shio-api
 ###########
 # Run Phase
 ###########
-FROM gcr.io/distroless/nodejs:${NODE_VERSION}-debug AS runner
+FROM gcr.io/distroless/static-debian11:debug AS runner
 
 WORKDIR /shio
 
