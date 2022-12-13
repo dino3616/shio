@@ -66,6 +66,6 @@
   },
   "pkg": {
     "scripts": "dist/**/*.js",
-    "targets": "node18-linux-arm64"
+    "targets": ["node18-linux-arm64"]
   }
 }
