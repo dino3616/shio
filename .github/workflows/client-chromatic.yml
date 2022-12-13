@@ -58,7 +58,7 @@ jobs:
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
           workingDir: packages/client
 
-  chromatic-check:
+  client-chromatic-check:
     if: ${{ ! failure() }}
     needs: publish
     runs-on: ubuntu-latest

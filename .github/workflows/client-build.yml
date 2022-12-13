@@ -43,7 +43,7 @@ jobs:
       - name: build
         run: yarn client build
 
-  build-check:
+  client-build-check:
     if: ${{ ! failure() }}
     needs: build-client
     runs-on: ubuntu-latest

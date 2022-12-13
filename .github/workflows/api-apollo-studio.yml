@@ -68,7 +68,7 @@ jobs:
       - name: publish
         run: yarn api apollo:rover
 
-  apollo-studio-check:
+  api-apollo-studio-check:
     if: ${{ ! failure() }}
     needs: publish
     runs-on: ubuntu-latest

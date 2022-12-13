@@ -49,7 +49,7 @@ jobs:
       - name: stylelint
         run: yarn client style --max-warnings=0
 
-  lint-check:
+  client-lint-check:
     if: ${{ ! failure() }}
     needs: lint-client
     runs-on: ubuntu-latest

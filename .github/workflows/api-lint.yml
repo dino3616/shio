@@ -46,7 +46,7 @@ jobs:
       - name: prettier
         run: yarn api fmt
 
-  lint-check:
+  api-lint-check:
     if: ${{ ! failure() }}
     needs: lint-api
     runs-on: ubuntu-latest

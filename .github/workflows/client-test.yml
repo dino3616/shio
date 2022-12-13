@@ -46,7 +46,7 @@ jobs:
       - name: e2e test
         run: yarn client test:e2e
 
-  test-check:
+  client-test-check:
     if: ${{ ! failure() }}
     needs: test-client
     runs-on: ubuntu-latest

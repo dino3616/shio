@@ -43,7 +43,7 @@ jobs:
       - name: build
         run: yarn api build
 
-  build-check:
+  api-build-check:
     if: ${{ ! failure() }}
     needs: build-api
     runs-on: ubuntu-latest
