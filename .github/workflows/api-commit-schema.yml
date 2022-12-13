@@ -70,10 +70,9 @@ jobs:
 
       - name: commit
         run: |
-          git config --global user.name "${GITHUB_ACTOR}"
-          git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
-          changed_files=$(git diff-tree -r --name-only --no-commit-id HEAD)
-          if [ -n "$changed_files" ]; then \
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          if git diff --name-only | grep -q "./schema.gql"; then \
             git add ./schema.gql; \
             git commit -m "actions: 🤖 (graphql) updated graphql schema"; \
             git push origin HEAD:${GITHUB_REF}; \
