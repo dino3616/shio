@@ -23,10 +23,10 @@ RUN yarn api build && yarn api pkg -o /bin/shio-api
 ###########
 FROM gcr.io/distroless/static-debian11:debug AS runner
 
-WORKDIR /shio
+WORKDIR /
 
 COPY --from=builder /bin/shio-api /bin/shio-api
 
 USER nonroot
 EXPOSE ${PORT}
-CMD ["shio-api"]
+CMD ["/bin/shio-api"]
