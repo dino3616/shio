@@ -16,7 +16,7 @@ RUN yarn install --immutable --immutable-cache --check-cache --network-timeout 6
 
 COPY ./tsconfig.base.json ./tsconfig.base.json
 COPY ./packages/api ./packages/api
-RUN yarn api build && yarn api pkg -o /bin/shio-api
+RUN yarn api build && yarn api pkg:debug -o /bin/shio-api
 
 ###########
 # Run Phase
