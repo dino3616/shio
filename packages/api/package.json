@@ -5,7 +5,6 @@
   "author": "dino3616 <85730998+dino3616@users.noreply.github.com>",
   "license": "Salty",
   "private": true,
-  "bin": "dist/main.js",
   "scripts": {
     "nest:module": "nest generate module",
     "nest:controller": "nest generate controller",
@@ -29,9 +28,7 @@
     "prisma:seed:dev": "cross-env NODE_ENV=development ts-node ./src/infra/prisma/seed/main.seed.ts",
     "prisma:studio:dev": "cross-env NODE_ENV=development prisma studio --schema ./src/infra/prisma/schema.prisma",
     "prisma:studio:prod": "cross-env NODE_ENV=production prisma studio --schema ./src/infra/prisma/schema.prisma",
-    "apollo:rover": "rover graph publish shio@current --schema ./schema.gql",
-    "pkg": "pkg .",
-    "pkg:debug": "pkg -d ."
+    "apollo:rover": "rover graph publish shio@current --schema ./schema.gql"
   },
   "dependencies": {
     "@nestjs/apollo": "10.1.7",
@@ -63,9 +60,5 @@
     "apollo-server-express": "3.11.1",
     "prisma": "4.7.1",
     "prisma-nestjs-graphql": "17.0.2"
-  },
-  "pkg": {
-    "scripts": "dist/**/*.js",
-    "targets": ["node18-linux-arm64"]
   }
 }

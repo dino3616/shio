@@ -8,25 +8,28 @@ FROM node:${NODE_VERSION}-bullseye-slim AS builder
 
 WORKDIR /shio
 
-RUN yarn global add pkg
-
 COPY ./package.json ./yarn.lock ./
 COPY ./packages/api/package.json ./packages/api/package.json
 RUN yarn install --immutable --immutable-cache --check-cache --network-timeout 600000
 
 COPY ./tsconfig.base.json ./tsconfig.base.json
 COPY ./packages/api ./packages/api
-RUN yarn api build && yarn api pkg -o /bin/shio-api
+RUN yarn api build
 
 ###########
 # Run Phase
 ###########
-FROM gcr.io/distroless/static-debian11:debug AS runner
+FROM gcr.io/distroless/nodejs:${NODE_VERSION}-debug AS runner
+ENV NODE_ENV=production
 
-WORKDIR /
+WORKDIR /shio
 
-COPY --from=builder /bin/shio-api /bin/shio-api
+COPY --from=builder /shio/node_modules ./node_modules
+COPY --from=builder /shio/packages/api/node_modules ./packages/api/node_modules
+COPY --from=builder /shio/packages/api/dist ./packages/api/dist
+
+WORKDIR /shio/packages/api
 
 USER nonroot
 EXPOSE ${PORT}
-CMD ["/bin/shio-api"]
+CMD ["dist/main.js"]
