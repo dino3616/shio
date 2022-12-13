@@ -30,6 +30,5 @@ COPY --from=builder /shio/packages/api/dist ./packages/api/dist
 
 WORKDIR /shio/packages/api
 
-USER nonroot
 EXPOSE ${PORT}
 CMD ["dist/main.js"]
