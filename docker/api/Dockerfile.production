@@ -1,6 +1,8 @@
 ARG PORT
 ARG NODE_VERSION=18
 
+FROM alpine:3 as alpine
+
 #############
 # Build Phase
 #############
@@ -24,6 +26,8 @@ ENV NODE_ENV=production
 
 WORKDIR /shio
 
+COPY --from=alpine /lib/libz.so.1 /lib/libz.so.1
+COPY --from=alpine /lib/libc.musl-x86_64.so.1 /lib/libc.musl-x86_64.so.1
 COPY --from=builder /shio/node_modules ./node_modules
 COPY --from=builder /shio/packages/api/node_modules ./packages/api/node_modules
 COPY --from=builder /shio/packages/api/dist ./packages/api/dist
