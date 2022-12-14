@@ -1,6 +1,6 @@
 name: api lint
 
-on: [push, pull_request]
+on: push
 
 env:
   node-version: 18
