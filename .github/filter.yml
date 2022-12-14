@@ -12,3 +12,5 @@ docker:
   - .github/filter.yml
   - .github/workflows/docker-*.yml
   - docker/**/*
+  - .dockerignore
+  - yarn.lock
