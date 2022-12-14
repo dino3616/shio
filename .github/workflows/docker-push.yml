@@ -28,9 +28,14 @@ jobs:
     runs-on: ubuntu-latest
     needs: filter
     if: ${{ needs.filter.outputs.docker == 'true' }}
+    env:
+      REPOSITORY_OWNER: ${{ github.repository_owner }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
+
+      - name: set repository owner
+        run: echo ${{ env.REPOSITORY_OWNER }} | tr '[:upper:]' '[:lower:]' > REPOSITORY_OWNER
 
       - name: login
         uses: docker/login-action@v2
@@ -45,7 +50,7 @@ jobs:
           context: .
           file: ./docker/Dockerfile.development
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/shio:latest
+          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/shio:latest
 
   docker-push-check:
     runs-on: ubuntu-latest
@@ -53,4 +58,4 @@ jobs:
     if: ${{ ! failure() }}
     steps:
       - name: check
-        run: echo "test is successfully executed."
+        run: echo "push is successfully executed."
