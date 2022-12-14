@@ -1,6 +1,9 @@
 name: docker push
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   filter:
@@ -33,15 +36,16 @@ jobs:
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: dino3616
+          username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: build and push
         uses: docker/build-push-action@v3
         with:
           context: .
+          file: ./docker/Dockerfile.development
           push: true
-          tags: latest
+          tags: ghcr.io/${{ github.repository_owner }}/shio:latest
 
   docker-push-check:
     runs-on: ubuntu-latest
