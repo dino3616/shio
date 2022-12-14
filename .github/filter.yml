@@ -7,3 +7,8 @@ client:
   - .github/filter.yml
   - .github/workflows/client-*.yml
   - packages/client/**
+
+docker:
+  - .github/filter.yml
+  - .github/workflows/docker-*.yml
+  - docker/**/*
