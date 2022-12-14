@@ -34,6 +34,9 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
 
+      - name: set up buildx
+        uses: docker/setup-buildx-action@v2
+
       - name: set repository owner
         run: echo ${{ env.REPOSITORY_OWNER }} | tr '[:upper:]' '[:lower:]' > REPOSITORY_OWNER
 
@@ -44,13 +47,26 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - uses: docker/metadata-action@v4
+        id: meta
+        with:
+          images: |
+            ghcr.io/${{ env.REPOSITORY_OWNER }}/shio
+          flavor: |
+            latest=true
+          tags: |
+            type=sha,prefix=
+
       - name: build and push
         uses: docker/build-push-action@v3
         with:
           context: .
           file: ./docker/Dockerfile.development
           push: true
-          tags: ghcr.io/${{ env.REPOSITORY_OWNER }}/shio:latest
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
 
   docker-push-check:
     runs-on: ubuntu-latest
