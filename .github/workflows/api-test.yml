@@ -45,6 +45,7 @@ jobs:
           mongodb-version: ${{ env.mongodb-version }}
           mongodb-port: 27017
           mongodb-db: test
+          mongodb-replica-set: test-rs
 
       - name: install
         run: yarn install --immutable
