@@ -70,8 +70,9 @@ jobs:
         run: yarn api apollo:rover
 
   api-apollo-studio-check:
-    if: ${{ ! failure() }}
-    needs: publish
     runs-on: ubuntu-latest
+    needs: publish
+    if: ${{ ! failure() }}
     steps:
-      - run: echo "publish graph is successfully executed."
+      - name: check
+        run: echo "publish graph is successfully executed."

@@ -44,8 +44,9 @@ jobs:
         run: yarn api build
 
   api-build-check:
-    if: ${{ ! failure() }}
-    needs: build-api
     runs-on: ubuntu-latest
+    needs: build-api
+    if: ${{ ! failure() }}
     steps:
-      - run: echo "build is successfully executed."
+      - name: check
+        run: echo "build is successfully executed."

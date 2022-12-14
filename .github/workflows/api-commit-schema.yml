@@ -77,8 +77,9 @@ jobs:
           fi
 
   api-commit-schema-check:
-    if: ${{ ! failure() }}
-    needs: commit
     runs-on: ubuntu-latest
+    needs: commit
+    if: ${{ ! failure() }}
     steps:
-      - run: echo "commit is successfully executed."
+      - name: check
+        run: echo "commit is successfully executed."
