@@ -10,6 +10,7 @@ RUN apt-get update \
 
 WORKDIR /shio
 
+COPY ./.git ./.git
 COPY ./package.json ./yarn.lock ./
 COPY ./packages/api/package.json ./packages/api/package.json
 COPY ./packages/client/package.json ./packages/client/package.json
