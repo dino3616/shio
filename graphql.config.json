@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "shio": {
+      "schema": ["./schema.gql"]
+    }
+  }
+}
