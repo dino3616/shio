@@ -16,6 +16,7 @@ services:
         target: /data/configdb
 
   app:
+    image: ghcr.io/dino3616/shio:latest
     container_name: app
     ports:
       - ${API_PORT:-4000:4000}
