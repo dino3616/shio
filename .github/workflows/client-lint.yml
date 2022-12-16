@@ -40,6 +40,9 @@ jobs:
       - name: install
         run: yarn install --immutable
 
+      - name: setup graphql
+        run: yarn client gql:gen
+
       - name: eslint
         run: yarn client lint --max-warnings=0
 

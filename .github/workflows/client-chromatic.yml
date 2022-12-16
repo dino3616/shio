@@ -49,6 +49,9 @@ jobs:
       - name: install
         run: yarn install --immutable
 
+      - name: setup graphql
+        run: yarn client gql:gen
+
       - name: publish
         uses: chromaui/action@v1
         with:
