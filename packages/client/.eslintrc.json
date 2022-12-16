@@ -58,6 +58,13 @@
         "import/prefer-default-export": "off",
         "import/no-default-export": "off"
       }
+    },
+    {
+      "files": ["./codegen.ts"],
+      "rules": {
+        "import/prefer-default-export": "error",
+        "import/no-default-export": "off"
+      }
     }
   ]
 }
