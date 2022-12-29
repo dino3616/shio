@@ -16,3 +16,5 @@ COPY ./packages/api/package.json ./packages/api/package.json
 COPY ./packages/client/package.json ./packages/client/package.json
 # hadolint ignore=DL3060
 RUN --mount=type=cache,sharing=locked,target=/usr/local/share/.cache/yarn/v6 yarn install --immutable --immutable-cache --network-timeout 100000
+
+COPY ./ ./
