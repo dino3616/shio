@@ -1,5 +1,6 @@
 image:
   file: ./docker/.gitpod.Dockerfile
+  context: ./
 
 vscode:
   extensions:
