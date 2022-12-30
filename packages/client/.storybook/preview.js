@@ -3,6 +3,7 @@ import { addDecorator } from '@storybook/react';
 import { urqlDecorator } from '@urql/storybook-addon';
 import * as NextImage from 'next/image';
 import { RouterContext } from 'next/dist/shared/lib/router-context';
+import { fontFamily } from '../src/font/family';
 import '../src/style/global.css';
 import '../src/style/storybook.css';
 
@@ -14,6 +15,12 @@ Object.defineProperty(NextImage, 'default', {
 });
 
 addDecorator(urqlDecorator);
+
+addDecorator((Story) => (
+  <div className={fontFamily}>
+    <Story />
+  </div>
+));
 
 export const parameters = {
   actions: { argTypesRegex: '^on[A-Z].*' },
