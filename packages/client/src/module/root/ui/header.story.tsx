@@ -1,0 +1,18 @@
+import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
+
+import { Header } from './header.layout';
+
+type Story = ComponentStoryObj<typeof Header>;
+
+const meta: ComponentMeta<typeof Header> = {
+  component: Header,
+  argTypes: {
+    className: {
+      control: { type: 'text' },
+    },
+  },
+};
+
+export default meta;
+
+export const Default: Story = {};
