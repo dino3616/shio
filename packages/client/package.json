@@ -45,6 +45,7 @@
     "react-magnetic-di": "2.2.11",
     "react-merge-refs": "2.0.1",
     "react-share": "4.4.1",
+    "react-type-animation": "2.1.2",
     "recoil": "0.7.6",
     "sharp": "0.31.3",
     "superjson": "1.12.1",
@@ -96,8 +97,5 @@
     "stylelint-config-recess-order": "3.1.0",
     "stylelint-config-standard-scss": "6.1.0",
     "stylelint-prettier": "2.0.0"
-  },
-  "resolutions": {
-    "@storybook/react-docgen-typescript-plugin": "npm:react-docgen-typescript-plugin@1.0.2"
   }
 }
