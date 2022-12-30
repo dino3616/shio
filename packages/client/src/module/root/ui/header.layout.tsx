@@ -5,7 +5,7 @@ import { twMerge } from '@/util/tw-merge';
 export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>;
 
 export const Header: FC<HeaderProps> = ({ className, ...props }) => (
-  <header className={twMerge('bg-white py-6 shadow-lg', className)} {...props}>
+  <header className={twMerge('z-50 bg-white py-6 shadow-lg', className)} {...props}>
     <ul className="flex items-center justify-center space-x-7">
       <li>
         <Link href="/product" className="transition-colors hover:text-gray-400">
