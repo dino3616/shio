@@ -10,10 +10,10 @@ const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
     className="bg-accent-100 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400 scrollbar-thumb-rounded-full hover:scrollbar-thumb-gray-500"
   >
     <head />
-    <body className={`${fontFamily} relative min-h-screen font-sans`}>
-      <Header className="sticky top-0 left-0" />
-      <main className="min-h-full">{children}</main>
-      <Footer className="absolute bottom-0 left-0 w-full" />
+    <body className={`${fontFamily} flex min-h-screen flex-col font-sans`}>
+      <Header className="sticky top-0 left-0 grow-0" />
+      <main className="min-h-full grow">{children}</main>
+      <Footer className="grow-0" />
     </body>
   </html>
 );
