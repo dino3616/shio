@@ -1,8 +1,9 @@
 import type { FC } from 'react';
+import { Introduction } from '@/module/root/ui/introduction.page';
 
 const RootPage: FC = () => (
   <div>
-    <h1 className="text-primary">Hello, shio World!</h1>
+    <Introduction className="py-10" />
   </div>
 );
 
