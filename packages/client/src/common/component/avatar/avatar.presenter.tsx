@@ -7,5 +7,5 @@ export type AvatarProps = {
 } & Omit<ImageProps, 'src' | 'alt' | 'width' | 'height'>;
 
 export const Avatar: FC<AvatarProps> = ({ size, className, ...props }) => (
-  <Image src="/favicon.png" alt="avatar" width={size} height={size} className={twMerge('rounded-[2.0rem]', className)} {...props} />
+  <Image priority src="/favicon.png" alt="avatar" width={size} height={size} className={twMerge('rounded-[2.0rem]', className)} {...props} />
 );
