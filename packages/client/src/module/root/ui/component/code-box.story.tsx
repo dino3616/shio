@@ -8,6 +8,7 @@ const meta: ComponentMeta<typeof CodeBox> = {
   component: CodeBox,
   argTypes: {
     className: {
+      description: 'class to inject.',
       control: { type: 'text' },
     },
   },

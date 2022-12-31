@@ -10,6 +10,7 @@ const meta: ComponentMeta<typeof Header> = {
   decorators: [(story) => <RecoilRoot>{story()}</RecoilRoot>],
   argTypes: {
     className: {
+      description: 'class to inject.',
       control: { type: 'text' },
     },
   },

@@ -8,6 +8,7 @@ const meta: ComponentMeta<typeof Card> = {
   component: Card,
   argTypes: {
     className: {
+      description: 'class to inject.',
       control: { type: 'text' },
     },
   },

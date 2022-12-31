@@ -8,6 +8,7 @@ const meta: ComponentMeta<typeof Footer> = {
   component: Footer,
   argTypes: {
     className: {
+      description: 'class to inject.',
       control: { type: 'text' },
     },
   },
