@@ -8,8 +8,13 @@ import { twMerge } from '@/util/tw-merge';
 export type CodeBoxProps = Omit<LinkProps & ComponentPropsWithoutRef<'a'>, 'children' | 'href' | 'target'>;
 
 export const CodeBox: FC<CodeBoxProps> = ({ className, ...props }) => (
-  <Link href="https://github.com/dino3616/shio/tree/main/packages/cli" target="_blank" className={twMerge('relative', className)} {...props}>
-    <div className="flex justify-center rounded-3xl bg-gray-700 p-5 text-left font-code transition hover:-translate-y-1 hover:-translate-x-1 active:translate-y-5 active:translate-x-5">
+  <Link
+    href="https://github.com/dino3616/shio/tree/main/packages/cli"
+    target="_blank"
+    className={twMerge('relative flex h-fit w-fit', className)}
+    {...props}
+  >
+    <div className="rounded-3xl bg-gray-700 p-5 text-left font-code transition hover:-translate-y-1 hover:-translate-x-1 active:translate-y-5 active:translate-x-5">
       <div className="text-info-100 md:text-xl">
         <pre>
           <code>$ shio --introduce</code>
