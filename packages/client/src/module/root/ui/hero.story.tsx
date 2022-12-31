@@ -1,11 +1,11 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
 
-import { Introduction } from './introduction.page';
+import { Hero } from './hero.page';
 
-type Story = ComponentStoryObj<typeof Introduction>;
+type Story = ComponentStoryObj<typeof Hero>;
 
-const meta: ComponentMeta<typeof Introduction> = {
-  component: Introduction,
+const meta: ComponentMeta<typeof Hero> = {
+  component: Hero,
   argTypes: {
     className: {
       control: { type: 'text' },
