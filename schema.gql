@@ -2,11 +2,41 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Query {
+  findTimelines(cursor: TimelineWhereUniqueInput, orderBy: [TimelineOrderInput!], skip: Int, take: Int): [Timeline!]!
   findUsers: [User!]!
 }
 
+enum SortOrder {
+  asc
+  desc
+}
+
+type Timeline {
+  createdAt: DateTime!
+  happenedAt: DateTime!
+  id: String!
+  title: String!
+}
+
+input TimelineOrderInput {
+  createdAt: SortOrder
+  happenedAt: SortOrder
+}
+
+input TimelineWhereUniqueInput {
+  id: String!
+}
+
 type User {
+  authId: String!
+  createdAt: DateTime!
+  email: String!
   id: String!
   name: String!
 }
