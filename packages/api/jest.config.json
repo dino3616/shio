@@ -11,7 +11,6 @@
   "testEnvironment": "node",
   "setupFiles": ["dotenv/config"],
   "moduleNameMapper": {
-    "^@/(.*)$": "<rootDir>/src/$1",
-    "^~/user/(.*)$": "<rootDir>/src/module/user/$1"
+    "^@/(.*)$": "<rootDir>/src/$1"
   }
 }

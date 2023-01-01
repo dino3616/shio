@@ -6,8 +6,7 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
-      "~/user/*": ["./src/module/user/*"]
+      "@/*": ["./src/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
