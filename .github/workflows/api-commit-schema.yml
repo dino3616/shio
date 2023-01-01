@@ -73,7 +73,7 @@ jobs:
           if git diff --name-only | grep -q "schema.gql"; then \
             git add ./schema.gql; \
             git commit -m "actions: 🤖 (graphql) updated graphql schema"; \
-            git push origin HEAD:${GITHUB_REF}; \
+            git push origin HEAD:${GITHUB_REF} --force; \
             echo "Committed changes to schema.gql"; \
           else \
             echo "No changes detected in schema.gql"; \
