@@ -40,6 +40,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.event.workflow_run.head_sha }}
+          token: ${{ secrets.PAT }}
 
       - name: setup node
         uses: actions/setup-node@v3
