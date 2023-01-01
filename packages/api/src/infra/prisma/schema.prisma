@@ -18,8 +18,22 @@ datasource db {
 }
 
 model User {
-  id   String @id @default(auto()) @map("_id") @db.ObjectId
-  name String @unique
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  name   String @unique
+  email  String
+  authId String @unique @map("auth_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("users")
+}
+
+model Timeline {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  title      String
+  happenedAt DateTime @map("happened_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("timeline")
 }
