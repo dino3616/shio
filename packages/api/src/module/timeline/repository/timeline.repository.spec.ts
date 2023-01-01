@@ -46,7 +46,7 @@ describe('TimelineRepository', () => {
 
     const foundTimelines = await timelineRepository.findMany({});
 
-    expect(foundTimelines).toEqual(expect.any(Array<Timeline>()));
+    expect(foundTimelines).toEqual(expect.any(Array));
 
     await deleteTimeline(prismaService, createdTimeline.id);
   });
