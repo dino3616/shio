@@ -74,6 +74,9 @@ jobs:
             git add ./schema.gql; \
             git commit -m "actions: 🤖 (graphql) updated graphql schema"; \
             git push origin HEAD:${GITHUB_REF}; \
+            echo "Committed changes to schema.gql"; \
+          else \
+            echo "No changes detected in schema.gql"; \
           fi
 
   api-commit-schema-check:
