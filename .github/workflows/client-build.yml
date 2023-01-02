@@ -42,6 +42,9 @@ jobs:
 
       - name: build
         run: yarn client build
+        env:
+          NEXT_PUBLIC_GRAPHQL_ENDPOINT: ${{ secrets.NEXT_PUBLIC_GRAPHQL_ENDPOINT }}
+          NEXT_PUBLIC_WS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_WS_ENDPOINT }}
 
   client-build-check:
     runs-on: ubuntu-latest
