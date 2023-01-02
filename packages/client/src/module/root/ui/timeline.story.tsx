@@ -16,4 +16,20 @@ const meta: ComponentMeta<typeof Timeline> = {
 
 export default meta;
 
-export const Default: Story = {};
+export const Default: Story = {
+  args: {
+    timelines: [
+      {
+        id: 'abc-123',
+        title: 'hoge event',
+        happenedAt: new Date('1970/01/01'),
+      },
+      {
+        id: 'abc-456',
+        title: 'fuga event',
+        happenedAt: new Date('1970/01/01'),
+      },
+    ],
+    dateFormatter: () => 'Jan. 01 1970',
+  },
+};
