@@ -1,0 +1,8 @@
+query FindTimelines {
+  findTimelines {
+    createdAt
+    happenedAt
+    id
+    title
+  }
+}
