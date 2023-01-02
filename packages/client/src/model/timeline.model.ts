@@ -1,4 +1,5 @@
 export type Timeline = {
-  event: string;
-  date: string; // TODO: Date
+  id: string;
+  title: string;
+  happenedAt: Date;
 };
