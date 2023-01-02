@@ -61,7 +61,7 @@
       }
     },
     {
-      "files": ["./codegen.ts"],
+      "files": ["./codegen*.*"],
       "rules": {
         "import/prefer-default-export": "error",
         "import/no-default-export": "off"

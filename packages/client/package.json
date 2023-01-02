@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "graphql-codegen --config codegen.ts -r dotenv/config && next build",
+    "build": "graphql-codegen --config codegen.yml -r dotenv/config && next build",
     "start": "next start",
     "lint": "next lint",
     "lint:fix": "next lint --fix",
@@ -18,7 +18,8 @@
     "test": "jest --silent=false --verbose false --passWithNoTests",
     "test:cov": "jest --coverage --passWithNoTests",
     "test:e2e": "jest --silent=false --verbose false --config ./test/jest-e2e.json --passWithNoTests",
-    "gql:gen": "graphql-codegen --config codegen.ts -r dotenv/config",
+    "gql:gen": "graphql-codegen --config codegen.yml -r dotenv/config",
+    "gql:gen:introspect": "graphql-codegen --config codegen-introspect.ts -r dotenv/config",
     "sb": "start-storybook -p 6006",
     "sb:build": "build-storybook -o ./.storybook/static",
     "sb:docs": "start-storybook -p 6006 --docs",

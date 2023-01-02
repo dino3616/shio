@@ -12,7 +12,7 @@ graphql:
   - .github/filter.yml
   - .github/workflows/graphql-*.yml
   - packages/api/**
-  - packages/client/codegen.ts
+  - packages/client/codegen*.*
 
 docker:
   - .github/filter.yml
