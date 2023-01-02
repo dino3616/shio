@@ -8,6 +8,12 @@ client:
   - .github/workflows/client-*.yml
   - packages/client/**
 
+graphql:
+  - .github/filter.yml
+  - .github/workflows/graphql-*.yml
+  - packages/api/**
+  - packages/client/codegen.ts
+
 docker:
   - .github/filter.yml
   - .github/workflows/docker-*.yml
