@@ -3,16 +3,19 @@ import type { CodegenConfig } from '@graphql-codegen/cli';
 
 const config: CodegenConfig = {
   overwrite: true,
-  schema: '../../schema.gql',
+  schema: 'http://localhost:4000/graphql',
   documents: ['src/infra/graphql/document/**/*.gql'],
   generates: {
     './src/infra/graphql/generated/graphql.ts': {
       config: {
         scalars: {
-          Datetime: Date,
+          DateTime: Date,
         },
       },
       plugins: ['typescript', 'typescript-operations', 'typescript-urql'],
+    },
+    './graphql.schema.json': {
+      plugins: ['introspection'],
     },
   },
 };
