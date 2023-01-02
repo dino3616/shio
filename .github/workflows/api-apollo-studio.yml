@@ -34,7 +34,7 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     env:
-      APOLLO_KEY: ${{secrets.APOLLO_KEY}}
+      APOLLO_KEY: ${{ secrets.APOLLO_KEY }}
     needs: filter
     if: needs.filter.outputs.api == 'true'
     steps:
