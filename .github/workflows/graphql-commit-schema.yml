@@ -61,7 +61,7 @@ jobs:
         run: yarn api prisma:gen
 
       - name: generate graphql schema
-        run: timeout 30 yarn api dev
+        run: timeout 90 yarn api dev
         continue-on-error: true
 
   commit:
