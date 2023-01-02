@@ -23,8 +23,10 @@ export default meta;
 export const Default: Story = {
   args: {
     timeline: {
-      event: 'some event',
-      date: '1970/01/01',
+      id: 'abc-123',
+      title: 'some event',
+      happenedAt: new Date('1970/01/01'),
     },
+    dateFormatter: () => 'Jan. 01 1970',
   },
 };
