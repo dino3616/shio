@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
-import { TimelineItem } from './component/timeline-item.presenter';
+import { TimelineItem, TimelineItemProps } from './component/timeline-item.presenter';
 import { ScrollRevealContainer } from '@/common/component/scroll-reveal-container/scroll-reveal-container.presenter';
 import { StyledHeading } from '@/common/component/styled-heading/styled-heading.presenter';
 import type { Timeline as TimelineModel } from '@/model/timeline.model';
@@ -7,9 +7,10 @@ import { twMerge } from '@/util/tw-merge';
 
 export type TimelineProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   timelines: TimelineModel[];
+  dateFormatter: TimelineItemProps['dateFormatter'];
 };
 
-export const Timeline: FC<TimelineProps> = ({ timelines, className, ...props }) => (
+export const Timeline: FC<TimelineProps> = ({ timelines, dateFormatter, className, ...props }) => (
   <div className={twMerge('py-10', className)} {...props}>
     <StyledHeading text="Timeline" alt="タイムライン" />
     <div className="relative mt-6">
@@ -20,7 +21,7 @@ export const Timeline: FC<TimelineProps> = ({ timelines, className, ...props }) 
       <div className="space-y-5 py-5">
         {timelines.map((timeline) => (
           <ScrollRevealContainer key={timeline.id} duration={0.8} delay={0} distance="40px">
-            <TimelineItem timeline={timeline} className="ml-5" />
+            <TimelineItem timeline={timeline} dateFormatter={dateFormatter} className="ml-5" />
           </ScrollRevealContainer>
         ))}
       </div>
