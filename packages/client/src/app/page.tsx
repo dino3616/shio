@@ -9,9 +9,6 @@ import { Timeline } from '@/module/root/ui/timeline.page';
 const RootPage: FC = () => {
   const timelines = useFindTimelines();
 
-  if (timelines === undefined) {
-    return null;
-  }
   if (timelines === null) {
     return null;
   }
@@ -19,7 +16,20 @@ const RootPage: FC = () => {
   return (
     <div className="px-10">
       <Hero className="h-[calc(100vh_-_76px)]" />
-      <Timeline timelines={timelines} dateFormatter={formatDate} />
+      {timelines === undefined ? (
+        <Timeline
+          timelines={[
+            {
+              id: '1',
+              title: 'loading...',
+              happenedAt: new Date('1970-01-01T00:00:00.000Z'),
+            },
+          ]}
+          dateFormatter={() => ''}
+        />
+      ) : (
+        <Timeline timelines={timelines} dateFormatter={formatDate} />
+      )}
     </div>
   );
 };
