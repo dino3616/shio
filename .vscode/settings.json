@@ -158,5 +158,7 @@
   "eslint.format.enable": true,
   "eslint.packageManager": "yarn",
   "eslint.workingDirectories": ["packages/api", "packages/client"],
-  "graphql-config.load.filePath": "../graphql.config.json"
+  "graphql-config.load.filePath": "../graphql.config.json",
+  "jest.rootPath": "/shio",
+  "jest.jestCommandLine": "yarn workspaces run test"
 }
