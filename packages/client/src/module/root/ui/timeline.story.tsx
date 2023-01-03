@@ -18,7 +18,7 @@ export default meta;
 
 export const Default: Story = {
   args: {
-    timelines: [
+    timelinesFinder: async () => [
       {
         id: 'abc-123',
         title: 'hoge event',
