@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-const Head: FC = () => (
+const RootHead: FC = () => (
   <>
     <title>shio.dev | Creators fot Creator</title>
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -8,4 +8,4 @@ const Head: FC = () => (
   </>
 );
 
-export default Head;
+export default RootHead;
