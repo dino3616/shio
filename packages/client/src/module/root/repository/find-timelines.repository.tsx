@@ -1,19 +1,17 @@
-import { useFindTimelinesQuery } from '@/infra/graphql/generated/graphql';
+import { FindTimelinesDocument, FindTimelinesQuery, FindTimelinesQueryVariables } from '@/infra/graphql/generated/graphql';
+import { urqlClient } from '@/infra/urql/urql.service';
 import type { Timeline } from '@/model/timeline.model';
 
-export type UseFindTimelinesResult = Array<Timeline> | null | undefined;
+export type FindTimelinesResult = Promise<Timeline[]>;
 
-export const useFindTimelines = (): UseFindTimelinesResult => {
-  const [{ data, fetching, error }] = useFindTimelinesQuery({
-    requestPolicy: 'cache-and-network',
-  });
+export const findTimelines = async (): FindTimelinesResult => {
+  const { data, error } = await urqlClient
+    .query<FindTimelinesQuery, FindTimelinesQueryVariables>(FindTimelinesDocument, {}, { requestPolicy: 'cache-and-network' })
+    .toPromise();
 
-  if (fetching) {
-    return undefined;
-  }
-  if (!fetching && !error && data) {
-    return data.findTimelines;
+  if (data?.findTimelines === undefined || error) {
+    throw error || new Error('An error occurred while `findTimelines()`.');
   }
 
-  return null;
+  return data.findTimelines;
 };
