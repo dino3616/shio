@@ -13,3 +13,18 @@ export const TimelineItem: FC<TimelineItemProps> = ({ timeline, dateFormatter, c
     <div className="text-sm text-gray-300">{dateFormatter(timeline.happenedAt, 'MMM. dd yyyy')}</div>
   </div>
 );
+
+export type SkeletonTimelineItemProps = Omit<TimelineItemProps, 'timeline' | 'dateFormatter'>;
+
+export const SkeletonTimelineItem: FC<SkeletonTimelineItemProps> = ({ className, ...props }) => (
+  <TimelineItem
+    timeline={{
+      id: '1',
+      title: 'loading...',
+      happenedAt: new Date('1970-01-01T00:00:00.000Z'),
+    }}
+    dateFormatter={() => ''}
+    className={className}
+    {...props}
+  />
+);
