@@ -14,7 +14,7 @@ const RootLayout: FC<{ children: ReactNode }> = ({ children }) => (
     <Provider value={urqlClient}>
       <html
         lang="ja"
-        className="bg-accent-100 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400 scrollbar-thumb-rounded-full hover:scrollbar-thumb-gray-500"
+        className="bg-accent-100 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-gray-400/70 scrollbar-thumb-rounded-full hover:scrollbar-thumb-gray-500"
       >
         <head />
         <body className={`${fontFamily} flex min-h-screen flex-col font-sans`}>
