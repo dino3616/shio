@@ -10,7 +10,7 @@ export type TimelineProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & 
   dateFormatter: TimelineItemProps['dateFormatter'];
 };
 
-export const Timeline: FC<TimelineProps> = ({ timelinesFinder: findTimelines, dateFormatter, className, ...props }) => (
+export const Timeline: FC<TimelineProps> = ({ timelinesFinder, dateFormatter, className, ...props }) => (
   <div className={twMerge('py-10', className)} {...props}>
     <StyledHeading text="Timeline" alt="タイムライン" />
     <div className="relative mt-6">
@@ -20,7 +20,7 @@ export const Timeline: FC<TimelineProps> = ({ timelinesFinder: findTimelines, da
       />
       <div className="space-y-5 py-5">
         <Suspense fallback={<SkeletonTimelineItem className="ml-7" />}>
-          {use(findTimelines()).map((timeline) => (
+          {use(timelinesFinder()).map((timeline) => (
             <ScrollRevealContainer key={timeline.id} duration={0.8} delay={0} distance="40px">
               <TimelineItem timeline={timeline} dateFormatter={dateFormatter} className="ml-7" />
             </ScrollRevealContainer>
