@@ -11,6 +11,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-orange" />
   <img src="https://img.shields.io/badge/codespaces-available-brightgreen" />
+  <img src="https://img.shields.io/badge/gitpod-available-brightgreen" />
   <img src="https://img.shields.io/badge/ghcr-available-brightgreen" />
 </p>
 
