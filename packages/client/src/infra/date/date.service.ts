@@ -1,4 +1,4 @@
 import { format } from 'date-fns';
-import { zonedTimeToUtc } from 'date-fns-tz';
+import { utcToZonedTime } from 'date-fns-tz';
 
-export const formatDate = (date: Date, pattern: string) => format(zonedTimeToUtc(date, 'Asia/Tokyo'), pattern);
+export const formatDate = (date: Date, pattern: string) => format(utcToZonedTime(date, 'Asia/Tokyo'), pattern);
