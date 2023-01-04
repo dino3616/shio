@@ -16,7 +16,7 @@ export const Header: FC<HeaderProps> = ({ className, ...props }) => {
   }, [ref, setHeaderRef]);
 
   return (
-    <header ref={ref} className={twMerge('z-50 bg-white py-6 shadow-lg', className)} {...props}>
+    <header ref={ref} className={twMerge('z-50 bg-white py-6 font-inter shadow-lg', className)} {...props}>
       <ul className="flex items-center justify-center space-x-7">
         <li>
           <Link href="/product" className="transition-colors hover:text-gray-400">
