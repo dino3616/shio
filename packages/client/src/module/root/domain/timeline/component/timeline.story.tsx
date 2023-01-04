@@ -1,11 +1,11 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
 
-import { TimelineItem } from './timeline-item.presenter';
+import { Timeline } from './timeline.presenter';
 
-type Story = ComponentStoryObj<typeof TimelineItem>;
+type Story = ComponentStoryObj<typeof Timeline>;
 
-const meta: ComponentMeta<typeof TimelineItem> = {
-  component: TimelineItem,
+const meta: ComponentMeta<typeof Timeline> = {
+  component: Timeline,
   argTypes: {
     timeline: {
       description: 'timeline of events. `date` is automatically formatted.',
@@ -27,6 +27,6 @@ export const Default: Story = {
       title: 'some event',
       happenedAt: new Date('1970/01/01'),
     },
-    dateFormatter: () => 'Jan. 01 1970',
+    formatDate: () => 'Jan. 01 1970',
   },
 };
