@@ -7,8 +7,8 @@ import { Hero } from '@/module/root/ui/hero.page';
 import { Timeline } from '@/module/root/ui/timeline.page';
 
 const RootPage: FC = () => (
-  <div className="px-10">
-    <Hero className="h-[calc(100vh_-_76px)]" />
+  <div className="p-10 pt-0">
+    <Hero className="h-[calc(100vh_-_4.75rem)]" />
     <Timeline timelinesFinder={findTimelines} dateFormatter={formatDate} />
   </div>
 );

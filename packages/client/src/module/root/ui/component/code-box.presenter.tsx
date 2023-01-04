@@ -11,7 +11,7 @@ export const CodeBox: FC<CodeBoxProps> = ({ className, ...props }) => (
   <Link
     href="https://github.com/dino3616/shio/tree/main/packages/cli"
     target="_blank"
-    className={twMerge('relative flex h-fit w-fit', className)}
+    className={twMerge('relative flex h-fit w-fit mb-5 mr-5', className)}
     {...props}
   >
     <div className="rounded-3xl bg-gray-700 py-5 px-10 text-left font-code transition hover:-translate-y-1 hover:-translate-x-1 active:translate-y-5 active:translate-x-5">
