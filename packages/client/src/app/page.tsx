@@ -1,3 +1,5 @@
+'use client';
+
 import type { FC } from 'react';
 import { formatDate } from '@/infra/date/date.service';
 import { useFindTimelines } from '@/module/root/repository/find-timelines.repository';
