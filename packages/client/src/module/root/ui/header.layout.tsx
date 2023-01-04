@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
-import { twMerge } from '@/common/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge.util';
 
 export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>;
 

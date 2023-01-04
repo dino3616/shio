@@ -1,6 +1,6 @@
 import Image, { ImageProps } from 'next/image';
 import type { FC } from 'react';
-import { twMerge } from '@/common/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge.util';
 
 export type AvatarProps = Omit<ImageProps, 'children' | 'src' | 'alt' | 'width' | 'height'> & {
   size: Required<Pick<ImageProps, 'width'>>['width'];

@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { Avatar } from '@/common/component/avatar/avatar.presenter';
-import { twMerge } from '@/common/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge.util';
 
 export type FooterProps = Omit<ComponentPropsWithoutRef<'footer'>, 'children'>;
 

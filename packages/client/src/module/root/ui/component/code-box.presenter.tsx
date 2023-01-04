@@ -3,7 +3,7 @@
 import Link, { LinkProps } from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { TypeAnimation } from 'react-type-animation';
-import { twMerge } from '@/common/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge.util';
 
 export type CodeBoxProps = Omit<ComponentPropsWithoutRef<'a'> & LinkProps, 'children' | 'href' | 'target'>;
 

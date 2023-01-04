@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import type { Timeline as TimelineModel } from '../model/timeline.model';
-import { twMerge } from '@/common/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge.util';
 
 export type TimelineProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   timeline: TimelineModel;
