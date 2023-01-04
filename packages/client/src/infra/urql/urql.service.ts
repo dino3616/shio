@@ -34,6 +34,7 @@ if (typeof window !== 'undefined') {
 const clientOptions: ClientOptions = {
   url,
   exchanges,
+  suspense: true,
 };
 
 export const urqlClient = createClient(clientOptions);
