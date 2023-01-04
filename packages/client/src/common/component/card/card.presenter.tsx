@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
-import { twMerge } from '@/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge';
 
 export type CardProps = ComponentPropsWithoutRef<'div'>;
 

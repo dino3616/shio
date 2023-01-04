@@ -1,7 +1,7 @@
 import type { ComponentPropsWithRef, FC } from 'react';
 import { CodeBox } from './component/code-box.presenter';
 import { Avatar } from '@/common/component/avatar/avatar.presenter';
-import { twMerge } from '@/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge';
 
 export type HeroProps = Omit<ComponentPropsWithRef<'div'>, 'children'>;
 

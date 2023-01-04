@@ -3,9 +3,9 @@
 import Link, { LinkProps } from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { TypeAnimation } from 'react-type-animation';
-import { twMerge } from '@/util/tw-merge';
+import { twMerge } from '@/common/util/tw-merge';
 
-export type CodeBoxProps = Omit<LinkProps & ComponentPropsWithoutRef<'a'>, 'children' | 'href' | 'target'>;
+export type CodeBoxProps = Omit<ComponentPropsWithoutRef<'a'> & LinkProps, 'children' | 'href' | 'target'>;
 
 export const CodeBox: FC<CodeBoxProps> = ({ className, ...props }) => (
   <Link
