@@ -1,3 +1,5 @@
+'use client';
+
 import { ComponentPropsWithoutRef, FC, Suspense, use } from 'react';
 import { di } from 'react-magnetic-di';
 import { SkeletonTimelineItem, TimelineItem, TimelineItemProps } from './component/timeline-item.presenter';
