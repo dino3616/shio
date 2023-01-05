@@ -1,8 +1,8 @@
-import { HTMLMotionProps, motion } from 'framer-motion';
+import { motion, MotionProps } from 'framer-motion';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 
 export type ScrollRevealContainerProps = ComponentPropsWithoutRef<'div'> &
-  HTMLMotionProps<'div'> & {
+  MotionProps & {
     once?: boolean;
     duration?: number;
     delay?: number;
