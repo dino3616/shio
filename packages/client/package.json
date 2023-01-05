@@ -27,7 +27,6 @@
   },
   "dependencies": {
     "@next/font": "13.1.1",
-    "@radix-ui/react-navigation-menu": "1.1.1",
     "@urql/devtools": "2.0.3",
     "@urql/exchange-auth": "1.0.0",
     "@urql/storybook-addon": "2.0.1",
