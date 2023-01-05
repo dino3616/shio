@@ -6,6 +6,10 @@ type Story = ComponentStoryObj<typeof Timeline>;
 const meta: ComponentMeta<typeof Timeline> = {
   component: Timeline,
   argTypes: {
+    foundTimelinesProps: {
+      description: 'props to inject into foundTimelines',
+      control: { type: 'object' },
+    },
     className: {
       description: 'class to inject.',
       control: { type: 'text' },
