@@ -8,6 +8,10 @@ type Story = ComponentStoryObj<typeof Button>;
 const meta: ComponentMeta<typeof Button> = {
   component: Button,
   argTypes: {
+    asIcon: {
+      description: 'render as icon.',
+      control: { type: 'boolean' },
+    },
     className: {
       description: 'class to inject.',
       control: { type: 'text' },
@@ -33,6 +37,14 @@ export const WithIcon: Story = {
 export const Circle: Story = {
   render: (args) => (
     <Button className="rounded-full" {...args}>
+      <SiStorybook className="text-pink-500" size={120} />
+    </Button>
+  ),
+};
+
+export const AsIcon: Story = {
+  render: (args) => (
+    <Button asIcon {...args}>
       <SiStorybook className="text-pink-500" size={120} />
     </Button>
   ),
