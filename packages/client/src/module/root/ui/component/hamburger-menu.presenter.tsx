@@ -17,7 +17,6 @@ export const HamburgerMenu: FC<HamburgerMenuProps> = ({ iconSize, ...props }) =>
       </Button>
     </Dialog.Trigger>
     <Dialog.Portal>
-      <Dialog.Overlay className="fixed inset-0 bg-gray-500/40" />
       <Dialog.Content className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 space-y-7 rounded-xl border-2 border-white/40 bg-white/10 px-5 py-7 drop-shadow-lg backdrop-blur-lg">
         <Dialog.Title className="mx-5 text-5xl font-bold">shio.dev</Dialog.Title>
         <nav>
