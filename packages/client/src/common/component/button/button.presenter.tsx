@@ -17,7 +17,6 @@ export const Button: FC<ButtonProps> = ({ asIcon, disabledHoverAnimation, disabl
       asIcon && 'bg-transparent p-0',
       className,
     )}
-    style={!asIcon ? { WebkitTapHighlightColor: 'transparent' } : undefined}
     type="button"
     {...props}
   >
