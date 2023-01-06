@@ -12,6 +12,14 @@ const meta: ComponentMeta<typeof Button> = {
       description: 'render as icon.',
       control: { type: 'boolean' },
     },
+    disabledHoverAnimation: {
+      description: 'disabled hover animation',
+      control: { type: 'boolean' },
+    },
+    disabledTapAnimation: {
+      description: 'disabled click animation',
+      control: { type: 'boolean' },
+    },
     className: {
       description: 'class to inject.',
       control: { type: 'text' },
