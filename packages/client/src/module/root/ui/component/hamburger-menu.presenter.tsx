@@ -3,7 +3,7 @@ import { FaHamburger } from 'react-icons/fa';
 import type { IconBaseProps } from 'react-icons/lib';
 import { Button } from '@/common/component/button/button.presenter';
 import { Dialog } from '@/common/component/dialog/dialog.presenter';
-import { NavigationMenu } from '@/common/component/navigation-menu/navigation-menu.presenter';
+import { NavigationMenu } from '@/common/component/navigation-menu/navigation-menu.container';
 
 export type HamburgerMenuProps = Omit<ComponentPropsWithoutRef<typeof Dialog.Root>, 'children'> & {
   iconSize: Required<IconBaseProps['size']>;

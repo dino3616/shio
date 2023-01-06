@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { HamburgerMenu } from './component/hamburger-menu.presenter';
-import { NavigationMenu } from '@/common/component/navigation-menu/navigation-menu.presenter';
+import { NavigationMenu } from '@/common/component/navigation-menu/navigation-menu.container';
 import { twMerge } from '@/common/util/tw-merge.util';
 
 export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>;
