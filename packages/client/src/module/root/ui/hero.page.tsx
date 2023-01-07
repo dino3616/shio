@@ -1,5 +1,5 @@
 import type { ComponentPropsWithRef, FC } from 'react';
-import { CodeBox } from './component/code-box.presenter';
+import { CodeBox } from './component/code-box/code-box.presenter';
 import { Avatar } from '@/common/component/avatar/avatar.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 
