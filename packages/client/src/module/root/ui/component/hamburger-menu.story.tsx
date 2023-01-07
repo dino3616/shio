@@ -1,6 +1,5 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-
-import { HamburgerMenu } from './hamburger-menu.presenter';
+import { HamburgerMenu } from './hamburger-menu.container';
 import { Avatar } from '@/common/component/avatar/avatar.presenter';
 
 type Story = ComponentStoryObj<typeof HamburgerMenu>;
