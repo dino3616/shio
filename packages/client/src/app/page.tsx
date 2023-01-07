@@ -7,7 +7,7 @@ import { Hero } from '@/module/root/ui/hero.page';
 import { Timeline } from '@/module/root/ui/timeline.page';
 
 const RootPage: FC = () => (
-  <div className="p-10 pt-0">
+  <div className="py-10 px-5 pt-0 md:px-10">
     <Hero className="h-[calc(100vh_-_4.75rem)]" />
     <Timeline
       foundTimelinesProps={{
