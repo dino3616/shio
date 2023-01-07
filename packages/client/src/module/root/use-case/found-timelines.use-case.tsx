@@ -1,7 +1,7 @@
 import type { FC } from 'react';
 import { Timeline, TimelineProps } from '../domain/timeline/component/timeline.presenter';
 import type { UseFindTimelinesInterface } from '../repository/find-timelines.repository';
-import { ScrollRevealContainer } from '@/common/component/scroll-reveal-container/scroll-reveal-container.presenter';
+import { ScrollRevealAnimation } from '@/common/component/scroll-reveal-animation/scroll-reveal-animation.presenter';
 
 export type FoundTimelinesProps = Omit<TimelineProps, 'timeline'> & {
   useFindTimelines: UseFindTimelinesInterface;
@@ -13,9 +13,9 @@ export const FoundTimelines: FC<FoundTimelinesProps> = ({ useFindTimelines, ...p
   return (
     <>
       {timelines.map((timeline) => (
-        <ScrollRevealContainer key={timeline.id} duration={0.8} delay={0} distance="40px">
+        <ScrollRevealAnimation key={timeline.id} duration={0.8} delay={0} distance="40px">
           <Timeline timeline={timeline} {...props} />
-        </ScrollRevealContainer>
+        </ScrollRevealAnimation>
       ))}
     </>
   );

@@ -1,12 +1,11 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
 import { Card } from '../card/card.presenter';
+import { ScrollRevealAnimation } from './scroll-reveal-animation.presenter';
 
-import { ScrollRevealContainer } from './scroll-reveal-container.presenter';
+type Story = ComponentStoryObj<typeof ScrollRevealAnimation>;
 
-type Story = ComponentStoryObj<typeof ScrollRevealContainer>;
-
-const meta: ComponentMeta<typeof ScrollRevealContainer> = {
-  component: ScrollRevealContainer,
+const meta: ComponentMeta<typeof ScrollRevealAnimation> = {
+  component: ScrollRevealAnimation,
   argTypes: {
     once: {
       description: 'whether to animate only once.',
@@ -40,12 +39,12 @@ export const Default: Story = {
     distance: '40px',
   },
   render: (args) => (
-    <ScrollRevealContainer {...args}>
+    <ScrollRevealAnimation {...args}>
       <Card>
         あのイーハトーヴォのすきとおった風、夏でも底に冷たさをもつ青いそら、うつくしい森で飾られたモリーオ市、郊外のぎらぎらひかる草の波。
         <br />
         またそのなかでいっしょになったたくさんのひとたち、ファゼーロとロザーロ、羊飼のミーロや、顔の赤いこどもたち、地主のテーモ、山猫博士のボーガント・デストゥパーゴなど、いまこの暗い巨きな石の建物のなかで考えていると、みんなむかし風のなつかしい青い幻燈のように思われます。では、わたくしはいつかの小さなみだしをつけながら、しずかにあの年のイーハトーヴォの五月から十月までを書きつけましょう。
       </Card>
-    </ScrollRevealContainer>
+    </ScrollRevealAnimation>
   ),
 };
