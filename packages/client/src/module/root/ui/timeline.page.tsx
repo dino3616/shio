@@ -1,8 +1,8 @@
 'use client';
 
 import { ComponentPropsWithoutRef, FC, Suspense } from 'react';
-import { SkeletonTimeline } from '../domain/timeline/component/timeline.presenter';
 import { FoundTimelines, FoundTimelinesProps } from '../use-case/found-timelines.use-case';
+import { SkeletonTimeline } from './component/timeline/timeline.presenter';
 import { Heading } from '@/common/component/heading/heading.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 

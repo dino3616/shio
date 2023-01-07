@@ -1,6 +1,7 @@
 import type { FC } from 'react';
-import { Timeline, TimelineProps } from '../domain/timeline/component/timeline.presenter';
 import type { UseFindTimelinesInterface } from '../repository/find-timelines.repository';
+import { Timeline } from '../ui/component/timeline/timeline.presenter';
+import type { TimelineProps } from '../ui/component/timeline/timeline.presenter';
 import { ScrollRevealAnimation } from '@/common/component/scroll-reveal-animation/scroll-reveal-animation.presenter';
 
 export type FoundTimelinesProps = Omit<TimelineProps, 'timeline'> & {
