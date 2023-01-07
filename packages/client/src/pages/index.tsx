@@ -1,20 +1,31 @@
-import type { FC } from 'react';
+import type { GetStaticProps, NextPage } from 'next';
 import { formatDate } from '@/infra/date/date.service';
 import { Layout } from '@/module/layout/ui/layout.page';
-import { useFindTimelines } from '@/module/root/repository/find-timelines.repository';
+import type { Timeline as TimelineModel } from '@/module/root/model/timeline.model';
+import { findTimelines } from '@/module/root/repository/find-timelines.repository';
 import { Hero } from '@/module/root/ui/hero.page';
 import { Timeline } from '@/module/root/ui/timeline.page';
 
-const RootPage: FC = () => (
+export type RootPageProps = {
+  timelines: TimelineModel[];
+};
+
+const RootPage: NextPage<RootPageProps> = ({ timelines }: RootPageProps) => (
   <Layout title="shio.dev | Creator for Creators" className="py-10 px-5 pt-0 md:px-10">
     <Hero className="h-[calc(100vh_-_4.75rem)]" />
-    <Timeline
-      foundTimelinesProps={{
-        useFindTimelines,
-        formatDate,
-      }}
-    />
+    <Timeline timelines={timelines} timelineItemProps={{ formatDate }} />
   </Layout>
 );
+
+export const getStaticProps: GetStaticProps<RootPageProps> = async () => {
+  const timelines = await findTimelines();
+
+  return {
+    props: {
+      timelines: JSON.parse(JSON.stringify(timelines)),
+    },
+    revalidate: 20,
+  };
+};
 
 export default RootPage;
