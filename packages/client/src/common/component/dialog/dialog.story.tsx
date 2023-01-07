@@ -2,7 +2,6 @@ import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
 import { SiStorybook } from 'react-icons/si';
 import { Button } from '../button/button.presenter';
 import { Card } from '../card/card.presenter';
-
 import { Dialog } from './dialog.presenter';
 
 type Story = ComponentStoryObj<typeof Dialog.Root>;

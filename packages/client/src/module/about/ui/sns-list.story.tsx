@@ -1,5 +1,4 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-
 import { SnsList } from './sns-list.page';
 
 type Story = ComponentStoryObj<typeof SnsList>;

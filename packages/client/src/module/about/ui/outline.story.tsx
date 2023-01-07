@@ -1,5 +1,4 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-
 import { Outline } from './outline.page';
 
 type Story = ComponentStoryObj<typeof Outline>;

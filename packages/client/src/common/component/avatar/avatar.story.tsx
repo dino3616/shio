@@ -1,5 +1,4 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-
 import { Avatar } from './avatar.presenter';
 
 type Story = ComponentStoryObj<typeof Avatar>;

@@ -1,5 +1,4 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-
 import { CodeBox } from './code-box.presenter';
 
 type Story = ComponentStoryObj<typeof CodeBox>;
