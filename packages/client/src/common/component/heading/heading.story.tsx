@@ -1,11 +1,10 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
+import { Heading } from './heading.presenter';
 
-import { StyledHeading } from './styled-heading.presenter';
+type Story = ComponentStoryObj<typeof Heading>;
 
-type Story = ComponentStoryObj<typeof StyledHeading>;
-
-const meta: ComponentMeta<typeof StyledHeading> = {
-  component: StyledHeading,
+const meta: ComponentMeta<typeof Heading> = {
+  component: Heading,
   argTypes: {
     text: {
       description: 'main text.',
