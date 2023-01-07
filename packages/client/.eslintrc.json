@@ -47,7 +47,7 @@
   },
   "overrides": [
     {
-      "files": ["./src/app/**"],
+      "files": ["./src/pages/**"],
       "rules": {
         "import/prefer-default-export": "error",
         "import/no-default-export": "off"

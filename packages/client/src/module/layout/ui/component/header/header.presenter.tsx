@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
-import { HamburgerMenu } from './component/hamburger-menu/hamburger-menu.container';
+import { HamburgerMenu } from '../hamburger-menu/hamburger-menu.container';
 import { NavigationMenu } from '@/common/component/navigation-menu/navigation-menu.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 

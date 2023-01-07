@@ -1,4 +1,4 @@
-import type { Timeline } from '../domain/timeline/model/timeline.model';
+import type { Timeline } from '../model/timeline.model';
 import { useFindTimelinesQuery } from '@/infra/graphql/generated/graphql';
 
 export type UseFindTimelinesInterface = () => Timeline[];

@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { TypeAnimation } from 'react-type-animation';

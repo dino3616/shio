@@ -5,13 +5,13 @@ const config = {
   mode: 'jit',
   content: ['./src/**/*.{ts,tsx}'],
   theme: {
-    fontFamily: {
-      sans: ['var(--font-noto-sans-jp)'],
-      inter: ['var(--font-inter)'],
-      rakkas: ['var(--font-rakkas)'],
-      code: ['var(--font-inconsolata)'],
-    },
     extend: {
+      fontFamily: {
+        sans: ['var(--font-noto-sans-jp)'],
+        inter: ['var(--font-inter)'],
+        rakkas: ['var(--font-rakkas)'],
+        code: ['var(--font-inconsolata)'],
+      },
       colors: {
         white: '#FFFFFF',
         primary: {

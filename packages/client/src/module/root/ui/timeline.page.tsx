@@ -1,5 +1,3 @@
-'use client';
-
 import { ComponentPropsWithoutRef, FC, Suspense } from 'react';
 import { FoundTimelines, FoundTimelinesProps } from '../use-case/found-timelines.use-case';
 import { SkeletonTimeline } from './component/timeline/timeline.presenter';

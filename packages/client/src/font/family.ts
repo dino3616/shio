@@ -11,20 +11,14 @@ const notoSansJp = Noto_Sans_JP({
   variable: '--font-noto-sans-jp',
 });
 
-const sansFamily = [inter, notoSansJp].map((font) => font.variable);
-
 const rakkas = Rakkas({
   weight: ['400'],
   variable: '--font-rakkas',
 });
-
-const rakkasFamily = [rakkas].map((font) => font.variable);
 
 const inconsolata = Inconsolata({
   weight: ['200', '300', '400', '500', '600', '700', '800', '900'],
   variable: '--font-inconsolata',
 });
 
-const codeFamily = [inconsolata].map((font) => font.variable);
-
-export const fontFamily = [...sansFamily, ...rakkasFamily, ...codeFamily].join(' ');
+export const fontFamily = [inter, notoSansJp, rakkas, inconsolata].map((font) => font.variable).join(' ');

@@ -1,10 +1,10 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-import { Footer } from './footer.layout';
+import { Header } from './header.presenter';
 
-type Story = ComponentStoryObj<typeof Footer>;
+type Story = ComponentStoryObj<typeof Header>;
 
-const meta: ComponentMeta<typeof Footer> = {
-  component: Footer,
+const meta: ComponentMeta<typeof Header> = {
+  component: Header,
   argTypes: {
     className: {
       description: 'class to inject.',

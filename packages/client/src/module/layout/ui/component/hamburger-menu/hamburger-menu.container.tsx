@@ -1,5 +1,3 @@
-'use client';
-
 import { ComponentPropsWithoutRef, FC, useState } from 'react';
 import { HamburgerMenu as HamburgerMenuPresenter } from './hamburger-menu.presenter';
 
