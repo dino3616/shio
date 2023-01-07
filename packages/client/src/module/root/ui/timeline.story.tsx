@@ -6,8 +6,12 @@ type Story = ComponentStoryObj<typeof Timeline>;
 const meta: ComponentMeta<typeof Timeline> = {
   component: Timeline,
   argTypes: {
-    foundTimelinesProps: {
-      description: 'props to inject into foundTimelines',
+    timelines: {
+      description: 'timelines to display.',
+      control: { type: 'object' },
+    },
+    timelineItemProps: {
+      description: 'props to inject into TimelineItem.',
       control: { type: 'object' },
     },
     className: {
@@ -21,19 +25,19 @@ export default meta;
 
 export const Default: Story = {
   args: {
-    foundTimelinesProps: {
-      useFindTimelines: () => [
-        {
-          id: 'abc-123',
-          title: 'hoge event',
-          happenedAt: new Date('1970/01/01'),
-        },
-        {
-          id: 'abc-456',
-          title: 'fuga event',
-          happenedAt: new Date('1970/01/01'),
-        },
-      ],
+    timelines: [
+      {
+        id: 'abc-123',
+        title: 'hoge event',
+        happenedAt: new Date('1970/01/01'),
+      },
+      {
+        id: 'abc-456',
+        title: 'fuga event',
+        happenedAt: new Date('1970/01/01'),
+      },
+    ],
+    timelineItemProps: {
       formatDate: () => 'Jan. 01 1970',
     },
   },
