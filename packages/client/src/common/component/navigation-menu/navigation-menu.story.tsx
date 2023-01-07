@@ -1,6 +1,6 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
 
-import { NavigationMenu } from './navigation-menu.container';
+import { NavigationMenu } from './navigation-menu.presenter';
 
 type Story = ComponentStoryObj<typeof NavigationMenu.Root>;
 
