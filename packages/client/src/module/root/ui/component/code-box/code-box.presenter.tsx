@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { TypeAnimation } from 'react-type-animation';
+import { Link } from '@/common/component/link/link.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 
 export type CodeBoxProps = Omit<ComponentPropsWithoutRef<typeof Link>, 'children' | 'href' | 'target'>;

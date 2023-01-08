@@ -1,10 +1,10 @@
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 import type { ComponentPropsWithoutRef, Dispatch, FC, SetStateAction } from 'react';
 import { FaHamburger } from 'react-icons/fa';
 import type { IconBaseProps } from 'react-icons/lib';
 import { Button } from '@/common/component/button/button.presenter';
 import { Dialog } from '@/common/component/dialog/dialog.presenter';
+import { Link } from '@/common/component/link/link.presenter';
 import { NavigationMenu } from '@/common/component/navigation-menu/navigation-menu.presenter';
 
 export type HamburgerMenuProps = Omit<ComponentPropsWithoutRef<typeof Dialog.Root>, 'children'> & {

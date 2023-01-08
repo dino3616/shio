@@ -1,12 +1,12 @@
 import * as RadixUiNavigationMenu from '@radix-ui/react-navigation-menu';
-import NextLink from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
+import { Link as PrimitiveLink } from '@/common/component/link/link.presenter';
 
-type LinkProps = ComponentPropsWithoutRef<typeof NextLink>;
+type LinkProps = ComponentPropsWithoutRef<typeof PrimitiveLink>;
 
 const Link: FC<LinkProps> = ({ children, ...props }) => (
   <RadixUiNavigationMenu.Link asChild>
-    <NextLink {...props}>{children}</NextLink>
+    <PrimitiveLink {...props}>{children}</PrimitiveLink>
   </RadixUiNavigationMenu.Link>
 );
 

@@ -1,8 +1,8 @@
-import Link from 'next/link';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { AiFillGithub, AiFillInstagram, AiOutlineTwitter } from 'react-icons/ai';
 import { FaDiscord } from 'react-icons/fa';
 import { SiQiita, SiZenn } from 'react-icons/si';
+import { Link } from '@/common/component/link/link.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 
 export type SnsListProps = Omit<ComponentPropsWithoutRef<'ul'>, 'children'>;
