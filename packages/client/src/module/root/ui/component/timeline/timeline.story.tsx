@@ -26,6 +26,6 @@ export const Default: Story = {
       title: 'some event',
       happenedAt: new Date('1970/01/01'),
     },
-    formatDate: () => 'Jan. 01 1970',
+    formatDate: () => 'Jan. 01, 1970',
   },
 };
