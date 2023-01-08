@@ -1,8 +1,8 @@
-import { motion, MotionProps } from 'framer-motion';
+import { motion } from 'framer-motion';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export type ButtonProps = Omit<ComponentPropsWithoutRef<'button'> & MotionProps, 'type'> & {
+export type ButtonProps = Omit<ComponentPropsWithoutRef<typeof motion.button>, 'type'> & {
   asIcon?: boolean;
   disabledHoverAnimation?: boolean;
   disabledTapAnimation?: boolean;
