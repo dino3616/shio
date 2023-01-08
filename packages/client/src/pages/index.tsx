@@ -1,5 +1,6 @@
 import type { GetStaticProps, NextPage } from 'next';
 import { formatDate } from '@/infra/date/date.service';
+import { SortOrder } from '@/infra/graphql/generated/graphql';
 import { Layout } from '@/module/layout/ui/layout.page';
 import type { Timeline as TimelineModel } from '@/module/root/model/timeline.model';
 import { findTimelines } from '@/module/root/repository/find-timelines.repository';
@@ -18,7 +19,7 @@ const RootPage: NextPage<RootPageProps> = ({ timelines }: RootPageProps) => (
 );
 
 export const getStaticProps: GetStaticProps<RootPageProps> = async () => {
-  const timelines = await findTimelines();
+  const timelines = await findTimelines({ orderBy: { happenedAt: SortOrder.Asc } });
 
   return {
     props: {
