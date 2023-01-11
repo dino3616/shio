@@ -1,0 +1,10 @@
+query FindSkills {
+  findSkills {
+    createdAt
+    description
+    iconUrl
+    id
+    name
+    officialUrl
+  }
+}
