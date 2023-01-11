@@ -1,5 +1,5 @@
-import Image from 'next/image';
 import type { ComponentPropsWithoutRef, FC } from 'react';
+import { Image } from '@/common/component/image/image.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 
 export type HttpErrorProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {

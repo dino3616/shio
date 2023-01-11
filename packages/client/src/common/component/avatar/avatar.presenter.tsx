@@ -1,9 +1,9 @@
-import Image, { ImageProps } from 'next/image';
-import type { FC } from 'react';
+import type { ComponentPropsWithoutRef, FC } from 'react';
+import { Image } from '../image/image.presenter';
 import { twMerge } from '@/common/util/tw-merge.util';
 
-export type AvatarProps = Omit<ImageProps, 'children' | 'src' | 'alt' | 'width' | 'height'> & {
-  size: Required<Pick<ImageProps, 'width'>>['width'];
+export type AvatarProps = Omit<ComponentPropsWithoutRef<typeof Image>, 'children' | 'src' | 'alt' | 'width' | 'height'> & {
+  size: Required<Pick<ComponentPropsWithoutRef<typeof Image>, 'width'>>['width'];
 };
 
 export const Avatar: FC<AvatarProps> = ({ size, className, ...props }) => (
