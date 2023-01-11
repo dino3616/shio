@@ -319,7 +319,7 @@
             "deprecationReason": null
           },
           {
-            "name": "officialLink",
+            "name": "officialUrl",
             "description": null,
             "args": [],
             "type": {
