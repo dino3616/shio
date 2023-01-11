@@ -14,7 +14,7 @@ export const createSkill = async (prismaService: PrismaService) => {
     data: {
       name: 'hoge',
       description: 'hoge',
-      officialLink: 'http://hoge.com',
+      officialUrl: 'http://hoge.com',
       iconUrl: 'http://hoge.com/icon.png',
     },
   });

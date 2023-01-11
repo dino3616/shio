@@ -12,7 +12,7 @@ export class Skill {
   description: string;
 
   @Field(() => String, { nullable: false })
-  officialLink: string;
+  officialUrl: string;
 
   @Field(() => String, { nullable: false })
   iconUrl: string;
