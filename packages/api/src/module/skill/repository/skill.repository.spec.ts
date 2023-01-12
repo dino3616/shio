@@ -2,6 +2,7 @@ import { Test } from '@nestjs/testing';
 import dotenv from 'dotenv';
 import { Skill } from '../domain/model/skill.model';
 import { SkillRepository } from './skill.repository';
+import { LearningLevel } from '@/common/dto/enum/learning-level.dto';
 import { PrismaService } from '@/infra/prisma/prisma.service';
 
 dotenv.config();
@@ -14,6 +15,7 @@ export const createSkill = async (prismaService: PrismaService) => {
     data: {
       name: 'hoge',
       description: 'hoge',
+      learningLevel: LearningLevel.BEGINNER,
       officialUrl: 'http://hoge.com',
       iconUrl: 'http://hoge.com/icon.png',
     },

@@ -39,13 +39,21 @@ model Timeline {
 }
 
 model Skill {
-  id          String @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String
-  officialUrl String @map("official_url")
-  iconUrl     String @map("icon_url")
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  description   String
+  learningLevel LearningLevel @map("learning_level")
+  officialUrl   String        @map("official_url")
+  iconUrl       String        @map("icon_url")
 
   createdAt DateTime @default(now()) @map("created_at")
 
   @@map("skills")
+}
+
+enum LearningLevel {
+  BEGINNER
+  INTERMEDIATE
+  ADVANCED
+  EXPERT
 }

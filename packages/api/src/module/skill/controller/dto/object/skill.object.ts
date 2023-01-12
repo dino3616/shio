@@ -1,4 +1,5 @@
 import { Field, ObjectType } from '@nestjs/graphql';
+import { LearningLevel } from '@/infra/prisma/generated/prisma/learning-level/enum';
 
 @ObjectType()
 export class Skill {
@@ -10,6 +11,9 @@ export class Skill {
 
   @Field(() => String, { nullable: false })
   description: string;
+
+  @Field(() => LearningLevel, { nullable: false })
+  learningLevel: keyof typeof LearningLevel;
 
   @Field(() => String, { nullable: false })
   officialUrl: string;
