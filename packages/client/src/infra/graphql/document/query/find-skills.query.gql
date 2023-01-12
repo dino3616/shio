@@ -4,6 +4,7 @@ query FindSkills {
     description
     iconUrl
     id
+    learningLevel
     name
     officialUrl
   }
