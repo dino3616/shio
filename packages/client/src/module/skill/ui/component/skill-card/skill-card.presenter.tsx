@@ -18,7 +18,7 @@ export const SkillCard: FC<SkillCardProps> = ({ skill, className, ...props }) =>
       className="flex h-36 w-full items-center justify-center"
       style={{ ...getLearningLevelBgColor(skill.learningLevel) }}
     >
-      <Image src={skill.iconUrl} width={100} height={100} alt={skill.name} className="bg-white" />
+      <Image src={skill.iconUrl} width={100} height={100} alt={skill.name} />
     </Link>
     <div className="space-y-5 p-5">
       <h2 className="text-center text-3xl font-semibold hover:underline">
