@@ -1,10 +1,11 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { SnsList } from './component/sns-list/sns-list.page';
+import { twMerge } from '@/common/util/tw-merge.util';
 
 export type OutlineProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'>;
 
-export const Outline: FC<OutlineProps> = ({ ...props }) => (
-  <div {...props}>
+export const Outline: FC<OutlineProps> = ({ className, ...props }) => (
+  <div className={twMerge('space-y-5', className)} {...props}>
     <div className="space-y-10 border-b-2 border-gray-400 pb-10">
       <div className="flex justify-between" {...props}>
         <div className="font-bold">
