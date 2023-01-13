@@ -1,15 +1,15 @@
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import type { Timeline as TimelineModel } from '../model/timeline.model';
-import { Timeline as TimelineItem } from './component/timeline/timeline.presenter';
+import { TimelineCard } from './component/timeline-card/timeline-card.presenter';
 import { Heading } from '@/common/component/heading/heading.presenter';
 import { ScrollRevealAnimation } from '@/common/component/scroll-reveal-animation/scroll-reveal-animation.presenter';
 
 export type TimelineProps = Omit<ComponentPropsWithoutRef<'div'>, 'children'> & {
   timelines: TimelineModel[];
-  timelineItemProps: Omit<ComponentPropsWithoutRef<typeof TimelineItem>, 'timeline'>;
+  timelineCardProps: Omit<ComponentPropsWithoutRef<typeof TimelineCard>, 'timeline'>;
 };
 
-export const Timeline: FC<TimelineProps> = ({ timelines, timelineItemProps, ...props }) => (
+export const Timeline: FC<TimelineProps> = ({ timelines, timelineCardProps, ...props }) => (
   <div {...props}>
     <Heading text="Timeline" alt="タイムライン" />
     <div className="relative mt-6">
@@ -20,7 +20,7 @@ export const Timeline: FC<TimelineProps> = ({ timelines, timelineItemProps, ...p
       <div className="space-y-5 py-5">
         {timelines.map((timeline) => (
           <ScrollRevealAnimation key={timeline.id} duration={0.8} delay={0} distance="40px">
-            <TimelineItem className="ml-7" timeline={timeline} {...timelineItemProps} />
+            <TimelineCard className="ml-7" timeline={timeline} {...timelineCardProps} />
           </ScrollRevealAnimation>
         ))}
       </div>

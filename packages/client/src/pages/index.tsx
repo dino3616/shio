@@ -14,7 +14,7 @@ export type RootPageProps = {
 const RootPage: NextPage<RootPageProps> = ({ timelines }: RootPageProps) => (
   <Layout title="shio.dev | Creator for Creators" className="py-10 px-5 pt-0 md:px-10">
     <Hero className="h-[calc(100vh_-_4.75rem)]" />
-    <Timeline timelines={timelines} timelineItemProps={{ formatDate }} />
+    <Timeline timelines={timelines} timelineCardProps={{ formatDate }} />
   </Layout>
 );
 

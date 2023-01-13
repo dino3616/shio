@@ -10,8 +10,8 @@ const meta: ComponentMeta<typeof Timeline> = {
       description: 'timelines to display.',
       control: { type: 'object' },
     },
-    timelineItemProps: {
-      description: 'props to inject into TimelineItem.',
+    timelineCardProps: {
+      description: 'props to inject into TimelineCard.',
       control: { type: 'object' },
     },
     className: {
@@ -37,7 +37,7 @@ export const Default: Story = {
         happenedAt: new Date('1970/01/01'),
       },
     ],
-    timelineItemProps: {
+    timelineCardProps: {
       formatDate: () => 'Jan. 01 1970',
     },
   },

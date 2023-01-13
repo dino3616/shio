@@ -1,10 +1,10 @@
 import type { ComponentStoryObj, ComponentMeta } from '@storybook/react';
-import { Timeline } from './timeline.presenter';
+import { TimelineCard } from './timeline-card.presenter';
 
-type Story = ComponentStoryObj<typeof Timeline>;
+type Story = ComponentStoryObj<typeof TimelineCard>;
 
-const meta: ComponentMeta<typeof Timeline> = {
-  component: Timeline,
+const meta: ComponentMeta<typeof TimelineCard> = {
+  component: TimelineCard,
   argTypes: {
     timeline: {
       description: 'timeline of events. `date` is automatically formatted.',
