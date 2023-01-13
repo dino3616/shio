@@ -40,6 +40,7 @@ model Timeline {
 
 model Skill {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  index         Int
   name          String
   description   String
   learningLevel LearningLevel @map("learning_level")

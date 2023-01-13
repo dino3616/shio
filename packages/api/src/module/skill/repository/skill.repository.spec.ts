@@ -13,6 +13,7 @@ jest.setTimeout(15000);
 export const createSkill = async (prismaService: PrismaService) => {
   const createdSkill = await prismaService.skill.create({
     data: {
+      index: 1,
       name: 'hoge',
       description: 'hoge',
       learningLevel: LearningLevel.BEGINNER,

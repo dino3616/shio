@@ -6,6 +6,9 @@ export class Skill {
   @Field(() => String, { nullable: false })
   id: string;
 
+  @Field(() => Number, { nullable: false })
+  index: number;
+
   @Field(() => String, { nullable: false })
   name: string;
 

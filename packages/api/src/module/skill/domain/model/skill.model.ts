@@ -3,6 +3,8 @@ import { LearningLevel } from '@/common/dto/enum/learning-level.dto';
 export class Skill {
   readonly id: string;
 
+  readonly index: number;
+
   readonly name: string;
 
   readonly description: string;
@@ -17,6 +19,7 @@ export class Skill {
 
   constructor(args: {
     id: string;
+    index: number;
     name: string;
     description: string;
     learningLevel: keyof typeof LearningLevel;
@@ -25,6 +28,7 @@ export class Skill {
     createdAt: Date;
   }) {
     this.id = args.id;
+    this.index = args.index;
     this.name = args.name;
     this.description = args.description;
     this.learningLevel = args.learningLevel;

@@ -3,6 +3,7 @@ import { SortOrder } from '@/common/dto/enum/sort-order.dto';
 
 export type FindManyProps = {
   orderBy?: {
+    index?: keyof typeof SortOrder;
     createdAt?: keyof typeof SortOrder;
   }[];
   cursor?: {

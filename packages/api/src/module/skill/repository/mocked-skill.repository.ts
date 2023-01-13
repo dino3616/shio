@@ -9,6 +9,7 @@ export class MockedSkillRepository implements SkillRepositoryInterface {
     const foundSkills = [
       {
         id: 'abc-123',
+        index: 0,
         name: 'hoge',
         description: 'hoge',
         learningLevel: LearningLevel.BEGINNER,
@@ -18,6 +19,7 @@ export class MockedSkillRepository implements SkillRepositoryInterface {
       },
       {
         id: 'abc-456',
+        index: 1,
         name: 'fuga',
         description: 'fuga',
         learningLevel: LearningLevel.BEGINNER,
