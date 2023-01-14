@@ -37,13 +37,21 @@
     "import/order": [
       "error",
       {
+        "pathGroups": [
+          {
+            "pattern": "@/**",
+            "group": "internal",
+            "position": "before"
+          }
+        ],
         "alphabetize": {
           "order": "asc"
         }
       }
     ],
     "import/prefer-default-export": "off",
-    "import/no-default-export": "error"
+    "import/no-default-export": "error",
+    "import/no-extraneous-dependencies": ["error", { "packageDir": ["./"] }]
   },
   "overrides": [
     {
