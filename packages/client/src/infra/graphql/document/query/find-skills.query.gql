@@ -1,5 +1,5 @@
-query FindSkills {
-  findSkills {
+query FindSkills($orderBy: [SkillOrderInput!]) {
+  findSkills(orderBy: $orderBy) {
     createdAt
     description
     iconUrl

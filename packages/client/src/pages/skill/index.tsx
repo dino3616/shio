@@ -1,4 +1,5 @@
 import type { GetStaticProps, NextPage } from 'next';
+import { SortOrder } from '@/infra/graphql/generated/graphql';
 import { Layout } from '@/module/layout/ui/layout.page';
 import type { Skill as SkillModel } from '@/module/skill/model/skill.model';
 import { findSkills } from '@/module/skill/repository/find-skills.repository';
@@ -15,7 +16,7 @@ const SkillPage: NextPage<SkillPageProps> = ({ skills }: SkillPageProps) => (
 );
 
 export const getStaticProps: GetStaticProps<SkillPageProps> = async () => {
-  const skills = await findSkills({});
+  const skills = await findSkills({ orderBy: { index: SortOrder.Asc } });
 
   return {
     props: {
