@@ -14,10 +14,10 @@ export const Skill: FC<SkillProps> = ({ skills, className, ...props }) => (
   <div className={twMerge('space-y-5', className)} {...props}>
     <Heading text="Skill" alt="スキル" />
     <LearningLevelList />
-    <div className="flex gap-5">
+    <div className="flex flex-col flex-wrap gap-10 md:flex-row">
       {skills.map((skill) => (
-        <ScrollRevealAnimation key={skill.id} duration={0.8} delay={0} distance="40px">
-          <SkillCard skill={skill} />
+        <ScrollRevealAnimation key={skill.id} once duration={0.8} delay={0} distance="40px">
+          <SkillCard skill={skill} className="h-full" />
         </ScrollRevealAnimation>
       ))}
     </div>
