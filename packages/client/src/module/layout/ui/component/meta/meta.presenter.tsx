@@ -10,14 +10,14 @@ export type MetaProps = {
 export const Meta: FC<MetaProps> = ({ title, hostname }) => (
   <Head>
     <title>{title}</title>
-    <link rel="icon" href="/favicon.png" key={MetaKey.FAVICON} />
+    <link rel="icon" href="/favicon.png" key={MetaKey.ICON} />
     <meta name="viewport" content="initial-scale=1.0, width=device-width" key={MetaKey.VIEWPORT} />
-    <meta property="og:type" content="website" key={MetaKey.TYPE} />
-    <meta property="og:title" content={title} key={MetaKey.TITLE} />
-    <meta property="description" content="shioのポートフォリオサイト" key={MetaKey.DESCRIPTION} />
-    <meta property="og:description" content="shioのポートフォリオサイト" key={MetaKey.OGDESCRIPTION} />
-    <meta property="og:image" content="/ogp/ogp.png" key={MetaKey.IMAGE} />
-    <meta property="og:image" content={`https://${hostname}/ogp.png`} key={MetaKey.IMAGE} />
+    <meta name="description" content="portfolio site of shio, creator for creators." key={MetaKey.DESCRIPTION} />
+    <meta property="og:type" content="website" key={MetaKey.OG_TYPE} />
+    <meta property="og:title" content={title} key={MetaKey.OG_TITLE} />
+    <meta property="og:description" content="portfolio site of shio, creator for creators." key={MetaKey.OG_DESCRIPTION} />
+    <meta property="og:image" content="/ogp.png" key={MetaKey.OG_IMAGE} />
+    <meta property="og:image" content={`https://${hostname}/ogp.png`} key={MetaKey.OG_IMAGE} />
     <meta property="twitter:image" content={`https://${hostname}/ogp.png`} key={MetaKey.TWITTER_IMAGE} />
     <meta name="twitter:card" content="summary_large_image" key={MetaKey.TWITTER_CARD} />
     <meta name="twitter:site" content="shio" key={MetaKey.TWITTER_SITE} />
