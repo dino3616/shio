@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import type { ComponentPropsWithoutRef, FC } from 'react';
 import { Footer } from './component/footer/footer.presenter';
 import { Header } from './component/header/header.presenter';
-import { Meta, MetaProps } from './component/meta/meta.presenter';
+import { Meta, MetaProps } from './component/meta/meta.container';
 import { twMerge } from '@/common/util/tw-merge.util';
 
 export type LayoutProps = ComponentPropsWithoutRef<typeof motion.main> & Pick<MetaProps, 'title'>;
