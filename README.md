@@ -17,4 +17,4 @@
 
 # Introduction
 
-This is portfolio site of shio, creators for creator.
+This is portfolio site of shio, creator for creators.
