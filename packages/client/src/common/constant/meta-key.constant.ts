@@ -9,4 +9,5 @@ export enum MetaKey {
   TWITTER_CARD = 'twitterCard',
   TWITTER_SITE = 'twitterSite',
   TWITTER_CREATOR = 'twitterCreator',
+  TWITTER_IMAGE = 'twitterImage',
 }
