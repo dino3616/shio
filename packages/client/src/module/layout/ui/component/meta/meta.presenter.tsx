@@ -16,11 +16,10 @@ export const Meta: FC<MetaProps> = ({ title, hostname }) => (
     <meta property="og:type" content="website" key={MetaKey.OG_TYPE} />
     <meta property="og:title" content={title} key={MetaKey.OG_TITLE} />
     <meta property="og:description" content="portfolio site of shio, creator for creators." key={MetaKey.OG_DESCRIPTION} />
-    <meta property="og:image" content="/ogp.png" key={MetaKey.OG_IMAGE} />
+    <meta property="og:url" content={`https://${hostname}`} key={MetaKey.OG_URL} />
+    <meta property="og:site_name" content="shio.dev" key={MetaKey.OG_SITE_NAME} />
     <meta property="og:image" content={`https://${hostname}/ogp.png`} key={MetaKey.OG_IMAGE} />
-    <meta property="twitter:image" content={`https://${hostname}/ogp.png`} key={MetaKey.TWITTER_IMAGE} />
     <meta name="twitter:card" content="summary_large_image" key={MetaKey.TWITTER_CARD} />
-    <meta name="twitter:site" content="shio" key={MetaKey.TWITTER_SITE} />
-    <meta name="twitter:creator" content="shio" key={MetaKey.TWITTER_CREATOR} />
+    <meta name="twitter:site" content="@shio3616" key={MetaKey.TWITTER_SITE} />
   </Head>
 );
