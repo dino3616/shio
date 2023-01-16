@@ -7,18 +7,18 @@ import { findTimelines } from '@/module/me/repository/find-timelines.repository'
 import { Hero } from '@/module/me/ui/hero.page';
 import { Timeline } from '@/module/me/ui/timeline.page';
 
-export type RootPageProps = {
+export type MePageProps = {
   timelines: TimelineModel[];
 };
 
-const RootPage: NextPage<RootPageProps> = ({ timelines }: RootPageProps) => (
+const MePage: NextPage<MePageProps> = ({ timelines }: MePageProps) => (
   <Layout title="shio.dev | Creator for Creators" className="py-10 px-5 pt-0 md:px-10">
     <Hero className="h-[calc(100vh_-_4.75rem)]" />
     <Timeline timelines={timelines} timelineCardProps={{ formatDate }} />
   </Layout>
 );
 
-export const getStaticProps: GetStaticProps<RootPageProps> = async () => {
+export const getStaticProps: GetStaticProps<MePageProps> = async () => {
   const timelines = await findTimelines({ orderBy: { happenedAt: SortOrder.Asc } });
 
   return {
@@ -29,4 +29,4 @@ export const getStaticProps: GetStaticProps<RootPageProps> = async () => {
   };
 };
 
-export default RootPage;
+export default MePage;
