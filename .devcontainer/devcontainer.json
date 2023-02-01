@@ -5,6 +5,9 @@
   "service": "app",
   "extensions": [
     "formulahendry.auto-complete-tag",
+    "wmaurer.change-case",
+    "gencay.vscode-chatgpt",
+    "bierner.color-info",
     "adam-bender.commit-message-editor",
     "mikestead.dotenv",
     "usernamehw.errorlens",
