@@ -2,8 +2,7 @@
 
 # dependencies
 node_modules
-.pnp
-.pnp.js
+.pnpm-store
 
 # testing
 coverage
@@ -31,6 +30,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+.turbo
 
 # typescript
 *.tsbuildinfo
