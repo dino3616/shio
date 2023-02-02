@@ -13,7 +13,7 @@ RUN yarn global add pnpm turbo
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./packages/client/package.json ./packages/client/package.json
-RUN pnpm install --flozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 #############
 # Build Phase
@@ -26,7 +26,7 @@ RUN yarn global add pnpm turbo
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./packages/client/package.json ./packages/client/package.json
-RUN pnpm install --flozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 COPY ./tsconfig.base.json ./tsconfig.base.json
 COPY ./packages/client ./packages/client
