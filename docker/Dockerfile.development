@@ -15,4 +15,5 @@ COPY ./.git ./.git
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./packages/api/package.json ./packages/api/package.json
 COPY ./packages/client/package.json ./packages/client/package.json
-RUN pnpm install --frozen-lockfile --ignore-scripts
+# FIXME: --flozen-lockfile
+RUN pnpm install --ignore-scripts
