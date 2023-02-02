@@ -1,0 +1,52 @@
+ARG PORT
+ARG NODE_VERSION=18
+
+###############
+# Install Phase
+###############
+FROM node:${NODE_VERSION}-bullseye-slim AS installer
+ENV NODE_ENV=production
+
+WORKDIR /shio
+
+RUN yarn global add pnpm turbo
+
+COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./packages/client/package.json ./packages/client/package.json
+RUN pnpm install --flozen-lockfile
+
+#############
+# Build Phase
+#############
+FROM node:${NODE_VERSION}-bullseye-slim AS builder
+
+WORKDIR /shio
+
+RUN yarn global add pnpm turbo
+
+COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./packages/client/package.json ./packages/client/package.json
+RUN pnpm install --flozen-lockfile
+
+COPY ./tsconfig.base.json ./tsconfig.base.json
+COPY ./packages/client ./packages/client
+RUN pnpm client build
+
+###########
+# Run Phase
+###########
+FROM gcr.io/distroless/nodejs:${NODE_VERSION}-debug AS runner
+ENV NODE_ENV=production
+
+WORKDIR /shio
+
+COPY --from=installer /shio/node_modules ./node_modules
+COPY --from=installer /shio/packages/client/node_modules ./packages/client/node_modules
+COPY --from=builder /shio/packages/client/public ./packages/client/public
+COPY --from=builder /shio/packages/client/.next ./packages/client/.next
+
+WORKDIR /shio/packages/client
+
+USER nonroot
+EXPOSE ${PORT}
+CMD ["node_modules/.bin/next", "start"]

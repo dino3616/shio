@@ -1,0 +1,40 @@
+ARG PORT
+ARG NODE_VERSION=18
+
+FROM alpine:3 as alpine
+
+#############
+# Build Phase
+#############
+FROM node:${NODE_VERSION}-bullseye-slim AS builder
+
+WORKDIR /shio
+
+RUN yarn global add pnpm turbo
+
+COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./packages/api/package.json ./packages/api/package.json
+RUN pnpm install --flozen-lockfile
+
+COPY ./tsconfig.base.json ./tsconfig.base.json
+COPY ./packages/api ./packages/api
+RUN pnpm api build
+
+###########
+# Run Phase
+###########
+FROM gcr.io/distroless/nodejs:${NODE_VERSION}-debug AS runner
+ENV NODE_ENV=production
+
+WORKDIR /shio
+
+COPY --from=alpine /lib/libz.so.1 /lib/libz.so.1
+COPY --from=alpine /lib/libc.musl-x86_64.so.1 /lib/libc.musl-x86_64.so.1
+COPY --from=builder /shio/node_modules ./node_modules
+COPY --from=builder /shio/packages/api/node_modules ./packages/api/node_modules
+COPY --from=builder /shio/packages/api/dist ./packages/api/dist
+
+WORKDIR /shio/packages/api
+
+EXPOSE ${PORT}
+CMD ["dist/main.js"]
