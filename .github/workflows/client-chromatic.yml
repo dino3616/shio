@@ -46,11 +46,28 @@ jobs:
         with:
           node-version: ${{ env.node-version }}
 
+      - name: setup pnpm
+        uses: pnpm/action-setup@v2.2.4
+        id: pnpm-install
+        with:
+          run_install: false
+
+      - name: get pnpm store
+        id: pnpm-cache
+        run: echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v3
+        name: setup pnpm cache
+        with:
+          path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-pnpm-store-
+
       - name: install
-        run: yarn install --immutable
+        run: pnpm install --frozen-lockfile
 
       - name: setup graphql
-        run: yarn client gql:gen
+        run: pnpm client gql:gen
 
       - name: publish
         uses: chromaui/action@v1
@@ -65,4 +82,4 @@ jobs:
     if: ${{ ! failure() }}
     steps:
       - name: check
-        run: echo "publish storybook is successfully executed."
+        run: echo "publish is successfully executed."

@@ -19,4 +19,4 @@ docker:
   - .github/workflows/docker-*.yml
   - docker/**/*
   - .dockerignore
-  - yarn.lock
+  - pnpm-lock.yaml

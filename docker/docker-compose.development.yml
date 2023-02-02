@@ -38,8 +38,8 @@ services:
         source: client-node-modules
         target: /shio/packages/client/node_modules
       - type: volume
-        source: yarn-cache
-        target: /usr/local/share/.cache/yarn/v6
+        source: pnpm-store
+        target: /shio/.pnpm-store
     tty: true
 
 volumes:
@@ -53,5 +53,5 @@ volumes:
     driver: local
   client-node-modules:
     driver: local
-  yarn-cache:
+  pnpm-store:
     driver: local

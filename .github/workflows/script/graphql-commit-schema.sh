@@ -1,7 +1,7 @@
 #!/bin/sh
 
 if [ "$1" = 1 ]; then
-    yarn api dev
+    pnpm api dev
 elif [ "$1" = 2 ]; then
-    sleep 15 && yarn client gql:gen:introspect
+    sleep 15 && pnpm client gql:gen:introspect
 fi
