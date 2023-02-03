@@ -35,7 +35,7 @@
     "babel-plugin-transform-remove-imports": "1.7.0",
     "date-fns": "2.29.3",
     "date-fns-tz": "2.0.0",
-    "framer-motion": "9.0.0",
+    "framer-motion": "9.0.1",
     "graphql-tag": "2.12.6",
     "graphql-ws": "5.11.3",
     "next": "13.1.6",
