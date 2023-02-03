@@ -54,6 +54,7 @@ jobs:
         id: pnpm-install
         with:
           run_install: false
+          version: 7.26.3
 
       - name: get pnpm store
         id: pnpm-cache
