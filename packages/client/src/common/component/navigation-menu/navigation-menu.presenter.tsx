@@ -10,4 +10,4 @@ const Link: FC<LinkProps> = ({ children, ...props }) => (
   </RadixUiNavigationMenu.Link>
 );
 
-export const NavigationMenu = { ...RadixUiNavigationMenu, Link };
+export const NavigationMenu: Omit<typeof RadixUiNavigationMenu, 'Link'> & { Link: typeof Link } = { ...RadixUiNavigationMenu, Link };
