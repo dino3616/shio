@@ -8,9 +8,9 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "all": "pnpm --filter @shio/*",
-    "api": "pnpm --filter @shio/api",
-    "client": "pnpm --filter @shio/client"
+    "all": "pnpm --filter @shio/* --",
+    "api": "pnpm --filter @shio/api --",
+    "client": "pnpm --filter @shio/client --"
   },
   "devDependencies": {
     "@types/jest": "29.4.0",
