@@ -1,0 +1,22 @@
+{
+  "name": "@shio/tsconfig",
+  "version": "0.1.0",
+  "repository": "https://github.com/dino3616/shio.git",
+  "author": "dino3616 <85730998+dino3616@users.noreply.github.com>",
+  "license": "MIT",
+  "private": true,
+  "files": [
+    "./tsconfig.*.json"
+  ],
+  "scripts": {
+    "lint": "eslint ./**/*.json",
+    "lint:fix": "eslint ./**/*.json --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write ."
+  },
+  "devDependencies": {
+    "@tsconfig/next-strictest": "1.0.1",
+    "@tsconfig/node-lts-strictest-esm": "18.12.1",
+    "@tsconfig/strictest": "1.0.2"
+  }
+}
