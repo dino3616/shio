@@ -1,3 +1,5 @@
+coverage
 dist
 generated
 node_modules
+schema.gql
