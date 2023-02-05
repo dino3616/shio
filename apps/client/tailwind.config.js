@@ -1,3 +1,4 @@
+const tailwindScrollbar = require('tailwind-scrollbar');
 const plugin = require('tailwindcss/plugin');
 
 /** @type {import('tailwindcss').Config} */
@@ -118,15 +119,13 @@ const config = {
     },
   },
   plugins: [
-    require('tailwind-scrollbar')({ nocompatible: true }),
+    tailwindScrollbar({ nocompatible: true }),
     plugin(({ addUtilities }) => {
       const gradientColorNames = ['cosmic'];
       const resolveColorObjectByName = (name) => name.split('-').reduce((acc, current) => acc[current] || undefined, config.theme.extend.colors);
       const newUtilities = Object.fromEntries(
         gradientColorNames
-          .map((name) => {
-            return { name, obj: resolveColorObjectByName(name) };
-          })
+          .map((name) => ({ name, obj: resolveColorObjectByName(name) }))
           .filter(({ obj }) => !!obj)
           .map(({ name, obj }) => [
             `.gradient-${name}`,

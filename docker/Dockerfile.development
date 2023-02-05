@@ -13,6 +13,6 @@ WORKDIR /shio
 
 COPY ./.git ./.git
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY ./packages/api/package.json ./packages/api/package.json
-COPY ./packages/client/package.json ./packages/client/package.json
+COPY ./apps/api/package.json ./apps/api/package.json
+COPY ./apps/client/package.json ./apps/client/package.json
 RUN pnpm install --frozen-lockfile

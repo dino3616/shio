@@ -75,7 +75,7 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: packages/client
+          workingDir: apps/client
 
   client-chromatic-check:
     runs-on: ubuntu-latest

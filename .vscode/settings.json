@@ -157,8 +157,8 @@
   ],
   "eslint.format.enable": true,
   "eslint.packageManager": "pnpm",
-  "eslint.workingDirectories": ["packages/api", "packages/client"],
+  "eslint.workingDirectories": ["apps/api", "apps/client"],
   "graphql-config.load.filePath": "../graphql.config.json",
   "jest.rootPath": "/shio",
-  "jest.jestCommandLine": "pnpm all test"
+  "jest.jestCommandLine": "pnpm apps test"
 }

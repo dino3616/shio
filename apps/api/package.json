@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "repository": "https://github.com/dino3616/shio.git",
   "author": "dino3616 <85730998+dino3616@users.noreply.github.com>",
-  "license": "Salty",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "nest:module": "nest generate module",
@@ -58,8 +58,12 @@
   "devDependencies": {
     "@apollo/rover": "0.11.0",
     "@nestjs/schematics": "9.0.4",
+    "@shio/jest": "workspace:*",
+    "@shio/prettier": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
     "@types/graphql-validation-complexity": "0.4.0",
     "apollo-server-express": "3.11.1",
+    "eslint-config-shio-node": "workspace:*",
     "prisma": "4.9.0",
     "prisma-nestjs-graphql": "17.1.0"
   }

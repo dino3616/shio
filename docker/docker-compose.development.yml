@@ -33,10 +33,10 @@ services:
         target: /shio/node_modules
       - type: volume
         source: api-node-modules
-        target: /shio/packages/api/node_modules
+        target: /shio/apps/api/node_modules
       - type: volume
         source: client-node-modules
-        target: /shio/packages/client/node_modules
+        target: /shio/apps/client/node_modules
       - type: volume
         source: pnpm-store
         target: /shio/.pnpm-store

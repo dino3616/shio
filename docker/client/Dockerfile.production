@@ -12,7 +12,7 @@ WORKDIR /shio
 RUN yarn global add pnpm turbo
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY ./packages/client/package.json ./packages/client/package.json
+COPY ./apps/client/package.json ./apps/client/package.json
 RUN pnpm install --frozen-lockfile
 
 #############
@@ -25,11 +25,11 @@ WORKDIR /shio
 RUN yarn global add pnpm turbo
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY ./packages/client/package.json ./packages/client/package.json
+COPY ./apps/client/package.json ./apps/client/package.json
 RUN pnpm install --frozen-lockfile
 
 COPY ./tsconfig.base.json ./tsconfig.base.json
-COPY ./packages/client ./packages/client
+COPY ./apps/client ./apps/client
 RUN pnpm client build
 
 ###########
@@ -41,11 +41,11 @@ ENV NODE_ENV=production
 WORKDIR /shio
 
 COPY --from=installer /shio/node_modules ./node_modules
-COPY --from=installer /shio/packages/client/node_modules ./packages/client/node_modules
-COPY --from=builder /shio/packages/client/public ./packages/client/public
-COPY --from=builder /shio/packages/client/.next ./packages/client/.next
+COPY --from=installer /shio/apps/client/node_modules ./apps/client/node_modules
+COPY --from=builder /shio/apps/client/public ./apps/client/public
+COPY --from=builder /shio/apps/client/.next ./apps/client/.next
 
-WORKDIR /shio/packages/client
+WORKDIR /shio/apps/client
 
 USER nonroot
 EXPOSE ${PORT}

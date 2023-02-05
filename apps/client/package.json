@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "repository": "https://github.com/dino3616/shio.git",
   "author": "dino3616 <85730998+dino3616@users.noreply.github.com>",
-  "license": "Salty",
+  "license": "MIT",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -68,6 +68,10 @@
     "@graphql-codegen/typescript-urql": "3.7.3",
     "@graphql-codegen/urql-introspection": "2.2.1",
     "@next/react-refresh-utils": "13.1.6",
+    "@shio/jest": "workspace:*",
+    "@shio/prettier": "workspace:*",
+    "@shio/stylelint": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
     "@storybook/addon-a11y": "6.5.16",
     "@storybook/addon-actions": "6.5.16",
     "@storybook/addon-essentials": "6.5.16",
@@ -87,7 +91,7 @@
     "babel-plugin-superjson-next": "0.4.5",
     "chromatic": "6.15.0",
     "css-loader": "6.7.3",
-    "jest-environment-jsdom": "29.4.1",
+    "eslint-config-shio-nextjs": "workspace:*",
     "postcss": "8.4.21",
     "postcss-loader": "7.0.2",
     "react-refresh": "0.14.0",
@@ -95,11 +99,6 @@
     "sass-loader": "13.2.0",
     "storybook-addon-next-router": "4.0.2",
     "style-dictionary": "3.7.2",
-    "style-loader": "3.3.1",
-    "stylelint": "14.16.1",
-    "stylelint-config-prettier": "9.0.4",
-    "stylelint-config-recess-order": "3.1.0",
-    "stylelint-config-standard-scss": "6.1.0",
-    "stylelint-prettier": "2.0.0"
+    "style-loader": "3.3.1"
   }
 }

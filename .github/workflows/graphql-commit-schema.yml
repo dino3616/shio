@@ -84,8 +84,8 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          if git diff --name-only | grep -q "packages/client/graphql.schema.json"; then \
-            git add ./packages/client/graphql.schema.json; \
+          if git diff --name-only | grep -q "apps/client/graphql.schema.json"; then \
+            git add ./apps/client/graphql.schema.json; \
             git commit -m "actions: 🤖 (graphql) updated graphql schema"; \
             git push origin HEAD:${GITHUB_REF} --force; \
             echo "Committed changes to GraphQL schema"; \
