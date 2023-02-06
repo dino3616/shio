@@ -13,8 +13,7 @@ WORKDIR /shio
 RUN yarn global add pnpm turbo
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY ./apps/api/package.json ./apps/api/package.json
-COPY ./packages/*/package.json ./packages/*/package.json
+COPY ./*/package.json ./*/package.json
 RUN pnpm install --frozen-lockfile
 COPY ./apps/api ./apps/api
 COPY ./packages ./packages
