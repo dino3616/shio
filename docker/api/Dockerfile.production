@@ -12,7 +12,7 @@ WORKDIR /shio
 
 RUN yarn global add pnpm turbo
 
-COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./*/package.json ./*/package.json
 RUN pnpm install --frozen-lockfile
 COPY ./apps/api ./apps/api
@@ -29,8 +29,7 @@ WORKDIR /shio
 
 COPY --from=alpine /lib/libz.so.1 /lib/libz.so.1
 COPY --from=alpine /lib/libc.musl-x86_64.so.1 /lib/libc.musl-x86_64.so.1
-COPY --from=builder /shio/node_modules ./node_modules
-COPY --from=builder /shio/apps/api/node_modules ./apps/api/node_modules
+COPY --from=builder /shio/*/node_modules ./*/node_modules
 COPY --from=builder /shio/apps/api/dist ./apps/api/dist
 
 WORKDIR /shio/apps/api

@@ -12,7 +12,6 @@ RUN apt-get update \
 WORKDIR /shio
 
 COPY ./.git ./.git
-COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY ./apps/api/package.json ./apps/api/package.json
-COPY ./apps/client/package.json ./apps/client/package.json
+COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./*/package.json ./*/package.json
 RUN pnpm install --frozen-lockfile

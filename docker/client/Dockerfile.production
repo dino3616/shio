@@ -11,7 +11,7 @@ WORKDIR /shio
 
 RUN yarn global add pnpm turbo
 
-COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./packages/*/package.json ./packages/*/package.json
 RUN pnpm install --frozen-lockfile --prod
 
@@ -24,7 +24,7 @@ WORKDIR /shio
 
 RUN yarn global add pnpm turbo
 
-COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+COPY ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./packages/*/package.json ./packages/*/package.json
 RUN pnpm install --frozen-lockfile
 
@@ -40,8 +40,7 @@ ENV NODE_ENV=production
 
 WORKDIR /shio
 
-COPY --from=installer /shio/node_modules ./node_modules
-COPY --from=installer /shio/apps/client/node_modules ./apps/client/node_modules
+COPY --from=installer /shio/*/node_modules ./*/node_modules
 COPY --from=builder /shio/apps/client/public ./apps/client/public
 COPY --from=builder /shio/apps/client/.next ./apps/client/.next
 
