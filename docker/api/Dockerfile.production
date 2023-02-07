@@ -35,6 +35,7 @@ WORKDIR /shio
 
 COPY --from=alpine /lib/libz.so.1 /lib/libz.so.1
 COPY --from=alpine /lib/libc.musl-x86_64.so.1 /lib/libc.musl-x86_64.so.1
+COPY --from=builder /shio/node_modules ./node_modules
 COPY --from=builder /shio/apps/api/node_modules ./apps/api/node_modules
 COPY --from=builder /shio/packages/tsconfig/node_modules ./packages/tsconfig/node_modules
 COPY --from=builder /shio/apps/api/dist ./apps/api/dist
@@ -42,4 +43,4 @@ COPY --from=builder /shio/apps/api/dist ./apps/api/dist
 WORKDIR /shio/apps/api
 
 EXPOSE ${PORT}
-CMD ["dist/main.js"]
+CMD ["node_modules/.bin/nest", "start"]
