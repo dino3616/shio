@@ -1,6 +1,5 @@
 import { registerEnumType } from '@nestjs/graphql';
 
-// eslint-disable-next-line no-shadow
 export enum LearningLevel {
   BEGINNER = 'BEGINNER',
   INTERMEDIATE = 'INTERMEDIATE',
@@ -8,4 +7,4 @@ export enum LearningLevel {
   EXPERT = 'EXPERT',
 }
 
-registerEnumType(LearningLevel, { name: 'LearningLevel', description: undefined });
+registerEnumType<typeof LearningLevel>(LearningLevel, { name: 'LearningLevel' });
