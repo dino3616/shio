@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SkillRepositoryInterface } from '../domain/service/repository/skill.repository';
-import { FindSkillsProps } from '../domain/service/use-case/port/skill-reader.input';
-import { SkillReaderUseCaseInterface } from '../domain/service/use-case/skill-reader.use-case';
+import type { SkillRepositoryInterface } from '../domain/service/repository/skill.repository';
+import type { FindSkillsProps } from '../domain/service/use-case/port/skill-reader.input';
+import type { SkillReaderUseCaseInterface } from '../domain/service/use-case/skill-reader.use-case';
 import { InjectionToken } from '@/common/constant/injection-token.constant';
 
 @Injectable()

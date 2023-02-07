@@ -1,7 +1,7 @@
 import { Inject, Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Skill as SkillModel } from '../domain/model/skill.model';
-import { SkillReaderUseCaseInterface } from '../domain/service/use-case/skill-reader.use-case';
+import type { Skill as SkillModel } from '../domain/model/skill.model';
+import type { SkillReaderUseCaseInterface } from '../domain/service/use-case/skill-reader.use-case';
 import { FindSkillsArgs } from './dto/args/find-skills.args';
 import { Skill } from './dto/object/skill.object';
 import { InjectionToken } from '@/common/constant/injection-token.constant';

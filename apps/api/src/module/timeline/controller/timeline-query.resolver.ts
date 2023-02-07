@@ -1,7 +1,7 @@
 import { Inject, Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { Timeline as TimelineModel } from '../domain/model/timeline.model';
-import { TimelineReaderUseCaseInterface } from '../domain/service/use-case/timeline-reader.use-case';
+import type { Timeline as TimelineModel } from '../domain/model/timeline.model';
+import type { TimelineReaderUseCaseInterface } from '../domain/service/use-case/timeline-reader.use-case';
 import { FindTimelinesArgs } from './dto/args/find-timelines.args';
 import { Timeline } from './dto/object/timeline.object';
 import { InjectionToken } from '@/common/constant/injection-token.constant';

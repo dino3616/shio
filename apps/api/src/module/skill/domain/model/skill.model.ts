@@ -1,4 +1,4 @@
-import { LearningLevel } from '@/common/dto/enum/learning-level.dto';
+import type { LearningLevel } from '@/common/dto/enum/learning-level.dto';
 
 export class Skill {
   readonly id: string;

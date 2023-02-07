@@ -1,5 +1,5 @@
-import { Timeline } from '../../model/timeline.model';
-import { SortOrder } from '@/common/dto/enum/sort-order.dto';
+import type { Timeline } from '../../model/timeline.model';
+import type { SortOrder } from '@/common/dto/enum/sort-order.dto';
 
 export type FindManyProps = {
   orderBy?: {

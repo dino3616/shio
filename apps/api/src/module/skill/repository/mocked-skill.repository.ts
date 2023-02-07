@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Skill } from '../domain/model/skill.model';
-import { SkillRepositoryInterface } from '../domain/service/repository/skill.repository';
+import type { SkillRepositoryInterface } from '../domain/service/repository/skill.repository';
 import { LearningLevel } from '@/common/dto/enum/learning-level.dto';
 
 @Injectable()

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Timeline } from '../domain/model/timeline.model';
-import { FindManyProps, TimelineRepositoryInterface } from '../domain/service/repository/timeline.repository';
+import type { FindManyProps, TimelineRepositoryInterface } from '../domain/service/repository/timeline.repository';
 import { PrismaService } from '@/infra/prisma/prisma.service';
 
 @Injectable()

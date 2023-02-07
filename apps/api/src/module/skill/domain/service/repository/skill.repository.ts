@@ -1,5 +1,5 @@
-import { Skill } from '../../model/skill.model';
-import { SortOrder } from '@/common/dto/enum/sort-order.dto';
+import type { Skill } from '../../model/skill.model';
+import type { SortOrder } from '@/common/dto/enum/sort-order.dto';
 
 export type FindManyProps = {
   orderBy?: {

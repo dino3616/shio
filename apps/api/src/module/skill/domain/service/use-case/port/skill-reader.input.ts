@@ -1,4 +1,4 @@
-import { SortOrder } from '@/common/dto/enum/sort-order.dto';
+import type { SortOrder } from '@/common/dto/enum/sort-order.dto';
 
 export type FindSkillsProps = {
   orderBy?: {
