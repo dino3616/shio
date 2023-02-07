@@ -9,5 +9,6 @@
     },
     "rootDir": "./"
   },
-  "include": ["./src/**/*", "./*.js", "./*.ts"]
+  "include": ["./src/**/*", "./*.js", "./*.ts"],
+  "exclude": ["node_modules"]
 }
