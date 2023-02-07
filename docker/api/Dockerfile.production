@@ -43,4 +43,4 @@ COPY --from=builder /shio/apps/api/dist ./apps/api/dist
 WORKDIR /shio/apps/api
 
 EXPOSE ${PORT}
-CMD ["node_modules/.bin/nest", "start"]
+CMD ["dist/src/main.js"]
