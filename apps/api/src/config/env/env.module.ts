@@ -4,7 +4,7 @@ import { match } from 'ts-pattern';
 import { EnvService } from './env.service';
 import { validate } from './util/validator.util';
 
-const envFilePath = match(process.env.NODE_ENV)
+const envFilePath = match(process.env['NODE_ENV'])
   .with('development', () => ['.env', '.env.development'])
   .with('production', () => ['.env', '.env.production'])
   .with('test', () => ['.env', '.env.test'])
