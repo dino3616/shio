@@ -64,7 +64,6 @@
     "@types/graphql-validation-complexity": "0.4.0",
     "apollo-server-express": "3.11.1",
     "eslint-config-shio-node": "workspace:*",
-    "prisma": "4.9.0",
-    "prisma-nestjs-graphql": "17.1.0"
+    "prisma": "4.9.0"
   }
 }
