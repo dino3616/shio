@@ -23,5 +23,5 @@ export abstract class BaseDataLoader<K, V> extends Object {
     return this.dataloader.prime(key, value);
   }
 
-  protected abstract batchLoad(keys: K[]): Promise<(V | Error)[]>;
+  protected abstract batchLoad(keys: readonly K[]): Promise<(V | Error)[]>;
 }
