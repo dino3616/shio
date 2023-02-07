@@ -1,29 +1,29 @@
 import { Field, ObjectType } from '@nestjs/graphql';
-import { LearningLevel } from '@/infra/prisma/generated/prisma/learning-level/enum';
+import { LearningLevel } from '@/common/dto/enum/learning-level.dto';
 
 @ObjectType()
 export class Skill {
   @Field(() => String, { nullable: false })
-  id: string;
+  id!: string;
 
   @Field(() => Number, { nullable: false })
-  index: number;
+  index!: number;
 
   @Field(() => String, { nullable: false })
-  name: string;
+  name!: string;
 
   @Field(() => String, { nullable: false })
-  description: string;
+  description!: string;
 
   @Field(() => LearningLevel, { nullable: false })
-  learningLevel: keyof typeof LearningLevel;
+  learningLevel!: keyof typeof LearningLevel;
 
   @Field(() => String, { nullable: false })
-  officialUrl: string;
+  officialUrl!: string;
 
   @Field(() => String, { nullable: false })
-  iconUrl: string;
+  iconUrl!: string;
 
   @Field(() => Date, { nullable: false })
-  createdAt: Date;
+  createdAt!: Date;
 }
