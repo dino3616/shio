@@ -2,16 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-generator nestgraphql {
-  provider                              = "prisma-nestjs-graphql"
-  output                                = "./generated"
-  outputFilePattern                     = "{model}/{name}/{type}.ts"
-  noAtomicOperations                    = true
-  purgeOutput                           = true
-  noTypeId                              = true
-  requireSingleFieldsInWhereUniqueInput = ture
-}
-
 datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
