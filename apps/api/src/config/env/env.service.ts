@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ApolloConfigInput } from 'apollo-server-types';
+import type { ApolloConfigInput } from 'apollo-server-types';
 
 @Injectable()
 export class EnvService {
