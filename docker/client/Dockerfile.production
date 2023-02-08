@@ -53,11 +53,8 @@ ENV NODE_ENV=production
 
 WORKDIR /shio
 
+COPY --from=builder /shio/node_modules ./node_modules
 COPY --from=installer /shio/apps/client/node_modules ./apps/client/node_modules
-COPY --from=installer /shio/packages/eslint/node_modules ./packages/eslint/node_modules
-COPY --from=installer /shio/packages/jest/node_modules ./packages/jest/node_modules
-COPY --from=installer /shio/packages/prettier/node_modules ./packages/prettier/node_modules
-COPY --from=installer /shio/packages/stylelint/node_modules ./packages/stylelint/node_modules
 COPY --from=installer /shio/packages/tsconfig/node_modules ./packages/tsconfig/node_modules
 COPY --from=builder /shio/apps/client/public ./apps/client/public
 COPY --from=builder /shio/apps/client/.next ./apps/client/.next
