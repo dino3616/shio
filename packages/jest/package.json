@@ -13,6 +13,6 @@
     "fmt:fix": "prettier --write ."
   },
   "devDependencies": {
-    "jest-environment-jsdom": "29.4.1"
+    "jest-environment-jsdom": "29.4.2"
   }
 }
