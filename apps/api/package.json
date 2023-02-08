@@ -39,7 +39,7 @@
     "@nestjs/graphql": "10.2.0",
     "@nestjs/platform-express": "9.3.5",
     "@nestjs/testing": "9.3.5",
-    "@prisma/client": "4.9.0",
+    "@prisma/client": "4.10.0",
     "apollo-server-core": "3.11.1",
     "apollo-server-types": "3.7.1",
     "class-transformer": "0.5.1",
@@ -64,6 +64,6 @@
     "@types/graphql-validation-complexity": "0.4.0",
     "apollo-server-express": "3.11.1",
     "eslint-config-shio-node": "workspace:*",
-    "prisma": "4.9.0"
+    "prisma": "4.10.0"
   }
 }
