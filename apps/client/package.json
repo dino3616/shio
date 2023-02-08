@@ -89,7 +89,7 @@
     "@types/webpack": "5.28.0",
     "autoprefixer": "10.4.13",
     "babel-plugin-superjson-next": "0.4.5",
-    "chromatic": "6.15.0",
+    "chromatic": "6.17.0",
     "css-loader": "6.7.3",
     "eslint-config-shio-nextjs": "workspace:*",
     "postcss": "8.4.21",
