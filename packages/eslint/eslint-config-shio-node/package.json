@@ -9,8 +9,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint ./**/*.js",
-    "lint:fix": "eslint ./**/*.js --fix",
-    "fmt": "prettier --check .",
-    "fmt:fix": "prettier --write ."
+    "lint:fix": "eslint ./**/*.js --fix"
+  },
+  "devDependencies": {
+    "eslint-config-shio-base": "workspace:*"
   }
 }
