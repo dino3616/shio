@@ -54,7 +54,7 @@
     "superjson": "1.12.2",
     "tailwind-merge": "1.9.1",
     "tailwind-scrollbar": "2.1.0",
-    "tailwindcss": "3.2.4",
+    "tailwindcss": "3.2.6",
     "ts-pattern": "4.1.4",
     "urql": "3.0.3",
     "urql-custom-scalars-exchange": "1.0.1"
@@ -89,7 +89,7 @@
     "@types/webpack": "5.28.0",
     "autoprefixer": "10.4.13",
     "babel-plugin-superjson-next": "0.4.5",
-    "chromatic": "6.15.0",
+    "chromatic": "6.17.0",
     "css-loader": "6.7.3",
     "eslint-config-shio-nextjs": "workspace:*",
     "postcss": "8.4.21",
