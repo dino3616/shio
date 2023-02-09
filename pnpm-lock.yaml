@@ -49,7 +49,7 @@ importers:
       '@nestjs/apollo': 10.2.0
       '@nestjs/cli': 9.2.0
       '@nestjs/common': 9.3.7
-      '@nestjs/config': 2.3.0
+      '@nestjs/config': 2.3.1
       '@nestjs/core': 9.3.7
       '@nestjs/graphql': 10.2.0
       '@nestjs/platform-express': 9.3.7
@@ -81,7 +81,7 @@ importers:
       '@nestjs/apollo': 10.2.0_s2tmol75oofvni3qzsdrsjjuva
       '@nestjs/cli': 9.2.0
       '@nestjs/common': 9.3.7_welcnyot5bzd5wa2aovbkxpi4i
-      '@nestjs/config': 2.3.0_ojttuksvundfk3amlyo674va74
+      '@nestjs/config': 2.3.1_ojttuksvundfk3amlyo674va74
       '@nestjs/core': 9.3.7_ipss6dxf5icme2x7c6jvrkkrmq
       '@nestjs/graphql': 10.2.0_dt3p2nqjo2orx3cdtiwg2dm5jq
       '@nestjs/platform-express': 9.3.7_zmctrozi6xxh3beaccl6ebop6u
@@ -3385,8 +3385,8 @@ packages:
       uid: 2.0.1
     dev: false
 
-  /@nestjs/config/2.3.0_ojttuksvundfk3amlyo674va74:
-    resolution: {integrity: sha512-VSAqoIagIrc0A3apaqC2O3a8VtQ+asw8xILmxvjK/eHW9m1rmhJ5NqkGf7m+uSv3Yxini4bzyb74Mk62+tB/cA==}
+  /@nestjs/config/2.3.1_ojttuksvundfk3amlyo674va74:
+    resolution: {integrity: sha512-Ckzel0NZ9CWhNsLfE1hxfDuxJuEbhQvGxSlmZ1/X8awjRmAA/g3kT6M1+MO1SHj1wMtPyUfd9WpwkiqFbiwQgA==}
     peerDependencies:
       '@nestjs/common': ^7.0.0 || ^8.0.0 || ^9.0.0
       reflect-metadata: ^0.1.13
