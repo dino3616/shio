@@ -1,10 +1,10 @@
-const createConfig = require("next/jest")({
-  dir: "./",
+const createConfig = require('next/jest')({
+  dir: './',
 });
 
 /** @type {import('jest').Config} */
 const config = {
-  testEnvironment: "jest-environment-jsdom",
+  testEnvironment: 'jest-environment-jsdom',
 };
 
 module.exports = createConfig(config);
