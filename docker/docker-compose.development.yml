@@ -29,15 +29,6 @@ services:
         source: ../
         target: /shio/
       - type: volume
-        source: node-modules
-        target: /shio/node_modules
-      - type: volume
-        source: api-node-modules
-        target: /shio/apps/api/node_modules
-      - type: volume
-        source: client-node-modules
-        target: /shio/apps/client/node_modules
-      - type: volume
         source: pnpm-store
         target: /shio/.pnpm-store
     tty: true
@@ -46,12 +37,6 @@ volumes:
   mongo-db:
     driver: local
   mongo-configdb:
-    driver: local
-  node-modules:
-    driver: local
-  api-node-modules:
-    driver: local
-  client-node-modules:
     driver: local
   pnpm-store:
     driver: local
