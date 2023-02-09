@@ -8,8 +8,6 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint ./**/*.js",
-    "lint:fix": "eslint ./**/*.js --fix",
     "fmt": "prettier --check .",
     "fmt:fix": "prettier --write ."
   }
