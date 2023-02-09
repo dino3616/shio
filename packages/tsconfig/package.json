@@ -15,8 +15,10 @@
     "fmt:fix": "prettier --write ."
   },
   "devDependencies": {
+    "@shio/prettier": "workspace:*",
     "@tsconfig/next-strictest": "1.0.1",
     "@tsconfig/node-lts-strictest": "18.12.1",
-    "@tsconfig/strictest": "1.0.2"
+    "@tsconfig/strictest": "1.0.2",
+    "eslint-config-shio-base": "workspace:*"
   }
 }
