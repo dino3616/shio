@@ -9,7 +9,7 @@ ENV NODE_ENV=production
 
 WORKDIR /shio
 
-RUN yarn global add pnpm turbo
+RUN yarn global add pnpm
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./apps/api/package.json ./apps/api/package.json
@@ -28,7 +28,7 @@ FROM node:${NODE_VERSION}-bullseye-slim AS builder
 
 WORKDIR /shio
 
-RUN yarn global add pnpm turbo
+RUN yarn global add pnpm
 
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
