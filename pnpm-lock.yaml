@@ -55,7 +55,7 @@ importers:
       '@nestjs/platform-express': 9.3.7
       '@nestjs/schematics': 9.0.4
       '@nestjs/testing': 9.3.7
-      '@prisma/client': 4.10.0
+      '@prisma/client': 4.10.1
       '@shio/jest': workspace:*
       '@shio/prettier': workspace:*
       '@shio/tsconfig': workspace:*
@@ -72,7 +72,7 @@ importers:
       graphql-subscriptions: 2.0.0
       graphql-tag: 2.12.6
       graphql-validation-complexity: 0.4.2
-      prisma: 4.10.0
+      prisma: 4.10.1
       reflect-metadata: 0.1.13
       supertest-graphql: 1.1.4
       ts-pattern: 4.1.4
@@ -86,7 +86,7 @@ importers:
       '@nestjs/graphql': 10.2.0_dt3p2nqjo2orx3cdtiwg2dm5jq
       '@nestjs/platform-express': 9.3.7_zmctrozi6xxh3beaccl6ebop6u
       '@nestjs/testing': 9.3.7_hxc5gkmejwink2uhle7e37kg2q
-      '@prisma/client': 4.10.0_prisma@4.10.0
+      '@prisma/client': 4.10.1_prisma@4.10.1
       apollo-server-core: 3.11.1_graphql@16.6.0
       apollo-server-types: 3.7.1_graphql@16.6.0
       class-transformer: 0.5.1
@@ -110,7 +110,7 @@ importers:
       '@types/graphql-validation-complexity': 0.4.0
       apollo-server-express: 3.11.1_5ha345eiak62qiwwva5z4dp6gu
       eslint-config-shio-node: link:../../packages/eslint/eslint-config-shio-node
-      prisma: 4.10.0
+      prisma: 4.10.1
 
   apps/client:
     specifiers:
@@ -3848,8 +3848,8 @@ packages:
       webpack: 5.75.0
     dev: true
 
-  /@prisma/client/4.10.0_prisma@4.10.0:
-    resolution: {integrity: sha512-sBmYb1S6SMKFIESaLMfKqWSalv3pH73cMCsFt9HslJvYjIIcKQCA6PDL2O4SZGWvc4JBef9cg5Gd7d9x3AtKjw==}
+  /@prisma/client/4.10.1_prisma@4.10.1:
+    resolution: {integrity: sha512-VonXLJZybdt8e5XZH5vnIGCRNnIh6OMX1FS3H/yzMGLT3STj5TJ/OkMcednrvELgk8PK89Vo3aSh51MWNO0axA==}
     engines: {node: '>=14.17'}
     requiresBuild: true
     peerDependencies:
@@ -3858,16 +3858,16 @@ packages:
       prisma:
         optional: true
     dependencies:
-      '@prisma/engines-version': 4.10.0-84.ca7fcef713137fa11029d519a9780db130cca91d
-      prisma: 4.10.0
+      '@prisma/engines-version': 4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19
+      prisma: 4.10.1
     dev: false
 
-  /@prisma/engines-version/4.10.0-84.ca7fcef713137fa11029d519a9780db130cca91d:
-    resolution: {integrity: sha512-UVpmVlvSaGfY4ue+hh8CTkIesbuXCFUfrr8zk//+u85WwkKfWMtt6nLB2tNSzR1YO8eAA8+HqNf8LM7mnXIq5w==}
+  /@prisma/engines-version/4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19:
+    resolution: {integrity: sha512-tsjTho7laDhf9EJ9EnDxAPEf7yrigSMDhniXeU4YoWc7azHAs4GPxRi2P9LTFonmHkJLMOLjR77J1oIP8Ife1w==}
     dev: false
 
-  /@prisma/engines/4.10.0:
-    resolution: {integrity: sha512-ZPPo7q+nQZdTlPFedS7mFXPE3oZ2kWtTh3GO4sku0XQ8ikLqEyinuTPJbQCw/8qel2xglIEQicsK6yI4Jgh20A==}
+  /@prisma/engines/4.10.1:
+    resolution: {integrity: sha512-B3tcTxjx196nuAu1GOTKO9cGPUgTFHYRdkPkTS4m5ptb2cejyBlH9X7GOfSt3xlI7p4zAJDshJP4JJivCg9ouA==}
     requiresBuild: true
 
   /@protobufjs/aspromise/1.1.2:
@@ -15394,13 +15394,13 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /prisma/4.10.0:
-    resolution: {integrity: sha512-xUHcF3Glc8QGgW8x0rfPITvyyTo04fskUdG7pI4kQbvDX/rhzDP4046x/FvazYqYHXMLR5/KTIi2p2Gth5vKOQ==}
+  /prisma/4.10.1:
+    resolution: {integrity: sha512-0jDxgg+DruB1kHVNlcspXQB9au62IFfVg9drkhzXudszHNUAQn0lVuu+T8np0uC2z1nKD5S3qPeCyR8u5YFLnA==}
     engines: {node: '>=14.17'}
     hasBin: true
     requiresBuild: true
     dependencies:
-      '@prisma/engines': 4.10.0
+      '@prisma/engines': 4.10.1
 
   /process-nextick-args/2.0.1:
     resolution: {integrity: sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag==}
