@@ -16,7 +16,7 @@
   "devDependencies": {
     "@shio/prettier": "workspace:*",
     "eslint-config-shio-base": "workspace:*",
-    "stylelint-config-prettier": "9.0.4",
+    "stylelint-config-prettier": "9.0.5",
     "stylelint-config-recess-order": "3.1.0",
     "stylelint-config-standard-scss": "6.1.0",
     "stylelint-prettier": "2.0.0"
