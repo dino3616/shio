@@ -5,7 +5,8 @@
     "fmt": {},
     "style": {},
     "build": {
-      "dependsOn": ["lint", "fmt", "style", "^build"]
+      "dependsOn": ["^build"],
+      "outputs": [".next/**", "dist/**"]
     },
     "test": {
       "dependsOn": ["build"]
