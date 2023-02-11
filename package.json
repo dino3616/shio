@@ -8,15 +8,15 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "prepare": "husky install",
-    "all": "pnpm --filter @shio/* --",
-    "apps": "pnpm --filter './apps/**' --",
-    "api": "pnpm --filter @shio/api --",
-    "client": "pnpm --filter @shio/client --",
-    "packages": "pnpm --filter './packages/**' --",
-    "eslint": "pnpm --filter @shio/eslint --",
-    "prettier": "pnpm --filter @shio/prettier --",
-    "stylelint": "pnpm --filter @shio/stylelint --",
-    "tsconfig": "pnpm --filter @shio/tsconfig --"
+    "all": "pnpm --filter @shio/*",
+    "apps": "pnpm --filter './apps/**'",
+    "api": "pnpm --filter @shio/api",
+    "client": "pnpm --filter @shio/client",
+    "packages": "pnpm --filter './packages/**'",
+    "eslint": "pnpm --filter @shio/eslint",
+    "prettier": "pnpm --filter @shio/prettier",
+    "stylelint": "pnpm --filter @shio/stylelint",
+    "tsconfig": "pnpm --filter @shio/tsconfig"
   },
   "devDependencies": {
     "@types/jest": "29.4.0",
