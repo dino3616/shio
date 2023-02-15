@@ -18,3 +18,8 @@
 # Introduction
 
 This is portfolio site of shio, creator for creators.
+
+# Component Catalog
+
+- [Storybook](https://main--638d5245f83a0dc73205cd8e.chromatic.com)
+- [Chromatic](https://www.chromatic.com/library?appId=638d5245f83a0dc73205cd8e&branch=main)
