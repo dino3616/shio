@@ -142,7 +142,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0
       '@types/react': 18.0.28
-      '@types/react-dom': 18.0.10
+      '@types/react-dom': 18.0.11
       '@types/webpack': 5.28.0
       '@urql/devtools': 2.0.3
       '@urql/exchange-auth': 1.0.0
@@ -161,7 +161,7 @@ importers:
       next: 13.1.6
       next-remove-imports: 1.0.8
       next-transpile-modules: 10.0.0
-      next-urql: 4.0.2
+      next-urql: 4.0.3
       postcss: 8.4.21
       postcss-loader: 7.0.2
       react: 18.2.0
@@ -202,7 +202,7 @@ importers:
       next: 13.1.6_xwkhz2pflc2dna3hcltgugxula
       next-remove-imports: 1.0.8_webpack@5.75.0
       next-transpile-modules: 10.0.0
-      next-urql: 4.0.2_react@18.2.0+urql@3.0.3
+      next-urql: 4.0.3_react@18.2.0+urql@3.0.3
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       react-icons: 4.7.1_react@18.2.0
@@ -245,7 +245,7 @@ importers:
       '@testing-library/jest-dom': 5.16.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@types/react': 18.0.28
-      '@types/react-dom': 18.0.10
+      '@types/react-dom': 18.0.11
       '@types/webpack': 5.28.0
       autoprefixer: 10.4.13_postcss@8.4.21
       babel-plugin-superjson-next: 0.4.5_6hb7bebdisxcpyppymkqpiq3a4
@@ -5749,7 +5749,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.20.13
       '@testing-library/dom': 8.20.0
-      '@types/react-dom': 18.0.10
+      '@types/react-dom': 18.0.11
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
     dev: true
@@ -6074,8 +6074,8 @@ packages:
   /@types/range-parser/1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
 
-  /@types/react-dom/18.0.10:
-    resolution: {integrity: sha512-E42GW/JA4Qv15wQdqJq8DL4JhNpB3prJgjgapN3qJT9K2zO5IIAQh4VXvCEDupoqAwnz0cY4RlXeC/ajX5SFHg==}
+  /@types/react-dom/18.0.11:
+    resolution: {integrity: sha512-O38bPbI2CWtgw/OoQoY+BRelw7uysmXbWvw3nLWO21H1HSh+GOlqPuXshJfjmpNlKiiSDG9cc1JZAaMmVdcTlw==}
     dependencies:
       '@types/react': 18.0.28
     dev: true
@@ -14260,8 +14260,8 @@ packages:
       enhanced-resolve: 5.12.0
     dev: false
 
-  /next-urql/4.0.2_react@18.2.0+urql@3.0.3:
-    resolution: {integrity: sha512-kxVMyk/angixsNjXSib2dabU1fGlidRgk7B9B+WOz+0yIZw9XPcrq1xwwgehfQe2n1O0gboBSQE8reP5LPGk7w==}
+  /next-urql/4.0.3_react@18.2.0+urql@3.0.3:
+    resolution: {integrity: sha512-pesvwu1ZuGzMla8tPMo0V0yiV3ObDF4dbZyZLB2rZoORy+ebdWtClU/pfz1XDrPEgzyfGC3tqvbR5gH7Kt59XA==}
     peerDependencies:
       react: '>=16.8.0'
       urql: ^3.0.0
