@@ -15,6 +15,6 @@
   "devDependencies": {
     "@shio/prettier": "workspace:*",
     "eslint-config-shio-base": "workspace:*",
-    "jest-environment-jsdom": "29.4.2"
+    "jest-environment-jsdom": "29.4.3"
   }
 }
