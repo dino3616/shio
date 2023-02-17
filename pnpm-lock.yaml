@@ -173,7 +173,7 @@ importers:
       react-share: 4.4.1
       react-type-animation: 2.1.2
       recoil: 0.7.6
-      sass: 1.58.1
+      sass: 1.58.2
       sass-loader: 13.2.0
       sharp: 0.31.3
       storybook-addon-next-router: 4.0.2
@@ -199,7 +199,7 @@ importers:
       framer-motion: 9.0.4_biqbaboplfbrettd7655fr4n2y
       graphql-tag: 2.12.6_graphql@16.6.0
       graphql-ws: 5.11.3_graphql@16.6.0
-      next: 13.1.6_xwkhz2pflc2dna3hcltgugxula
+      next: 13.1.6_4u6c57fe2msmz5uzpiwwufo4my
       next-remove-imports: 1.0.8_webpack@5.75.0
       next-transpile-modules: 10.0.0
       next-urql: 4.0.3_react@18.2.0+urql@3.0.3
@@ -255,8 +255,8 @@ importers:
       postcss: 8.4.21
       postcss-loader: 7.0.2_6jdsrmfenkuhhw3gx4zvjlznce
       react-refresh: 0.14.0
-      sass: 1.58.1
-      sass-loader: 13.2.0_sass@1.58.1+webpack@5.75.0
+      sass: 1.58.2
+      sass-loader: 13.2.0_sass@1.58.2+webpack@5.75.0
       storybook-addon-next-router: 4.0.2_6nv3hzettcai7gglevmsm66qhm
       style-dictionary: 3.7.2
       style-loader: 3.3.1_webpack@5.75.0
@@ -7753,7 +7753,7 @@ packages:
       '@babel/helper-module-imports': 7.18.6
       '@babel/types': 7.20.7
       hoist-non-react-statics: 3.3.2
-      next: 13.1.6_xwkhz2pflc2dna3hcltgugxula
+      next: 13.1.6_4u6c57fe2msmz5uzpiwwufo4my
       superjson: 1.12.2
     dev: true
 
@@ -14364,7 +14364,7 @@ packages:
       urql: 3.0.3_onqnqwb3ubg5opvemcqf7c2qhy
     dev: false
 
-  /next/13.1.6_xwkhz2pflc2dna3hcltgugxula:
+  /next/13.1.6_4u6c57fe2msmz5uzpiwwufo4my:
     resolution: {integrity: sha512-hHlbhKPj9pW+Cymvfzc15lvhaOZ54l+8sXDXJWm3OBNBzgrVj6hwGPmqqsXg40xO1Leq+kXpllzRPuncpC0Phw==}
     engines: {node: '>=14.6.0'}
     hasBin: true
@@ -14388,7 +14388,7 @@ packages:
       postcss: 8.4.14
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
-      sass: 1.58.1
+      sass: 1.58.2
       styled-jsx: 5.1.1_2exiyaescjxorpwwmy4ejghgte
     optionalDependencies:
       '@next/swc-android-arm-eabi': 13.1.6
@@ -16564,7 +16564,7 @@ packages:
       - supports-color
     dev: true
 
-  /sass-loader/13.2.0_sass@1.58.1+webpack@5.75.0:
+  /sass-loader/13.2.0_sass@1.58.2+webpack@5.75.0:
     resolution: {integrity: sha512-JWEp48djQA4nbZxmgC02/Wh0eroSUutulROUusYJO9P9zltRbNN80JCBHqRGzjd4cmZCa/r88xgfkjGD0TXsHg==}
     engines: {node: '>= 14.15.0'}
     peerDependencies:
@@ -16585,12 +16585,12 @@ packages:
     dependencies:
       klona: 2.0.6
       neo-async: 2.6.2
-      sass: 1.58.1
+      sass: 1.58.2
       webpack: 5.75.0
     dev: true
 
-  /sass/1.58.1:
-    resolution: {integrity: sha512-bnINi6nPXbP1XNRaranMFEBZWUfdW/AF16Ql5+ypRxfTvCRTTKrLsMIakyDcayUt2t/RZotmL4kgJwNH5xO+bg==}
+  /sass/1.58.2:
+    resolution: {integrity: sha512-2mbyOWOv/lhEXD6nVrQZQ4KT2DlwcODbTskM42EyqBAFUWOhiiYtAXZqjZz1ygzapYf+N+2GwfIH9M5FM4GUMg==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
@@ -17137,7 +17137,7 @@ packages:
       '@storybook/addon-actions': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@storybook/addons': 6.5.16_biqbaboplfbrettd7655fr4n2y
       '@storybook/client-api': 6.5.16_biqbaboplfbrettd7655fr4n2y
-      next: 13.1.6_xwkhz2pflc2dna3hcltgugxula
+      next: 13.1.6_4u6c57fe2msmz5uzpiwwufo4my
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
       tslib: 2.4.0
