@@ -8,7 +8,7 @@ export const HamburgerMenu: FC<HamburgerMenuProps> = ({ ...props }) => {
 
   return (
     <HamburgerMenuPresenter
-      modalController={{
+      dialogController={{
         open,
         setOpen,
         toClose: () => setOpen(false),
