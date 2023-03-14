@@ -181,7 +181,7 @@ importers:
       style-loader: 3.3.1
       superjson: 1.12.2
       tailwind-merge: 1.10.0
-      tailwind-scrollbar: 2.1.0
+      tailwind-scrollbar: 3.0.0
       tailwindcss: 3.2.7
       ts-pattern: 4.2.1
       urql: 3.0.3
@@ -214,7 +214,7 @@ importers:
       sharp: 0.31.3
       superjson: 1.12.2
       tailwind-merge: 1.10.0
-      tailwind-scrollbar: 2.1.0_tailwindcss@3.2.7
+      tailwind-scrollbar: 3.0.0_tailwindcss@3.2.7
       tailwindcss: 3.2.7_aesdjsunmf4wiehhujt67my7tu
       ts-pattern: 4.2.1
       urql: 3.0.3_onqnqwb3ubg5opvemcqf7c2qhy
@@ -17762,8 +17762,8 @@ packages:
     resolution: {integrity: sha512-WFnDXSS4kFTZwjKg5/oZSGzBRU/l+qcbv5NVTzLUQvJ9yovDAP05h0F2+ZFW0Lw9EcgRoc2AfURUdZvnEFrXKg==}
     dev: false
 
-  /tailwind-scrollbar/2.1.0_tailwindcss@3.2.7:
-    resolution: {integrity: sha512-zpvY5mDs0130YzYjZKBiDaw32rygxk5RyJ4KmeHjGnwkvbjm/PszON1m4Bbt2DkMRIXlXsfNevykAESgURN4KA==}
+  /tailwind-scrollbar/3.0.0_tailwindcss@3.2.7:
+    resolution: {integrity: sha512-OkVRX9Q1T769vk979UZ519jhj/j/zNBHql7zPLI+tlhX+ahksYO4ZryWD29lOETDx9Wj1sw+K1OeW7W3+ECQOA==}
     engines: {node: '>=12.13.0'}
     peerDependencies:
       tailwindcss: 3.x
