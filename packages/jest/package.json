@@ -1,10 +1,6 @@
 {
   "name": "@shio/jest",
   "version": "0.1.0",
-  "repository": "https://github.com/dino3616/shio.git",
-  "author": "dino3616 <85730998+dino3616@users.noreply.github.com>",
-  "license": "MIT",
-  "private": true,
   "type": "commonjs",
   "scripts": {
     "lint": "eslint ./**/*.js",
@@ -15,6 +11,6 @@
   "devDependencies": {
     "@shio/prettier": "workspace:*",
     "eslint-config-shio-base": "workspace:*",
-    "jest-environment-jsdom": "29.4.3"
+    "jest-environment-jsdom": "29.5.0"
   }
 }

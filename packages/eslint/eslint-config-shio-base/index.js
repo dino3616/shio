@@ -8,6 +8,9 @@ module.exports = {
   },
   extends: ["eslint:recommended", "prettier", "plugin:json/recommended"],
   plugins: ["import", "prettier", "json"],
+  parserOptions: {
+    ecmaVersion: "latest",
+  },
   rules: {
     "json/*": ["error", "allowComments"],
     "import/no-default-export": "error",

@@ -2,7 +2,7 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:base", ":prHourlyLimitNone", ":timezone(Asia/Tokyo)"],
   "dependencyDashboard": true,
-  "labels": ["📚ライブラリ", "🤖renovate"],
+  "labels": ["📦️ build", "🤖 renovate"],
   "packageRules": [
     {
       "groupName": "all non-major dependencies",

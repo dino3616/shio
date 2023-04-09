@@ -3,6 +3,7 @@
   // https://github.com/tsconfig/bases/blob/main/bases/next-strictest.json
   "extends": "@tsconfig/next-strictest/tsconfig.json",
   "compilerOptions": {
+    "allowJs": false,
     "exactOptionalPropertyTypes": false,
     "experimentalDecorators": true
   }

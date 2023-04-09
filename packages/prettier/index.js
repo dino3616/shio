@@ -1,9 +1,10 @@
 /** @type {import('prettier').Options} */
 module.exports = {
+  endOfLine: 'lf',
   printWidth: 150,
-  tabWidth: 2,
-  useTabs: false,
-  singleQuote: true,
   semi: true,
+  singleQuote: true,
+  tabWidth: 2,
   trailingComma: 'all',
+  useTabs: false,
 };

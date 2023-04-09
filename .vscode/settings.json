@@ -1,114 +1,111 @@
 {
-  "files.encoding": "utf8",
-  "files.eol": "\n",
-  "commit-message-editor.view.defaultView": "form",
   "commit-message-editor.tokens": [
     {
       "label": "Type",
       "name": "type",
       "type": "enum",
-      "description": "変更の種類。",
+      "description": "Type of changes.",
       "combobox": true,
       "options": [
         {
           "label": "feat: ✨",
           "value": "feat: ✨",
-          "description": "機能の実装。"
+          "description": "Implementation of new features."
         },
         {
           "label": "feat: ⚰️",
           "value": "feat: ⚰️",
-          "description": "機能の削除。"
+          "description": "Deletion of features."
         },
         {
           "label": "fix: 🐛",
           "value": "fix: 🐛",
-          "description": "バグの修正。"
-        },
-        {
-          "label": "fix: 🐞",
-          "value": "fix: 🐞",
-          "description": "バグほどではない小さな問題の修正。"
+          "description": "Bug fixes."
         },
         {
           "label": "fix: 🚑️",
           "value": "fix: 🚑️",
-          "description": "重大なバグの修正。"
+          "description": "Critical bug fixes or major changes."
         },
         {
           "label": "doc: 📝",
           "value": "doc: 📝",
-          "description": "ドキュメントの追加・更新。"
+          "description": "Documentation changes."
         },
         {
           "label": "typo: 🖋️",
           "value": "typo: 🖋️",
-          "description": "タイポグラフィーの追加・更新。"
-        },
-        {
-          "label": "style: 💄",
-          "value": "style: 💄",
-          "description": "UIやスタイルファイルの変更。"
+          "description": "Typography changes."
         },
         {
           "label": "refactor: ♻️",
           "value": "refactor: ♻️",
-          "description": "コードのフォーマットやリファクタリング。"
+          "description": "Code formatting or refactoring."
+        },
+        {
+          "label": "a11y: 🌈",
+          "value": "a11y: 🌈",
+          "description": "Accessibility changes."
+        },
+        {
+          "label": "ux: 💖",
+          "value": "ux: 💖",
+          "description": "UX changes."
         },
         {
           "label": "test: 🧪",
           "value": "test: 🧪",
-          "description": "テストの追加・更新。"
+          "description": "Test cases changes."
         },
         {
           "label": "ci: 🦺",
           "value": "ci: 🦺",
-          "description": "CIの変更。"
+          "description": "CI changes."
         },
         {
           "label": "build: 📦️",
           "value": "build: 📦️",
-          "description": "ビルドシステムや依存関係の変更。"
+          "description": "Build system or dependency changes."
         },
         {
           "label": "container: 🐳",
           "value": "container: 🐳",
-          "description": "Dockerfileの変更。"
+          "description": "The Dockerfile changes."
         },
         {
           "label": "container: 🐙",
           "value": "container: 🐙",
-          "description": "docker-composeファイルの変更。"
+          "description": "The docker-compose changes."
         },
         {
           "label": "chore: 🔧",
           "value": "chore: 🔧",
-          "description": "設定ファイルの変更。"
+          "description": "Configuration changes."
         },
         {
           "label": "chore: 🔨",
           "value": "chore: 🔨",
-          "description": "開発スクリプトの変更。"
+          "description": "Development script changes."
         },
         {
           "label": "chore: 🍱",
           "value": "chore: 🍱",
-          "description": "アセットの変更。"
+          "description": "Assets changes."
         },
         {
           "label": "revert: ⏪️",
           "value": "revert: ⏪️",
-          "description": "変更の取り消し。"
+          "description": "Reversion of changes."
         },
         {
           "label": "wip: 🚧",
           "value": "wip: 🚧",
-          "description": "squashされる変更のコミット。"
+          "description": "Changes that will be squashed."
         },
         {
           "label": "initial: 🎉",
           "value": "initial: 🎉",
-          "description": "最初のコミット。"
+          "description": "The first commit."
         }
       ]
     },
@@ -116,7 +113,7 @@
       "label": "Scope",
       "name": "scope",
       "type": "text",
-      "description": "変更の範囲。\n例:\n・.gitignore\n・NavBar",
+      "description": "Scope of changes.",
       "prefix": " (",
       "suffix": ")"
     },
@@ -124,13 +121,13 @@
       "label": "Short Description",
       "name": "description",
       "type": "text",
-      "description": "コミットの要約。\n\n例:\n・認証を実装\n・認証画面のスタイルが崩れるバグを修正"
+      "description": "Commit summary."
     },
     {
       "label": "Body",
       "name": "body",
       "type": "text",
-      "description": "コミットの詳細な説明。\ndescriptionと内容が一致する場合は省略しても良い。\n\n例:\n・CSSにタイポがあったため、それらを修正した。",
+      "description": "Detailed description of commit.",
       "maxLines": 10,
       "multiline": true,
       "lines": 5
@@ -138,15 +135,18 @@
     {
       "label": "Footer",
       "name": "footer",
-      "description": "破壊的変更についての説明。または署名。",
+      "description": "Description of disruptive changes or signature.",
       "type": "text",
       "multiline": true
     }
   ],
+  "commit-message-editor.view.defaultView": "form",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.format.enable": true,
   "eslint.packageManager": "pnpm",
-  "eslint.workingDirectories": ["apps/api", "apps/client"],
-  "graphql-config.load.filePath": "../graphql.config.json",
-  "jest.rootPath": "/shio",
-  "jest.jestCommandLine": "pnpm apps -- test"
+  "eslint.workingDirectories": ["apps/website/"],
+  "files.encoding": "utf8",
+  "files.eol": "\n",
+  "jest.jestCommandLine": "pnpm apps -- test",
+  "jest.rootPath": "/workspaces/shio/"
 }

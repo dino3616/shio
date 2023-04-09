@@ -1,36 +1,19 @@
 version: "3.8"
 
 services:
-  mongo:
-    image: mongo:6
-    container_name: mongo
-    command: --replSet rs-shio
-    ports:
-      - 27017:27017
-    volumes:
-      - type: volume
-        source: mongo-db
-        target: /data/db
-      - type: volume
-        source: mongo-configdb
-        target: /data/configdb
-
   app:
     image: ghcr.io/dino3616/shio:latest
     container_name: app
-    ports:
-      - ${API_PORT:-4000:4000}
-      - ${CLIENT_PORT:-3000:3000}
     build:
       context: ../
       dockerfile: ./docker/Dockerfile.development
     volumes:
       - type: bind
         source: ../
-        target: /shio/
+        target: /workspaces/shio/
       - type: volume
         source: pnpm-store
-        target: /shio/.pnpm-store
+        target: /workspaces/shio/.pnpm-store/
     tty: true
 
 volumes:

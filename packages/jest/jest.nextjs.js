@@ -3,8 +3,13 @@ const createConfig = require('next/jest')({
 });
 
 /** @type {import('jest').Config} */
-const config = {
+const defaultConfig = {
   testEnvironment: 'jest-environment-jsdom',
+  setupFiles: ['dotenv/config'],
 };
 
-module.exports = createConfig(config);
+module.exports = (/** @type {import('jest').Config} */ config) =>
+  createConfig({
+    ...defaultConfig,
+    ...config,
+  });

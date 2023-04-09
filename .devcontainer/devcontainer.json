@@ -1,6 +1,6 @@
 {
   "name": "shio",
-  "workspaceFolder": "shio",
+  "workspaceFolder": "/workspaces/shio/",
   "dockerComposeFile": ["../docker/docker-compose.development.yml"],
   "service": "app",
   "customizations": {
@@ -8,10 +8,10 @@
       "extensions": [
         "formulahendry.auto-complete-tag",
         "wmaurer.change-case",
-        "gencay.vscode-chatgpt",
         "bierner.color-info",
         "adam-bender.commit-message-editor",
         "mikestead.dotenv",
+        "editorconfig.editorconfig",
         "usernamehw.errorlens",
         "dbaeumer.vscode-eslint",
         "github.copilot",

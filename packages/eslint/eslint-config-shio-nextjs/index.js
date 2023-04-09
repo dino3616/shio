@@ -72,7 +72,7 @@ module.exports = {
       },
     },
     {
-      files: ["./src/pages/**"],
+      files: ["./src/app/**"],
       rules: {
         "import/no-default-export": "off",
         "import/prefer-default-export": "error",

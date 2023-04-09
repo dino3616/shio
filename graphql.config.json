@@ -1,7 +1,7 @@
 {
   "projects": {
     "shio": {
-      "schema": ["./apps/client/graphql.schema.json"]
+      "schema": ["./apps/website/graphql.schema.json"]
     }
   }
 }
