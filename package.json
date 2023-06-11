@@ -9,7 +9,7 @@
     "node": ">=18.0.0 <19",
     "pnpm": ">=7.0.0"
   },
-  "packageManager": "pnpm@7.29.3",
+  "packageManager": "pnpm@8.6.2",
   "scripts": {
     "prepare": "husky install",
     "all": "pnpm --filter @shio/*",
