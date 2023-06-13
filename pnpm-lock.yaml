@@ -182,7 +182,7 @@ importers:
       tailwindcss: 3.2.7
       ts-pattern: 4.2.1
       tw-colors: 1.1.6
-      urql: 3.0.4
+      urql: 4.0.4
       urql-custom-scalars-exchange: 1.0.1
     dependencies:
       '@radix-ui/react-dialog': 1.0.3_zula6vjvt3wdocc4mwcxqa6nzi
@@ -204,8 +204,8 @@ importers:
       sharp: 0.31.3
       tailwind-merge: 1.10.0
       ts-pattern: 4.2.1
-      urql: 3.0.4_onqnqwb3ubg5opvemcqf7c2qhy
-      urql-custom-scalars-exchange: 1.0.1_x72y3paapidibbptilo54vixa4
+      urql: 4.0.4_onqnqwb3ubg5opvemcqf7c2qhy
+      urql-custom-scalars-exchange: 1.0.1_mi4qfzfgs753v5h27aldvxwl6a
     devDependencies:
       '@graphql-codegen/cli': 3.2.2_m2ardozlv3vugy4t2ufgxiya7m
       '@graphql-codegen/introspection': 3.0.1_graphql@16.6.0
@@ -339,6 +339,17 @@ importers:
       eslint-config-shio-base: link:../eslint/eslint-config-shio-base
 
 packages:
+
+  /@0no-co/graphql.web/1.0.4_graphql@16.6.0:
+    resolution: {integrity: sha512-W3ezhHGfO0MS1PtGloaTpg0PbaT8aZSmmaerL7idtU5F7oCI+uu25k+MsMS31BVFlp4aMkHSrNRxiD72IlK8TA==}
+    peerDependencies:
+      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
+    peerDependenciesMeta:
+      graphql:
+        optional: true
+    dependencies:
+      graphql: 16.6.0
+    dev: false
 
   /@adobe/css-tools/4.2.0:
     resolution: {integrity: sha512-E09FiIft46CmH5Qnjb0wsW54/YQd69LsxeKUOWawmws1XWvyFGURnAChH0mlr7YPFR1ofwvUQfcL0J3lMxXqPA==}
@@ -6364,7 +6375,16 @@ packages:
       graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
     dependencies:
       graphql: 16.6.0
-      wonka: 6.2.5
+      wonka: 6.3.2
+    dev: false
+
+  /@urql/core/4.0.10_graphql@16.6.0:
+    resolution: {integrity: sha512-Vs3nOSAnYftqOCg034Ostp/uSqWlQg5ryLIzcOrm8+O43s4M+Ew4GQAuemIH7ZDB8dek6h61zzWI3ujd8FH3NA==}
+    dependencies:
+      '@0no-co/graphql.web': 1.0.4_graphql@16.6.0
+      wonka: 6.3.2
+    transitivePeerDependencies:
+      - graphql
     dev: false
 
   /@urql/devtools/2.0.3_xelz6oxoiemjwtgpzxhxuepwdy:
@@ -10953,7 +10973,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
@@ -18444,7 +18464,7 @@ packages:
       braces: 3.0.2
     dev: true
 
-  /urql-custom-scalars-exchange/1.0.1_x72y3paapidibbptilo54vixa4:
+  /urql-custom-scalars-exchange/1.0.1_mi4qfzfgs753v5h27aldvxwl6a:
     resolution: {integrity: sha512-NSxUaw1ZWu72iJ/t4qy6hbm33HKthIglLl8JzHEtEQgE1ICxl5kXmzmZWL5ycxlNRgCOvU2nqzrplIhBo7q3UQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
@@ -18454,19 +18474,19 @@ packages:
     dependencies:
       '@urql/core': 3.2.2_graphql@16.6.0
       graphql: 16.6.0
-      wonka: 6.2.5
+      wonka: 6.3.2
     dev: false
 
-  /urql/3.0.4_onqnqwb3ubg5opvemcqf7c2qhy:
-    resolution: {integrity: sha512-okmQKQ9pF4t8O8iCC5gH9acqfFji5lkhW3nLBjx8WKDd2zZG7PXoUpUK19VQEMK87L6VFBOO/XZ52MMKFEI0AA==}
+  /urql/4.0.4_onqnqwb3ubg5opvemcqf7c2qhy:
+    resolution: {integrity: sha512-C5P4BMnAsk+rbytCWglit5ijXbIKXsa9wofSGPbuMyJKsDdL+9GfipS362Nff/Caag+eYOK5W+sox8fwEILT6Q==}
     peerDependencies:
-      graphql: ^0.11.0 || ^0.12.0 || ^0.13.0 || ^14.0.0 || ^15.0.0 || ^16.0.0
       react: '>= 16.8.0'
     dependencies:
-      '@urql/core': 3.2.2_graphql@16.6.0
-      graphql: 16.6.0
+      '@urql/core': 4.0.10_graphql@16.6.0
       react: 18.2.0
-      wonka: 6.2.5
+      wonka: 6.3.2
+    transitivePeerDependencies:
+      - graphql
     dev: false
 
   /use-callback-ref/1.3.0_pmekkgnqduwlme35zpnqhenc34:
@@ -19027,6 +19047,10 @@ packages:
 
   /wonka/6.2.5:
     resolution: {integrity: sha512-adhGYKm5xWIZYXRkzEqHbRbRl2gXHqOudjQJMXpRgSyboFmaKOjGm3RIThBk4tZdiZx1DXuKK0H9wKBgXHhzZg==}
+    dev: false
+
+  /wonka/6.3.2:
+    resolution: {integrity: sha512-2xXbQ1LnwNS7egVm1HPhW2FyKrekolzhpM3mCwXdQr55gO+tAiY76rhb32OL9kKsW8taj++iP7C6hxlVzbnvrw==}
     dev: false
 
   /word-wrap/1.2.3:

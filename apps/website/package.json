@@ -39,7 +39,7 @@
     "sharp": "0.31.3",
     "tailwind-merge": "1.10.0",
     "ts-pattern": "4.2.1",
-    "urql": "3.0.4",
+    "urql": "4.0.4",
     "urql-custom-scalars-exchange": "1.0.1"
   },
   "devDependencies": {
