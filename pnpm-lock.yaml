@@ -312,14 +312,14 @@ importers:
       eslint-config-shio-base: workspace:*
       stylelint-config-prettier: 9.0.5
       stylelint-config-recess-order: 4.0.0
-      stylelint-config-standard-scss: 7.0.1
+      stylelint-config-standard-scss: 9.0.0
       stylelint-prettier: 3.0.0
     devDependencies:
       '@shio/prettier': link:../prettier
       eslint-config-shio-base: link:../eslint/eslint-config-shio-base
       stylelint-config-prettier: 9.0.5
       stylelint-config-recess-order: 4.0.0
-      stylelint-config-standard-scss: 7.0.1_postcss@8.4.21
+      stylelint-config-standard-scss: 9.0.0_postcss@8.4.21
       stylelint-prettier: 3.0.0_prettier@2.8.4
 
   packages/tsconfig:
@@ -10953,7 +10953,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
@@ -17244,47 +17244,47 @@ packages:
       stylelint-order: 6.0.3
     dev: true
 
-  /stylelint-config-recommended-scss/9.0.1_postcss@8.4.21:
-    resolution: {integrity: sha512-qAmz/TdrqslwiMTuLM3QXeISUkfEDUXGMfRBCHm/xrkCJNnQefv+mzG2mWTsWkqcVk8HAyUkug10dwAcYp2fCQ==}
+  /stylelint-config-recommended-scss/11.0.0_postcss@8.4.21:
+    resolution: {integrity: sha512-EDghTDU7aOv2LTsRZvcT1w8mcjUaMhuy+t38iV5I/0Qiu6ixdkRwhLEMul3K/fnB2v9Nwqvb3xpvJfPH+HduDw==}
     peerDependencies:
       postcss: ^8.3.3
-      stylelint: ^15.0.0
+      stylelint: ^15.5.0
     peerDependenciesMeta:
       postcss:
         optional: true
     dependencies:
       postcss: 8.4.21
       postcss-scss: 4.0.6_postcss@8.4.21
-      stylelint-config-recommended: 10.0.1
-      stylelint-scss: 4.5.0
+      stylelint-config-recommended: 12.0.0
+      stylelint-scss: 4.7.0
     dev: true
 
-  /stylelint-config-recommended/10.0.1:
-    resolution: {integrity: sha512-TQ4xQ48tW4QSlODcti7pgSRqBZcUaBzuh0jPpfiMhwJKBPkqzTIAU+IrSWL/7BgXlOM90DjB7YaNgFpx8QWhuA==}
+  /stylelint-config-recommended/12.0.0:
+    resolution: {integrity: sha512-x6x8QNARrGO2sG6iURkzqL+Dp+4bJorPMMRNPScdvaUK8PsynriOcMW7AFDKqkWAS5wbue/u8fUT/4ynzcmqdQ==}
     peerDependencies:
-      stylelint: ^15.0.0
+      stylelint: ^15.5.0
     dev: true
 
-  /stylelint-config-standard-scss/7.0.1_postcss@8.4.21:
-    resolution: {integrity: sha512-m5sRdtsB1F5fnC1Ozla7ryftU47wVpO+HWd+JQTqeoG0g/oPh5EfbWfcVHbNCEtuoHfALIySiUWS20pz2hX6jA==}
+  /stylelint-config-standard-scss/9.0.0_postcss@8.4.21:
+    resolution: {integrity: sha512-yPKpJsrZn4ybuQZx/DkEHuCjw7pJginErE/47dFhCnrvD48IJ4UYec8tSiCuJWMA3HRjbIa3nh5ZeSauDGuVAg==}
     peerDependencies:
       postcss: ^8.3.3
-      stylelint: ^15.0.0
+      stylelint: ^15.5.0
     peerDependenciesMeta:
       postcss:
         optional: true
     dependencies:
       postcss: 8.4.21
-      stylelint-config-recommended-scss: 9.0.1_postcss@8.4.21
-      stylelint-config-standard: 30.0.1
+      stylelint-config-recommended-scss: 11.0.0_postcss@8.4.21
+      stylelint-config-standard: 33.0.0
     dev: true
 
-  /stylelint-config-standard/30.0.1:
-    resolution: {integrity: sha512-NbeHOmpRQhjZh5XB1B/S4MLRWvz4xxAxeDBjzl0tY2xEcayNhLbaRGF0ZQzq+DQZLCcPpOHeS2Ru1ydbkhkmLg==}
+  /stylelint-config-standard/33.0.0:
+    resolution: {integrity: sha512-eyxnLWoXImUn77+ODIuW9qXBDNM+ALN68L3wT1lN2oNspZ7D9NVGlNHb2QCUn4xDug6VZLsh0tF8NyoYzkgTzg==}
     peerDependencies:
-      stylelint: ^15.0.0
+      stylelint: ^15.5.0
     dependencies:
-      stylelint-config-recommended: 10.0.1
+      stylelint-config-recommended: 12.0.0
     dev: true
 
   /stylelint-order/6.0.3:
@@ -17307,12 +17307,11 @@ packages:
       prettier-linter-helpers: 1.0.0
     dev: true
 
-  /stylelint-scss/4.5.0:
-    resolution: {integrity: sha512-/+rQ8FePOiwT5xblOHkujYzRYfSjmE6HYhLpqJShL+9wH6/HaAVj4mWpXlpEsM3ZgIpOblG9Y+/BycSJzWgjNw==}
+  /stylelint-scss/4.7.0:
+    resolution: {integrity: sha512-TSUgIeS0H3jqDZnby1UO1Qv3poi1N8wUYIJY6D1tuUq2MN3lwp/rITVo0wD+1SWTmRm0tNmGO0b7nKInnqF6Hg==}
     peerDependencies:
       stylelint: ^14.5.1 || ^15.0.0
     dependencies:
-      lodash: 4.17.21
       postcss-media-query-parser: 0.2.3
       postcss-resolve-nested-selector: 0.1.1
       postcss-selector-parser: 6.0.11
