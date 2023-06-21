@@ -1,8 +1,7 @@
 {
-  "name": "eslint-config-shio-base",
+  "name": "eslint-config-shio-nextjs",
   "version": "0.1.0",
   "repository": "https://github.com/dino3616/shio.git",
-  "author": "dino3616 <85730998+dino3616@users.noreply.github.com>",
   "license": "MIT",
   "private": true,
   "type": "commonjs",
@@ -10,5 +9,8 @@
   "scripts": {
     "lint": "eslint ./**/*.js",
     "lint:fix": "eslint ./**/*.js --fix"
+  },
+  "devDependencies": {
+    "eslint-config-shio-base": "workspace:*"
   }
 }
