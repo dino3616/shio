@@ -32,7 +32,7 @@ const RootLayout = ({ children }: RootLayoutProps): ReactNode => (
         <PageTransitionAnimationProvider>
           <main className="min-h-full grow">{children}</main>
         </PageTransitionAnimationProvider>
-        <Footer />
+        <Footer className="mt-24" />
       </ThemeProvider>
     </body>
   </html>
