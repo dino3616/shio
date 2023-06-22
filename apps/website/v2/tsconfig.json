@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "@shio/tsconfig/tsconfig.nextjs.json",
+  "compilerOptions": {
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "baseUrl": "./",
+    "ignoreDeprecations": "5.0",
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+    "rootDir": "./"
+  },
+  "include": ["./src/**/*", "./*.js", "./*.ts", ".next/types/**/*.ts"],
+  "exclude": ["**/node_modules/**/*"]
+}
