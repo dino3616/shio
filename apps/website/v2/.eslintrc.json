@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/eslintrc",
+  "extends": ["shio-nextjs"],
+  "rules": {
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["../"]
+      }
+    ]
+  },
+  "settings": {
+    "tailwindcss": {
+      "callees": ["cn"]
+    }
+  }
+}
