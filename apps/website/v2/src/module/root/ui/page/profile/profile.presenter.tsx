@@ -14,7 +14,7 @@ import { breakpoints } from '@/style/token';
 type ProfileProps = ComponentPropsWithoutRef<'section'>;
 
 export const Profile = ({ className, ...props }: ProfileProps): ReactNode => (
-  <section className={cn('flex flex-col items-center gap-12 px-12 tablet:gap-28 tablet:px-20 laptop:px-28')} {...props}>
+  <section className={cn('flex flex-col items-center gap-12 p-12 tablet:gap-28 tablet:px-20 laptop:px-28', className)} {...props}>
     <h1 className="text-4xl font-bold text-mauve-12 tablet:text-6xl laptop:text-7xl">
       Hi, I&apos;m <span className="text-purple-11">shio</span>!🧂
     </h1>
@@ -59,17 +59,22 @@ export const Profile = ({ className, ...props }: ProfileProps): ReactNode => (
           </Link>
         </li>
         <li>
-          <Link aria-label="discord link" aria-description="A link to Discord account of shio." href="https://www.instagram.com/shio_dino/" external>
+          <Link
+            aria-label="discord link"
+            aria-description="A link to Discord account of shio."
+            href="https://discordapp.com/users/699659576349294633/"
+            external
+          >
             <DiscordIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
           </Link>
         </li>
         <li>
-          <Link aria-label="github link" aria-description="A link to GitHub account of shio." href="https://www.instagram.com/shio_dino/" external>
+          <Link aria-label="github link" aria-description="A link to GitHub account of shio." href="https://github.com/dino3616/" external>
             <GithubIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
           </Link>
         </li>
         <li>
-          <Link aria-label="mail link" aria-description="An E-mail address for shio" href="mailto:me@shio.studio" external>
+          <Link aria-label="mail link" aria-description="An E-mail address for shio." href="mailto:me@shio.studio" external>
             <MailIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
           </Link>
         </li>
