@@ -40,25 +40,32 @@ const RootLayout = ({ children }: RootLayoutProps): ReactNode => (
 
 export default RootLayout;
 
-export const metadata: Metadata = {
-  metadataBase: getBaseUrl(),
-  title: {
-    default: 'shio.studio | Provide accessible Web for everyone, everywhere.',
-    template: '%s | shio.studio',
-  },
-  description:
-    'This portfolio presents my projects and thoughts as a frontend developer who maximizes website accessibility from two perspectives: engineer and designer.',
-  openGraph: {
-    locale: 'en_US',
-    url: getBaseUrl(),
-  },
-  twitter: {
-    card: 'summary_large_image',
-    site: '@shio3616',
-    creator: '@shio3616',
-  },
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: colors.light.purple['7'] },
-    { media: '(prefers-color-scheme: dark)', color: colors.dark.purple['7'] },
-  ],
+export const generateMetadata = (): Metadata => {
+  const title = 'shio.studio | Provide accessible Web for everyone, everywhere.';
+  const description =
+    'This portfolio presents my projects and thoughts as a frontend developer who maximizes website accessibility from two perspectives: engineer and designer.';
+
+  return {
+    metadataBase: getBaseUrl(),
+    title: {
+      default: title,
+      template: '%s | shio.studio',
+    },
+    description,
+    openGraph: {
+      title,
+      description,
+      locale: 'en_US',
+      url: getBaseUrl(),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      site: '@shio3616',
+      creator: '@shio3616',
+    },
+    themeColor: [
+      { media: '(prefers-color-scheme: light)', color: colors.light.purple['7'] },
+      { media: '(prefers-color-scheme: dark)', color: colors.dark.purple['7'] },
+    ],
+  };
 };
