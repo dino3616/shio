@@ -6,20 +6,13 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: [
-    "airbnb-typescript",
-    "eslint:recommended",
-    "prettier",
-    "plugin:@typescript-eslint/recommended",
-  ],
-  plugins: ["@typescript-eslint", "import", "prettier"],
-  parser: "@typescript-eslint/parser",
+  extends: ["eslint:recommended", "prettier", "plugin:json/recommended"],
+  plugins: ["import", "prettier", "json"],
   parserOptions: {
-    project: "./tsconfig.json",
     ecmaVersion: "latest",
-    sourceType: "module",
   },
   rules: {
+    "json/*": ["error", "allowComments"],
     "import/no-default-export": "error",
     "import/no-extraneous-dependencies": ["error", { packageDir: ["./"] }],
     "import/order": [
@@ -44,7 +37,6 @@ module.exports = {
     {
       files: ["./*"],
       rules: {
-        "@typescript-eslint/no-var-requires": "off",
         "import/no-default-export": "off",
         "import/prefer-default-export": "off",
       },

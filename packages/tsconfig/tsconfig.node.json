@@ -1,10 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  // https://github.com/tsconfig/bases/blob/main/bases/node-lts-strictest-esm.combined.json
+  // https://github.com/tsconfig/bases/blob/main/bases/node-lts-strictest.combined.json
   "extends": "@tsconfig/node-lts-strictest/tsconfig.json",
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "exactOptionalPropertyTypes": false,
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
+    "baseUrl": "./",
+    "paths": {
+      "#cms/*": ["../cms/src/*"],
+      "#model/*": ["../model/src/*"]
+    },
+    "rootDir": "./"
   }
 }
