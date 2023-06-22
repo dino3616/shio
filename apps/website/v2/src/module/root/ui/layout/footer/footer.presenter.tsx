@@ -27,26 +27,22 @@ export const Footer = ({ className, ...props }: FooterProps): ReactNode => (
         </div>
         <ul className="flex items-center gap-4">
           <li className="border-r-2 border-mauve-11 pr-4">
+            <p className="sr-only">Links to social media accounts of shio.</p>
             <ul className="flex items-center gap-4">
               <li>
-                <Link aria-label="twitter link" aria-description="A link to Twitter account of shio." href="https://twitter.com/shio3616/" external>
+                <Link aria-label="twitter link" aria-description="A link to Twitter." href="https://twitter.com/shio3616/" external>
                   <TwitterIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
                 </Link>
               </li>
               <li>
-                <Link
-                  aria-label="instagram link"
-                  aria-description="A link to Instagram account of shio."
-                  href="https://www.instagram.com/shio_dino/"
-                  external
-                >
+                <Link aria-label="instagram link" aria-description="A link to Instagram." href="https://www.instagram.com/shio_dino/" external>
                   <InstagramIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
                 </Link>
               </li>
               <li>
                 <Link
                   aria-label="discord link"
-                  aria-description="A link to Discord account of shio."
+                  aria-description="A link to Discord."
                   href="https://discordapp.com/users/699659576349294633/"
                   external
                 >
@@ -54,23 +50,24 @@ export const Footer = ({ className, ...props }: FooterProps): ReactNode => (
                 </Link>
               </li>
               <li>
-                <Link aria-label="github link" aria-description="A link to GitHub account of shio." href="https://github.com/dino3616/" external>
+                <Link aria-label="github link" aria-description="A link to GitHub." href="https://github.com/dino3616/" external>
                   <GithubIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
                 </Link>
               </li>
               <li>
-                <Link aria-label="mail link" aria-description="An E-mail address for shio." href="mailto:me@shio.studio" external>
+                <Link aria-label="e-mail link" aria-description="An E-mail address." href="mailto:me@shio.studio" external>
                   <MailIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
                 </Link>
               </li>
             </ul>
           </li>
           <li>
+            <p className="sr-only">Links to resources related to this website.</p>
             <ul className="flex items-center gap-4">
               <li>
                 <Link
                   aria-label="source code link"
-                  aria-description="A link to the source code for this website hosted on GitHub."
+                  aria-description="A link to the source code hosted on GitHub."
                   href="https://github.com/dino3616/shio/"
                   external
                 >
@@ -80,7 +77,7 @@ export const Footer = ({ className, ...props }: FooterProps): ReactNode => (
               <li>
                 <Link
                   aria-label="design link"
-                  aria-description="A link to the design for this website created by Figma."
+                  aria-description="A link to the design created by Figma."
                   href="https://www.figma.com/file/wIpzL4L6xxDhB7TGejMBBk/shio.studio?type=design&node-id=0%3A1&t=kBxA06Gtzi3Y0i09-1/"
                   external
                 >
