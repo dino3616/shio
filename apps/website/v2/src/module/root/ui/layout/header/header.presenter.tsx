@@ -14,7 +14,7 @@ export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>;
 export const Header = ({ className, ...props }: HeaderProps): ReactNode => (
   <header className={cn('flex w-full items-center justify-between p-3 tablet:p-6', className)} {...props}>
     <nav className="flex items-center gap-6 laptop:gap-12">
-      <Link href="/" className="items-center gap-3 tablet:flex">
+      <Link href="/" className="flex items-center gap-3">
         <Image src={BrandShioImage} alt="An image of brand icon for shio." className="h-8 w-8 rounded-full" />
         <p className="hidden text-2xl font-bold text-black hover:opacity-70 dark:text-white tablet:block">
           <span className="text-purple-11">shio</span>.studio
@@ -40,7 +40,7 @@ export const Header = ({ className, ...props }: HeaderProps): ReactNode => (
       </ul>
     </nav>
     <div className="flex items-center gap-6">
-      <ul className="hidden items-center gap-6 border-r-2 border-mauve-11 pr-6 laptop:flex">
+      <ul className="hidden items-center gap-4 border-r-2 border-mauve-11 pr-6 laptop:flex">
         <li>
           <Link aria-label="twitter link" aria-description="A link to Twitter account of shio." href="https://twitter.com/shio3616/" external>
             <TwitterIcon className="h-6 w-6 fill-mauve-11 transition hover:opacity-70" />
