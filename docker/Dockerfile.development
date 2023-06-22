@@ -9,18 +9,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists \
     && yarn global add pnpm
 
-WORKDIR /shio
+WORKDIR /workspaces/shio/
 
-COPY ./.git ./.git
-COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
-COPY ./apps/api/package.json ./apps/api/package.json
-COPY ./apps/client/package.json ./apps/client/package.json
-COPY ./packages/eslint/package.json ./packages/eslint/package.json
-COPY ./packages/eslint/eslint-config-shio-base/package.json ./packages/eslint/eslint-config-shio-base/package.json
-COPY ./packages/eslint/eslint-config-shio-nextjs/package.json ./packages/eslint/eslint-config-shio-nextjs/package.json
-COPY ./packages/eslint/eslint-config-shio-node/package.json ./packages/eslint/eslint-config-shio-node/package.json
-COPY ./packages/jest/package.json ./packages/jest/package.json
-COPY ./packages/prettier/package.json ./packages/prettier/package.json
-COPY ./packages/stylelint/package.json ./packages/stylelint/package.json
-COPY ./packages/tsconfig/package.json ./packages/tsconfig/package.json
+COPY ./ ./
 RUN pnpm install --frozen-lockfile
