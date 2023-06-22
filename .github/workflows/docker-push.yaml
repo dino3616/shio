@@ -22,10 +22,13 @@ jobs:
         id: changes
         with:
           token: ${{ github.token }}
-          filters: .github/filter.yml
+          filters: .github/filter.yaml
 
   push:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     needs: filter
     if: ${{ needs.filter.outputs.docker == 'true' }}
     env:

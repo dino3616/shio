@@ -1,9 +1,10 @@
-name: api lint
+name: app format
 
 on: push
 
 env:
-  node-version: 18
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
   filter:
@@ -12,7 +13,7 @@ jobs:
       contents: read
       pull-requests: read
     outputs:
-      api: ${{ steps.changes.outputs.api }}
+      app: ${{ steps.changes.outputs.app }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -22,12 +23,12 @@ jobs:
         id: changes
         with:
           token: ${{ github.token }}
-          filters: .github/filter.yml
+          filters: .github/filter.yaml
 
-  lint:
+  format:
     runs-on: ubuntu-latest
     needs: filter
-    if: ${{ needs.filter.outputs.api == 'true' }}
+    if: ${{ needs.filter.outputs.app == 'true' }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
@@ -35,14 +36,13 @@ jobs:
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.node-version }}
+          node-version-file: "package.json"
 
       - name: setup pnpm
         uses: pnpm/action-setup@v2.2.4
         id: pnpm-install
         with:
           run_install: false
-          version: 7.26.3
 
       - name: get pnpm store
         id: pnpm-cache
@@ -58,16 +58,13 @@ jobs:
       - name: install
         run: pnpm install --frozen-lockfile
 
-      - name: eslint
-        run: pnpm api lint --max-warnings=0
-
       - name: prettier
-        run: pnpm api fmt
+        run: pnpm turbo fmt
 
-  api-lint-check:
+  app-format-check:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: format
     if: ${{ ! failure() }}
     steps:
       - name: check
-        run: echo "lint is successfully executed."
+        run: echo "format is successfully executed."

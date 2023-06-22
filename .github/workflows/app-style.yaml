@@ -1,13 +1,10 @@
-name: client chromatic
+name: app style
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
+on: push
 
 env:
-  node-version: 18
+  TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
+  TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
 jobs:
   filter:
@@ -16,42 +13,36 @@ jobs:
       contents: read
       pull-requests: read
     outputs:
-      client: ${{ steps.changes.outputs.client }}
+      app: ${{ steps.changes.outputs.app }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: check for file changes
         uses: dorny/paths-filter@v2
         id: changes
         with:
           token: ${{ github.token }}
-          filters: .github/filter.yml
+          filters: .github/filter.yaml
 
-  publish:
+  style:
     runs-on: ubuntu-latest
     needs: filter
-    if: needs.filter.outputs.client == 'true'
+    if: ${{ needs.filter.outputs.app == 'true' }}
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: setup node
         uses: actions/setup-node@v3
         with:
-          node-version: ${{ env.node-version }}
+          node-version-file: "package.json"
 
       - name: setup pnpm
         uses: pnpm/action-setup@v2.2.4
         id: pnpm-install
         with:
           run_install: false
-          version: 7.26.3
 
       - name: get pnpm store
         id: pnpm-cache
@@ -67,20 +58,13 @@ jobs:
       - name: install
         run: pnpm install --frozen-lockfile
 
-      - name: setup graphql
-        run: pnpm client gql:gen
+      - name: stylestyle
+        run: pnpm turbo style -- --max-warnings=0
 
-      - name: publish
-        uses: chromaui/action@v1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: apps/client
-
-  client-chromatic-check:
+  app-style-check:
     runs-on: ubuntu-latest
-    needs: publish
+    needs: style
     if: ${{ ! failure() }}
     steps:
       - name: check
-        run: echo "publish is successfully executed."
+        run: echo "style is successfully executed."
