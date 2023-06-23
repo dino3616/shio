@@ -89,47 +89,47 @@ export const Footer = ({ className, ...props }: FooterProps): ReactNode => (
         </ul>
       </div>
       <nav aria-label="footer navigation">
-        <ul className="flex gap-16">
+        <ul className="flex gap-8 tablet:gap-16">
           <li className="flex flex-col gap-5">
-            <p className="text-lg font-bold text-mauve-11">Work</p>
+            <p className="font-bold text-mauve-11 tablet:text-lg">Work</p>
             <ul className="flex flex-col gap-4">
               <li>
-                <Link href="/" className="text-xl text-mauve-12 transition hover:text-mauve-11">
+                <Link href="/" className="text-lg text-mauve-12 transition hover:text-mauve-11 tablet:text-xl">
                   Service
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-xl text-mauve-12 transition hover:text-mauve-11">
+                <Link href="/" className="text-lg text-mauve-12 transition hover:text-mauve-11 tablet:text-xl">
                   Skill
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-xl text-mauve-12 transition hover:text-mauve-11">
+                <Link href="/" className="text-lg text-mauve-12 transition hover:text-mauve-11 tablet:text-xl">
                   Experience
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-xl text-mauve-12 transition hover:text-mauve-11">
+                <Link href="/" className="text-lg text-mauve-12 transition hover:text-mauve-11 tablet:text-xl">
                   Studio
                 </Link>
               </li>
             </ul>
           </li>
           <li className="flex flex-col gap-5">
-            <p className="text-lg font-bold text-mauve-11">Blog</p>
+            <p className="font-bold text-mauve-11 tablet:text-lg">Blog</p>
             <ul className="flex flex-col gap-4">
               <li>
-                <Link href="/" className="text-xl text-mauve-12 transition hover:text-mauve-11">
+                <Link href="/" className="text-lg text-mauve-12 transition hover:text-mauve-11 tablet:text-xl">
                   List
                 </Link>
               </li>
             </ul>
           </li>
           <li className="flex flex-col gap-5">
-            <p className="text-lg font-bold text-mauve-11">Me</p>
+            <p className="font-bold text-mauve-11 tablet:text-lg">Me</p>
             <ul className="flex flex-col gap-4">
               <li>
-                <Link href="/" className="text-xl text-mauve-12 transition hover:text-mauve-11">
+                <Link href="/" className="text-lg text-mauve-12 transition hover:text-mauve-11 tablet:text-xl">
                   Contact
                 </Link>
               </li>
