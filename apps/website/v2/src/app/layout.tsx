@@ -27,7 +27,7 @@ const RootLayout = ({ children }: RootLayoutProps): ReactNode => (
       )}
     >
       <Analytics />
-      <ThemeProvider attribute="data-theme">
+      <ThemeProvider attribute="data-theme" enableSystem defaultTheme="system">
         <Header className="fixed left-0 top-0 z-10 grow-0" />
         <PageTransitionAnimationProvider>
           <main className="min-h-full grow">{children}</main>
