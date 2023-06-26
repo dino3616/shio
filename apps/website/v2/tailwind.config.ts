@@ -53,6 +53,7 @@ const config: Config = {
         { values: flattenColorPalette(theme('backgroundColor')), type: 'color' },
       );
     },
+    require('tailwindcss-animate'),
   ],
   variants: {
     scrollbar: ['rounded'],
