@@ -7,7 +7,7 @@ import { GithubIcon } from '@/core/icon/github-icon';
 import { TagIcon } from '@/core/icon/tag-icon';
 import { TwitterIcon } from '@/core/icon/twitter-icon';
 import { cn } from '@/core/util/cn';
-import { ThemeSwitch } from '@/module/root/ui/component/theme-switch';
+import { ThemeSelect } from '@/module/root/ui/component/theme-select';
 
 export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>;
 
@@ -56,7 +56,7 @@ export const Header = ({ className, ...props }: HeaderProps): ReactNode => (
         <TagIcon className="h-5 w-5 fill-mauve-11" />
         <p className="font-bold text-mauve-11">v2</p>
       </div>
-      <ThemeSwitch />
+      <ThemeSelect />
     </div>
   </header>
 );
