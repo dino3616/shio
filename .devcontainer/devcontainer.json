@@ -19,7 +19,7 @@
         "gencay.vscode-chatgpt",
         "github.copilot",
         "graphql.vscode-graphql",
-        "gruntfuggly.todo-tree"
+        "gruntfuggly.todo-tree",
         "hbenl.vscode-test-explorer",
         "mikestead.dotenv",
         "orta.vscode-jest",
@@ -32,7 +32,7 @@
         "vincaslt.highlight-matching-tag",
         "visualstudioexptteam.vscodeintellicode",
         "wix.vscode-import-cost",
-        "wmaurer.change-case",
+        "wmaurer.change-case"
       ],
       "settings": {
         "editor.codeActionsOnSave": {
