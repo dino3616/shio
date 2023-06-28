@@ -1,9 +1,9 @@
 {
   "$schema": "https://json.schemastore.org/tsconfig",
-  // https://github.com/tsconfig/bases/blob/main/bases/next-strictest.json
-  "extends": "@tsconfig/next-strictest/tsconfig.json",
+  // https://github.com/tsconfig/bases/blob/main/bases/strictest.json
+  // https://github.com/tsconfig/bases/blob/main/bases/next.json
+  "extends": ["@tsconfig/strictest/tsconfig", "@tsconfig/next/tsconfig"],
   "compilerOptions": {
-    "allowJs": false,
     "exactOptionalPropertyTypes": false
   }
 }

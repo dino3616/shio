@@ -294,7 +294,7 @@ importers:
         version: 6.19.8
       eslint-config-shio-nextjs:
         specifier: workspace:*
-        version: link:../../../packages/eslint/eslint-config-nitic-astronomy-nextjs
+        version: link:../../../packages/eslint/eslint-config-shio-nextjs
       mini-svg-data-uri:
         specifier: 1.4.4
         version: 1.4.4
@@ -376,7 +376,7 @@ importers:
         version: 8.8.0(eslint@8.43.0)
       eslint-config-shio-base:
         specifier: workspace:*
-        version: link:eslint-config-nitic-astronomy-base
+        version: link:eslint-config-shio-base
       eslint-plugin-json:
         specifier: 3.1.0
         version: 3.1.0
@@ -441,7 +441,7 @@ importers:
         version: link:../prettier
       eslint-config-shio-base:
         specifier: workspace:*
-        version: link:../eslint/eslint-config-nitic-astronomy-base
+        version: link:../eslint/eslint-config-shio-base
       jest-environment-jsdom:
         specifier: 29.5.0
         version: 29.5.0
@@ -477,7 +477,7 @@ importers:
         version: link:../prettier
       eslint-config-shio-base:
         specifier: workspace:*
-        version: link:../eslint/eslint-config-nitic-astronomy-base
+        version: link:../eslint/eslint-config-shio-base
       stylelint-config-prettier:
         specifier: 9.0.5
         version: 9.0.5(stylelint@15.8.0)
@@ -496,21 +496,15 @@ importers:
       '@shio/prettier':
         specifier: workspace:*
         version: link:../prettier
-      '@tsconfig/next-strictest':
-        specifier: 1.0.1
-        version: 1.0.1
-      '@tsconfig/node-lts-strictest':
-        specifier: 18.12.1
-        version: 18.12.1
-      '@tsconfig/node-lts-strictest-esm':
-        specifier: 18.12.1
-        version: 18.12.1
+      '@tsconfig/next':
+        specifier: 2.0.0
+        version: 2.0.0
       '@tsconfig/strictest':
         specifier: 2.0.1
         version: 2.0.1
       eslint-config-shio-base:
         specifier: workspace:*
-        version: link:../eslint/eslint-config-nitic-astronomy-base
+        version: link:../eslint/eslint-config-shio-base
 
 packages:
 
@@ -5692,19 +5686,8 @@ packages:
     engines: {node: '>=10.13.0'}
     dev: true
 
-  /@tsconfig/next-strictest@1.0.1:
-    resolution: {integrity: sha512-TchRkSPpfgXA4v5kKIPGZDatVNSHD92VJSVRDnKfQcUAml6Efn9KJbX+hxQcfzTwrnJHkdj0c7eE9PNSew0B4A==}
-    deprecated: TypeScript 5.0 supports combining TSConfigs using array syntax in extends
-    dev: true
-
-  /@tsconfig/node-lts-strictest-esm@18.12.1:
-    resolution: {integrity: sha512-LvBLmaC6Q/txTddLc11OeMHF9XjJFzlilkETJuvBlUvHy9pPiMsoH3nxWZM1FMSO53zp4mJP6gzOzxKEq0me7Q==}
-    deprecated: TypeScript 5.0 supports combining TSConfigs using array syntax in extends
-    dev: true
-
-  /@tsconfig/node-lts-strictest@18.12.1:
-    resolution: {integrity: sha512-pn6cefRFlBVSEo5lO82bJnGmaptr90Wu8zCROkMUYXEz0f4AgCD65Guhq4u3PIuIlsYImaOmdoiHajx1gVTiQw==}
-    deprecated: TypeScript 5.0 supports combining TSConfigs using array syntax in extends
+  /@tsconfig/next@2.0.0:
+    resolution: {integrity: sha512-ip/XpFLWuUrhDkbI8ixpWxPlmWvUhQCLS5rB7nibcZUavA1Ru34Q7a5CniBM7BdHw1YlAXu40HXUn66h/A4EBQ==}
     dev: true
 
   /@tsconfig/node10@1.0.9:
