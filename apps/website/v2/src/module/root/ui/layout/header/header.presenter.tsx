@@ -15,7 +15,7 @@ export const Header = ({ className, ...props }: HeaderProps): ReactNode => (
   <header className={cn('flex w-full items-center justify-between p-3 tablet:p-6', className)} {...props}>
     <nav aria-label="main navigation" className="flex items-center gap-6 laptop:gap-12">
       <Link href="/" className="flex items-center gap-3">
-        <Image src={BrandShioImage} alt="An image of brand icon for shio." className="h-8 w-8 rounded-full" />
+        <Image src={BrandShioImage} alt="An image of brand icon for shio." width={32} className="h-8 w-8 rounded-full" />
         <p className="hidden text-2xl font-bold text-black hover:opacity-70 dark:text-white tablet:block">
           <span className="text-purple-11">shio</span>.studio
         </p>
