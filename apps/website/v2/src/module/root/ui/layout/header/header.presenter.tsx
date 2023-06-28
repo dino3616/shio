@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import BrandShioImage from '@/core/asset/brand/shio.png';
+import BrandShioImage from '@/core/asset/brand/shio.webp';
 import { Image } from '@/core/component/image';
 import { Link } from '@/core/component/link';
 import { ArrowRoundedIcon } from '@/core/icon/arrow-rounded-icon';

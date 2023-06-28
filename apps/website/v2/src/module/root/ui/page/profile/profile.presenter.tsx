@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import BrandShioImage from '@/core/asset/brand/shio.png';
-import ProfileActualPictureImage from '@/core/asset/profile/actual-picture.jpg';
+import BrandShioImage from '@/core/asset/brand/shio.webp';
+import ProfileActualPictureImage from '@/core/asset/profile/actual-picture.webp';
 import { Image } from '@/core/component/image';
 import { Link } from '@/core/component/link';
 import { DiscordIcon } from '@/core/icon/discord-icon';
