@@ -8,10 +8,10 @@
     "node": ">=18.0.0 <19",
     "pnpm": ">=8.0.0"
   },
-  "packageManager": "pnpm@8.6.2",
+  "packageManager": "pnpm@8.6.5",
   "volta": {
-    "node": "18.16.0",
-    "pnpm": "8.6.2"
+    "node": "18.16.1",
+    "pnpm": "8.6.5"
   },
   "scripts": {
     "prepare": "husky install",
