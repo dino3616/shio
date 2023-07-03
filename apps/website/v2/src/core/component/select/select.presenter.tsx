@@ -3,7 +3,7 @@
 import * as RadixUiSelect from '@radix-ui/react-select';
 import { ComponentPropsWithoutRef, ElementRef, forwardRef, ReactNode } from 'react';
 import { CheckIcon } from '@/core/icon/check-icon';
-import { cn } from '@/core/util/cn';
+import { cn } from '@/core/util/tailwind';
 
 export const Select = RadixUiSelect.Root;
 
@@ -12,7 +12,7 @@ export const SelectGroup = RadixUiSelect.Group;
 export const SelectValue = RadixUiSelect.Value;
 
 type SelectTriggerProps = ComponentPropsWithoutRef<typeof RadixUiSelect.Trigger> & {
-  icon?: (props: ComponentPropsWithoutRef<'svg'>) => ReactNode;
+  icon?: (props: Omit<ComponentPropsWithoutRef<'svg'>, 'children'>) => ReactNode;
 };
 
 export const SelectTrigger = forwardRef<ElementRef<typeof RadixUiSelect.Trigger>, Omit<SelectTriggerProps, 'ref'>>(
