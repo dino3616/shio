@@ -1,5 +1,5 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import { cn } from '@/core/util/cn';
+import { cn } from '@/core/util/tailwind';
 
 type HeroProps = ComponentPropsWithoutRef<'section'>;
 

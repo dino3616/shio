@@ -6,7 +6,7 @@ import { ArrowRoundedIcon } from '@/core/icon/arrow-rounded-icon';
 import { GithubIcon } from '@/core/icon/github-icon';
 import { TagIcon } from '@/core/icon/tag-icon';
 import { TwitterIcon } from '@/core/icon/twitter-icon';
-import { cn } from '@/core/util/cn';
+import { cn } from '@/core/util/tailwind';
 import { ThemeSelect } from '@/module/root/ui/component/theme-select';
 
 export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children'>;

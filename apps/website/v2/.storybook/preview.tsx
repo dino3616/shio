@@ -2,8 +2,8 @@ import { INITIAL_VIEWPORTS } from '@storybook/addon-viewport';
 import { Preview } from '@storybook/react';
 import React from 'react';
 import { fontFamily } from '../src/core/font/family';
+import { cn } from '../src/core/util/tailwind';
 import { ThemeProvider } from '../src/module/root/ui/layout/theme-provider';
-import { cn } from '../src/core/util/cn';
 import '../src/style/global.css';
 
 const preview: Preview = {

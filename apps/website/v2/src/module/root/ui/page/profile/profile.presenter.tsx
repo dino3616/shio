@@ -8,7 +8,7 @@ import { GithubIcon } from '@/core/icon/github-icon';
 import { InstagramIcon } from '@/core/icon/instagram-icon';
 import { MailIcon } from '@/core/icon/mail-icon';
 import { TwitterIcon } from '@/core/icon/twitter-icon';
-import { cn } from '@/core/util/cn';
+import { cn } from '@/core/util/tailwind';
 import { breakpoints } from '@/style/token';
 
 type ProfileProps = ComponentPropsWithoutRef<'section'>;
