@@ -114,8 +114,8 @@ importers:
         specifier: 1.13.2
         version: 1.13.2
       tailwind-variants:
-        specifier: 0.1.10
-        version: 0.1.10(tailwindcss@3.3.2)
+        specifier: 0.1.11
+        version: 0.1.11(tailwindcss@3.3.2)
       ts-pattern:
         specifier: 5.0.1
         version: 5.0.1
@@ -14170,8 +14170,8 @@ packages:
       tailwindcss: 3.3.2(ts-node@10.9.1)
     dev: true
 
-  /tailwind-variants@0.1.10(tailwindcss@3.3.2):
-    resolution: {integrity: sha512-PlOoXweMcOt2TXYr01lZ8iuRJG3M3voiWdAIb1vSqmuGuLvjtJwGphmwPToHRLXebC0dnKXow/xz2gRShCqI9w==}
+  /tailwind-variants@0.1.11(tailwindcss@3.3.2):
+    resolution: {integrity: sha512-BF7y9C89s7A0Jj6BANizRBTiS4edwYWlGhlYspR7Vb31COTFucChxY+OkkZmYtGOcchuH1dnbTov4VktxB+uzg==}
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
       tailwindcss: '*'
