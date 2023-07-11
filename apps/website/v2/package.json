@@ -39,7 +39,7 @@
     "react-icons": "4.10.1",
     "sharp": "0.32.2",
     "tailwind-merge": "1.13.2",
-    "tailwind-variants": "0.1.12",
+    "tailwind-variants": "0.1.13",
     "ts-pattern": "5.0.1",
     "zod": "3.21.4"
   },
