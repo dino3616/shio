@@ -114,8 +114,8 @@ importers:
         specifier: 1.13.2
         version: 1.13.2
       tailwind-variants:
-        specifier: 0.1.12
-        version: 0.1.12(tailwindcss@3.3.2)
+        specifier: 0.1.13
+        version: 0.1.13(tailwindcss@3.3.2)
       ts-pattern:
         specifier: 5.0.1
         version: 5.0.1
@@ -4798,7 +4798,7 @@ packages:
       pretty-hrtime: 1.0.3
       prompts: 2.4.2
       read-pkg-up: 7.0.1
-      semver: 7.5.3
+      semver: 7.5.4
       serve-favicon: 2.5.0
       telejson: 7.1.0
       ts-dedent: 2.2.0
@@ -5752,7 +5752,7 @@ packages:
       '@typescript-eslint/typescript-estree': 5.62.0(typescript@5.1.6)
       eslint: 8.44.0
       eslint-scope: 5.1.1
-      semver: 7.5.3
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
       - typescript
@@ -9054,7 +9054,7 @@ packages:
       minimatch: 3.1.2
       node-abort-controller: 3.1.1
       schema-utils: 3.3.0
-      semver: 7.5.3
+      semver: 7.5.4
       tapable: 2.2.1
       typescript: 5.1.6
       webpack: 5.87.0(esbuild@0.17.19)
@@ -10629,7 +10629,7 @@ packages:
       jest-util: 29.6.1
       natural-compare: 1.4.0
       pretty-format: 29.6.1
-      semver: 7.5.3
+      semver: 7.5.4
     transitivePeerDependencies:
       - supports-color
 
@@ -11648,7 +11648,7 @@ packages:
     dependencies:
       hosted-git-info: 4.1.0
       is-core-module: 2.12.1
-      semver: 7.5.3
+      semver: 7.5.4
       validate-npm-package-license: 3.0.4
     dev: true
 
@@ -14122,8 +14122,8 @@ packages:
       tailwindcss: 3.3.2(ts-node@10.9.1)
     dev: true
 
-  /tailwind-variants@0.1.12(tailwindcss@3.3.2):
-    resolution: {integrity: sha512-7ydBs+N8Zqo6w0x08N11Y/HZFuhob5lmYhJb85a5qbTqOfF/sOyfzfkuqcNOjr6SIekULMt7cLeljpB3Gx0zmw==}
+  /tailwind-variants@0.1.13(tailwindcss@3.3.2):
+    resolution: {integrity: sha512-G2M7M74hjq0nAo6QdEfUJgF+0t9DecFUw91GC1P9YTnwMcfB3uChT5U5e2DuNU42xoOz15lzo7r0mPdMzZkylg==}
     engines: {node: '>=16.x', pnpm: '>=7.x'}
     peerDependencies:
       tailwindcss: '*'
