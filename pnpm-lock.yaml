@@ -196,8 +196,8 @@ importers:
         specifier: 1.0.6
         version: 1.0.6(tailwindcss@3.3.3)
       tw-colors:
-        specifier: 1.2.6
-        version: 1.2.6(tailwindcss@3.3.3)
+        specifier: 2.0.3
+        version: 2.0.3(tailwindcss@3.3.3)
 
   packages/eslint:
     devDependencies:
@@ -13894,8 +13894,8 @@ packages:
       turbo-windows-arm64: 1.10.12
     dev: true
 
-  /tw-colors@1.2.6(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-/HI70siD+7/xNd52YuVtKN77As/ERrm/db6P6DJpdioZ06andLRbaMBWowHO6XagdVjZ9dBQRoQlqAENzCe8UA==}
+  /tw-colors@2.0.3(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-X/KswsDSTSfyVa3KHxSu73xYN3ndssM08n6RXhwhFLKGGh+QZeNLlrxvjI6qV3pn2aC0HvE4bRbtFdqTocrW7w==}
     peerDependencies:
       tailwindcss: '>=3.0.0'
     dependencies:
