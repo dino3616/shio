@@ -13,6 +13,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-orange" />
   <img src="https://img.shields.io/badge/codespaces-available-brightgreen" />
+  <img src="https://img.shields.io/badge/storybook-available-brightgreen" />
 </p>
 
 # shio
