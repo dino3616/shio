@@ -93,7 +93,7 @@ export const SelectItem = forwardRef<ElementRef<typeof RadixUiSelect.Item>, Omit
   <RadixUiSelect.Item
     ref={ref}
     className={cn(
-      'relative flex w-full cursor-default select-none items-center rounded py-1.5 pl-9 text-sm outline-none tablet:text-base',
+      'relative flex w-full cursor-default select-none items-center rounded py-1.5 pl-9 pr-2 text-sm outline-none tablet:text-base',
       'data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       'focus:bg-mauve-4',
     )}

@@ -12,7 +12,7 @@ type ThemeSelectProps = Omit<ComponentPropsWithoutRef<typeof Select>, 'children'
 
 export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const { theme, setTheme, resolvedTheme, systemTheme } = useTheme();
 
   useEffect(() => {
     setMounted(true);
@@ -32,7 +32,13 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
         asIcon
         bg-color="transparent"
       >
-        <ColorPaletteIcon className="h-6 w-6 fill-mauve-11 stroke-mauve-11" />
+        {resolvedTheme === 'light' ? (
+          <SunIcon className="h-5 w-5 fill-mauve-11 stroke-mauve-11" />
+        ) : resolvedTheme === 'dark' ? (
+          <MoonIcon className="h-5 w-5 fill-mauve-11 stroke-mauve-11" />
+        ) : (
+          <ColorPaletteIcon className="h-5 w-5 fill-mauve-11 stroke-mauve-11" />
+        )}
       </SelectTrigger>
       <SelectContent>
         <SelectGroup>
@@ -40,19 +46,25 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
           <SelectItem value="light">
             <span className="flex items-center gap-3">
               Light
-              <SunIcon className="h-4 w-6 fill-mauve-11" />
+              <SunIcon className="h-4 w-4 fill-mauve-11" />
             </span>
           </SelectItem>
           <SelectItem value="dark">
             <span className="flex items-center gap-3">
               Dark
-              <MoonIcon className="h-4 w-6 fill-mauve-11" />
+              <MoonIcon className="h-4 w-4 fill-mauve-11" />
             </span>
           </SelectItem>
           <SelectItem value="system">
             <span className="flex items-center gap-3">
               System
-              <ComputerIcon className="h-4 w-6 fill-mauve-11" />
+              {systemTheme === 'light' ? (
+                <SunIcon className="h-4 w-4 fill-mauve-11" />
+              ) : systemTheme === 'dark' ? (
+                <MoonIcon className="h-4 w-4 fill-mauve-11" />
+              ) : (
+                <ComputerIcon className="h-4 w-4 fill-mauve-11" />
+              )}
             </span>
           </SelectItem>
         </SelectGroup>
