@@ -2,7 +2,6 @@ version: "3.8"
 
 services:
   app:
-    image: ghcr.io/dino3616/shio:latest
     container_name: shio-app
     build:
       context: ../

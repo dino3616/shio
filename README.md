@@ -13,17 +13,15 @@
 <p align="center">
   <img src="https://img.shields.io/badge/license-MIT-orange" />
   <img src="https://img.shields.io/badge/codespaces-available-brightgreen" />
-  <img src="https://img.shields.io/badge/gitpod-available-brightgreen" />
-  <img src="https://img.shields.io/badge/ghcr-available-brightgreen" />
 </p>
 
 # shio
 
-The portfolio site of shio, creator for creators.
+Portfolio site of shio, a frontend engineer and designer.
 
 ## Setup
 
-### git clone
+### clone git repository
 
 ```powershell
 git clone "https://github.com/dino3616/shio"
@@ -32,7 +30,7 @@ git clone "https://github.com/dino3616/shio"
 ### launch conatiner
 
 ```powershell
-docker compose -f "./docker/docker-compose.development.yml" -p "shio" up -d
+docker compose -f "./docker/docker-compose.development.yaml" -p "shio" up -d
 ```
 
 ### set env variables
