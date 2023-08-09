@@ -38,7 +38,7 @@
     "@shio/prettier": "workspace:*",
     "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "@storybook/react": "7.2.1",
+    "@storybook/react": "7.2.2",
     "@types/react": "18.2.19",
     "@types/react-dom": "18.2.7",
     "eslint-config-shio-nextjs": "workspace:*"
