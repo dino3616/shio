@@ -158,11 +158,21 @@
   "commit-message-editor.view.defaultView": "form",
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "eslint.format.enable": true,
-  "eslint.packageManager": "pnpm",
-  "eslint.workingDirectories": ["apps/website/v1/", "apps/website/v2/"],
+  "eslint.workingDirectories": [
+    "apps/api/",
+    "apps/catalog/",
+    "apps/website-v2/",
+    "packages/core/",
+    "packages/design-token/",
+    "packages/jest/",
+    "packages/postcss/",
+    "packages/stylelint",
+    "packages/tailwind/"
+  ],
   "files.encoding": "utf8",
   "files.eol": "\n",
-  "jest.jestCommandLine": "pnpm apps -- test",
+  "jest.jestCommandLine": "pnpm all -- test",
+  "tailwindCSS.classAttributes": ["class", "className", "outsideClass"],
   "tailwindCSS.experimental.classRegex": [
     ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
   ]

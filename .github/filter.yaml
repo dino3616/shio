@@ -11,20 +11,9 @@ app:
 website-v2:
   - .github/filter.yaml
   - .github/workflows/website-v2-*.yaml
-  - apps/website/v2/**/*
+  - apps/website-v2/**/*
   - packages/**/*
   - .npmrc
   - package.json
-  - pnpm-workspace.yaml
-  - turbo.json
-
-docker:
-  - .github/filter.yaml
-  - .github/workflows/docker-*.yaml
-  - docker/**/*
-  - .dockerignore
-  - .npmrc
-  - package.json
-  - pnpm-lock.yaml
   - pnpm-workspace.yaml
   - turbo.json

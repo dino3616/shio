@@ -1,0 +1,46 @@
+{
+  "name": "@shio/website-v2",
+  "version": "0.1.0",
+  "repository": "https://github.com/dino3616/shio.git",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "module": "nodenext",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "lint:fix": "next lint --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write .",
+    "style": "stylelint ./**/*.{css,scss}",
+    "style:fix": "stylelint ./**/*.{css,scss} --fix",
+    "test": "jest --silent=false --verbose false --passWithNoTests"
+  },
+  "dependencies": {
+    "@shio/core": "workspace:*",
+    "@shio/design-token": "workspace:*",
+    "@shio/tailwind": "workspace:*",
+    "@vercel/analytics": "1.0.1",
+    "dotenv": "16.3.1",
+    "framer-motion": "10.15.1",
+    "next": "13.4.13",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "sharp": "0.32.4",
+    "tailwind-merge": "1.14.0",
+    "tailwind-variants": "0.1.13"
+  },
+  "devDependencies": {
+    "@shio/jest": "workspace:*",
+    "@shio/postcss": "workspace:*",
+    "@shio/prettier": "workspace:*",
+    "@shio/stylelint": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
+    "@storybook/react": "7.2.1",
+    "@types/react": "18.2.19",
+    "@types/react-dom": "18.2.7",
+    "eslint-config-shio-nextjs": "workspace:*"
+  }
+}

@@ -4,21 +4,21 @@
   "repository": "https://github.com/dino3616/shio.git",
   "license": "MIT",
   "private": true,
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
-    "lint": "eslint ./**/*.js",
-    "lint:fix": "eslint ./**/*.js --fix",
+    "lint": "eslint './**/{*.*js,*.*ts}'",
+    "lint:fix": "eslint './**/{*.*js,*.*ts}' --fix",
     "fmt": "prettier --check .",
     "fmt:fix": "prettier --write ."
   },
   "devDependencies": {
-    "@shio/prettier": "workspace:*",
-    "eslint-config-shio-base": "workspace:*",
-    "jest-environment-jsdom": "29.6.2"
-  },
-  "dependencies": {
     "@types/jest": "29.5.3",
+    "@shio/prettier": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
+    "eslint-config-shio-esm": "workspace:*",
     "jest": "29.6.2",
+    "jest-environment-jsdom": "29.6.2",
+    "next": "13.4.13",
     "ts-jest": "29.1.1"
   }
 }

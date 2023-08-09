@@ -1,7 +1,7 @@
 {
   "name": "shio",
   "workspaceFolder": "/workspaces/shio/",
-  "dockerComposeFile": ["../docker/docker-compose.development.yml"],
+  "dockerComposeFile": ["../docker/docker-compose.development.yaml"],
   "service": "app",
   "customizations": {
     "vscode": {
@@ -15,39 +15,25 @@
         "ecmel.vscode-html-css",
         "editorconfig.editorconfig",
         "esbenp.prettier-vscode",
+        "figma.figma-vscode-extension",
         "formulahendry.auto-complete-tag",
-        "gencay.vscode-chatgpt",
         "github.copilot",
-        "graphql.vscode-graphql",
+        "github.copilot-labs",
+        "github.vscode-github-actions",
+        "github.vscode-pull-request-github",
         "gruntfuggly.todo-tree",
         "hbenl.vscode-test-explorer",
+        "jock.svg",
         "mikestead.dotenv",
         "orta.vscode-jest",
-        "pkief.material-icon-theme",
-        "prisma.prisma",
-        "sooxt.pretty-graphql",
         "stylelint.vscode-stylelint",
-        "tabnine.tabnine-vscode",
         "usernamehw.errorlens",
         "vincaslt.highlight-matching-tag",
         "visualstudioexptteam.vscodeintellicode",
         "wix.vscode-import-cost",
-        "wmaurer.change-case"
-      ],
-      "settings": {
-        "editor.codeActionsOnSave": {
-          "source.fixAll.eslint": true,
-          "source.fixAll.prettier": true,
-          "source.fixAll.stylelint": true
-        },
-        "editor.cursorBlinking": "phase",
-        "editor.cursorSmoothCaretAnimation": "on",
-        "editor.formatOnSave": true,
-        "editor.quickSuggestions": {
-          "strings": true
-        },
-        "files.autoSave": "off"
-      }
+        "wmaurer.change-case",
+        "yoavbls.pretty-ts-errors"
+      ]
     }
   }
 }

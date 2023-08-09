@@ -1,0 +1,22 @@
+{
+  "name": "@shio/design-token",
+  "version": "0.1.0",
+  "repository": "https://github.com/dino3616/shio.git",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint './**/{*.*js,*.*ts}'",
+    "lint:fix": "eslint './**/{*.*js,*.*ts}' --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write .",
+    "test": "jest --silent=false --verbose false --passWithNoTests"
+  },
+  "devDependencies": {
+    "@shio/jest": "workspace:*",
+    "@shio/prettier": "workspace:*",
+    "@shio/stylelint": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
+    "eslint-config-shio-esm": "workspace:*"
+  }
+}
