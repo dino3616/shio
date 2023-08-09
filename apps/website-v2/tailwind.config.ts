@@ -3,7 +3,7 @@ import { config as coreConfig } from '@shio/tailwind';
 const config: typeof coreConfig = {
   ...coreConfig,
   mode: 'jit',
-  content: ['./src/**/*.{ts,tsx}'],
+  content: ['./src/**/*.{ts,tsx}', '../../packages/**/*.{ts,tsx}'],
   darkMode: ['class', '[data-theme="dark"]'],
 };
 
