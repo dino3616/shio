@@ -4,7 +4,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 type HeroProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
 
 export const Hero = ({ ...props }: HeroProps): ReactNode => (
-  <section className="relative flex h-screen items-center justify-center overflow-x-hidden px-5 tablet:px-20" {...props}>
+  <section className="relative flex h-screen items-center justify-center overflow-hidden px-5 tablet:overflow-visible tablet:px-20" {...props}>
     <div
       aria-hidden
       className="absolute left-1/2 top-1/2 -z-10 h-[220px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-purple-7 blur-[90px] laptop:h-[428px] laptop:w-[856px] laptop:blur-[220px]"
