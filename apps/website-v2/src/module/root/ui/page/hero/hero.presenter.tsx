@@ -7,7 +7,8 @@ export const Hero = ({ ...props }: HeroProps): ReactNode => (
   <section className="relative flex h-screen items-center justify-center overflow-hidden px-5 tablet:overflow-visible tablet:px-20" {...props}>
     <div
       aria-hidden
-      className="absolute left-1/2 top-1/2 -z-10 h-[220px] w-[440px] -translate-x-1/2 -translate-y-1/2 rounded-[50%] bg-purple-7 blur-[90px] laptop:h-[428px] laptop:w-[856px] laptop:blur-[220px]"
+      // HACK: The filter: blur does not work correctly on iPad OS (and possibly iOS), enable GPU acceleration by explicitly specifying transform-gpu.
+      className="absolute left-1/2 top-1/2 -z-10 h-[220px] w-[440px] -translate-x-1/2 -translate-y-1/2 transform-gpu rounded-[50%] bg-purple-7 blur-[90px] laptop:h-[428px] laptop:w-[856px] laptop:blur-[220px]"
     />
     <div className="relative flex flex-col gap-10">
       <hgroup className="mr-5 flex max-w-6xl flex-col gap-5 tablet:mr-60 laptop:mr-72">
