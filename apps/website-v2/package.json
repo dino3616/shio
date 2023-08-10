@@ -22,7 +22,7 @@
     "@shio/core": "workspace:*",
     "@shio/design-token": "workspace:*",
     "@shio/tailwind": "workspace:*",
-    "@vercel/analytics": "1.0.1",
+    "@vercel/analytics": "1.0.2",
     "dotenv": "16.3.1",
     "framer-motion": "10.15.1",
     "next": "13.4.13",
