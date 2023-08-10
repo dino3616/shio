@@ -22,13 +22,13 @@ export const Profile = ({ ...props }: ProfileProps): ReactNode => (
         <div className="flex shrink-0 justify-center gap-4 laptop:justify-start">
           <Image
             src={BrandShioImage}
-            alt="An image of brand icon for shio."
+            alt="A brand icon for shio."
             sizes={`${breakpoints.laptop.mediaQuery} 200px, 180px`}
             className="h-[180px] w-[180px] laptop:h-[200px] laptop:w-[200px]"
           />
           <Image
             src={ProfileActualPictureImage}
-            alt="An image of actual picture for shio."
+            alt="An actual picture for shio."
             sizes={`${breakpoints.laptop.mediaQuery} 200px, 180px`}
             className="hidden h-[180px] w-[180px] laptop:block laptop:h-[200px] laptop:w-[200px]"
           />
