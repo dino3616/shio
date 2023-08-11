@@ -10,9 +10,9 @@ import { TwitterIcon } from '@shio/core/icon/twitter-icon';
 import { breakpoints } from '@shio/design-token';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-type ProfileProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
+type ProfileSectionProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
 
-export const Profile = ({ ...props }: ProfileProps): ReactNode => (
+export const ProfileSection = ({ ...props }: ProfileSectionProps): ReactNode => (
   <section className="flex flex-col items-center gap-12 p-12 tablet:gap-28 tablet:px-20 laptop:px-28" {...props}>
     <h1 className="text-4xl font-bold text-mauve-12 tablet:text-6xl laptop:text-7xl">
       Hi, I&apos;m <span className="text-purple-11">shio</span>!🧂

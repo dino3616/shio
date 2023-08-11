@@ -1,11 +1,11 @@
 import type { ReactNode } from 'react';
-import { Hero } from '@/module/root/ui/page/hero';
-import { Profile } from '@/module/root/ui/page/profile';
+import { HeroSection } from '@/module/root/ui/page/hero-section';
+import { ProfileSection } from '@/module/root/ui/page/profile-section';
 
 const RootPage = (): ReactNode => (
   <>
-    <Hero />
-    <Profile />
+    <HeroSection />
+    <ProfileSection />
   </>
 );
 
