@@ -1,9 +1,9 @@
 import { cn } from '@shio/tailwind';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-type HeroProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
+type HeroSectionProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
 
-export const Hero = ({ ...props }: HeroProps): ReactNode => (
+export const HeroSection = ({ ...props }: HeroSectionProps): ReactNode => (
   <section className="relative flex h-screen items-center justify-center overflow-hidden px-5 tablet:overflow-visible tablet:px-20" {...props}>
     <div
       aria-hidden
