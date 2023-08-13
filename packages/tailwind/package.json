@@ -25,7 +25,7 @@
     "@shio/prettier": "workspace:*",
     "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "autoprefixer": "10.4.14",
+    "autoprefixer": "10.4.15",
     "eslint-config-shio-esm": "workspace:*",
     "mini-svg-data-uri": "1.4.4",
     "postcss": "8.4.27",
