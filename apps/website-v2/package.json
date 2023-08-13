@@ -28,9 +28,7 @@
     "next": "13.4.13",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "0.32.4",
-    "tailwind-merge": "1.14.0",
-    "tailwind-variants": "0.1.13"
+    "sharp": "0.32.4"
   },
   "devDependencies": {
     "@shio/jest": "workspace:*",

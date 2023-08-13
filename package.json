@@ -21,6 +21,7 @@
     "website-v2": "pnpm --filter @shio/website-v2"
   },
   "devDependencies": {
+    "@types/eslint": "8.44.2",
     "@types/jest": "29.5.3",
     "@types/node": "20.4.9",
     "cross-env": "7.0.3",
@@ -38,7 +39,8 @@
   },
   "pnpm": {
     "patchedDependencies": {
-      "esbuild-register@3.4.2": "patches/esbuild-register@3.4.2.patch"
+      "esbuild-register@3.4.2": "patches/esbuild-register@3.4.2.patch",
+      "tailwind-variants@0.1.13": "patches/tailwind-variants@0.1.13.patch"
     }
   }
 }

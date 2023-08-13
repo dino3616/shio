@@ -1,5 +1,6 @@
 import { breakpoints, colors } from '@shio/design-token';
 import svgToDataUri from 'mini-svg-data-uri';
+import { withTV } from 'tailwind-variants/transformer';
 import type { Config } from 'tailwindcss';
 import defaultTheme from 'tailwindcss/defaultTheme';
 import type { KeyValuePair, PluginAPI, RecursiveKeyValuePair, ResolvableTo } from 'tailwindcss/types/config';
@@ -17,7 +18,7 @@ const flattenColorPalette = (colorPalette: ResolvableTo<RecursiveKeyValuePair<st
     ),
   );
 
-export const config: Config = {
+const defaultConfig: Config = {
   content: [],
   theme: {
     colors,
@@ -55,3 +56,9 @@ export const config: Config = {
     scrollbar: ['rounded'],
   },
 };
+
+export const createConfig = (config: Config): Config =>
+  withTV({
+    ...defaultConfig,
+    ...config,
+  });
