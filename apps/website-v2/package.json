@@ -25,7 +25,7 @@
     "@vercel/analytics": "1.0.2",
     "dotenv": "16.3.1",
     "framer-motion": "10.16.0",
-    "next": "13.4.18",
+    "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sharp": "0.32.5",
@@ -38,7 +38,7 @@
     "@shio/prettier": "workspace:*",
     "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "@storybook/react": "7.3.1",
+    "@storybook/react": "7.3.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "eslint-config-shio-nextjs": "workspace:*"
