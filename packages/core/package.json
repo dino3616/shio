@@ -17,7 +17,7 @@
     "@radix-ui/react-select": "1.2.2",
     "@shio/tailwind": "workspace:*",
     "dotenv": "16.3.1",
-    "framer-motion": "10.16.0",
+    "framer-motion": "10.16.1",
     "next": "13.4.19",
     "next-themes": "0.2.1",
     "react": "18.2.0",
