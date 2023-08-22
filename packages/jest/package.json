@@ -12,7 +12,7 @@
     "fmt:fix": "prettier --write ."
   },
   "devDependencies": {
-    "@types/jest": "29.5.3",
+    "@types/jest": "29.5.4",
     "@shio/prettier": "workspace:*",
     "@shio/tsconfig": "workspace:*",
     "eslint-config-shio-esm": "workspace:*",
