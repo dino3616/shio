@@ -21,8 +21,8 @@
     "website-v2": "pnpm --filter @shio/website-v2"
   },
   "devDependencies": {
-    "@types/jest": "29.5.3",
-    "@types/node": "20.5.2",
+    "@types/jest": "29.5.4",
+    "@types/node": "20.5.3",
     "cross-env": "7.0.3",
     "eslint": "8.47.0",
     "husky": "8.0.3",
