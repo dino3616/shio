@@ -123,8 +123,8 @@ importers:
         specifier: 18.2.7
         version: 18.2.7
       chromatic:
-        specifier: 6.22.0
-        version: 6.22.0
+        specifier: 6.23.0
+        version: 6.23.0
       eslint-config-shio-nextjs:
         specifier: workspace:*
         version: link:../../packages/eslint/eslint-config-shio-nextjs
@@ -6333,8 +6333,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /chromatic@6.22.0:
-    resolution: {integrity: sha512-PBZAhTzjQvx+B4nXmEgvySmR9+a8hgt7zuTT3NhC0BT1Wf08T6gjnl4bZR5Dg5V4PfCeQvP5uROPS7QFdzZeyA==}
+  /chromatic@6.23.0:
+    resolution: {integrity: sha512-y30/n2b/lCGywgvaiHKwg4WaFVMNIUXHvV7Cyn8lWAPgXhbkOmfiyLUkqFi+X7dzzwAUq8xOmAkpyRyoD5+utA==}
     hasBin: true
     dev: true
 
