@@ -42,7 +42,7 @@
     "@storybook/theming": "7.3.2",
     "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
-    "chromatic": "6.24.0",
+    "chromatic": "6.24.1",
     "eslint-config-shio-nextjs": "workspace:*",
     "storybook": "7.3.2"
   }
