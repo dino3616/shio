@@ -18,7 +18,7 @@ export const Header = ({ outsideClass, ...props }: HeaderProps): ReactNode => (
     <nav aria-label="main navigation" className="flex items-center gap-6 laptop:gap-12">
       <Link href="/" className="flex items-center gap-3">
         <Image src={BrandShioImage} alt="A brand icon for shio." width={32} priority className="h-8 w-8 rounded-full" />
-        <p className="hidden text-2xl font-bold text-black hover:opacity-70 dark:text-white tablet:block">
+        <p className="hidden text-2xl font-bold text-dark-pure hover:opacity-70 dark:text-light-pure tablet:block">
           <span className="text-purple-11">shio</span>.studio
         </p>
       </Link>
