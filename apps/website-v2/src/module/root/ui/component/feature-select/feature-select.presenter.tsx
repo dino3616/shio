@@ -2,7 +2,7 @@
 
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '@shio/core/component/select';
 import { ArrowHeadIcon } from '@shio/core/icon/arrow-head-icon';
-import { type ComponentPropsWithoutRef, useEffect, useState } from 'react';
+import { type ComponentPropsWithoutRef, type ReactNode, useEffect, useState } from 'react';
 
 const toTitleCase = (str: string) =>
   str
@@ -21,7 +21,12 @@ type FeatureSelectProps<Feature extends string> = Omit<
   features: Feature[];
 };
 
-export const FeatureSelect = <Feature extends string>({ selectedFeature, onFeatureChange, features, ...props }: FeatureSelectProps<Feature>) => {
+export const FeatureSelect = <Feature extends string>({
+  selectedFeature,
+  onFeatureChange,
+  features,
+  ...props
+}: FeatureSelectProps<Feature>): ReactNode => {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
