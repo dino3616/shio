@@ -3,8 +3,8 @@ module.exports = {
   $schema: "https://json.schemastore.org/eslintrc",
   env: {
     es6: true,
-    node: true,
     jest: true,
+    node: true,
   },
   extends: ["eslint:recommended", "prettier", "plugin:json/recommended"],
   plugins: ["import", "prettier", "json"],
@@ -20,16 +20,23 @@ module.exports = {
     "import/order": [
       "error",
       {
+        groups: [
+          "builtin",
+          "external",
+          "internal",
+          "parent",
+          "sibling",
+          "object",
+          "unknown",
+        ],
         pathGroups: [
           {
-            pattern: "@/**",
+            pattern: "#*/**",
             group: "internal",
-            position: "before",
           },
           {
-            pattern: "#**",
-            group: "internal",
-            position: "before",
+            pattern: "@/**",
+            group: "parent",
           },
         ],
         alphabetize: {
@@ -38,7 +45,19 @@ module.exports = {
       },
     ],
     "import/prefer-default-export": "off",
+    "no-restricted-imports": [
+      "error",
+      {
+        patterns: ["../"],
+      },
+    ],
     "no-useless-constructor": "off",
+    "sort-imports": [
+      "error",
+      {
+        ignoreDeclarationSort: true,
+      },
+    ],
   },
   overrides: [
     {
