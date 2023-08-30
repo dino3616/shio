@@ -8,8 +8,21 @@ app:
   - pnpm-workspace.yaml
   - turbo.json
 
+catalog:
+  - .github/filter.yaml
+  - .github/workflows/app-*.yaml
+  - .github/workflows/catalog-*.yaml
+  - apps/catalog/**/*
+  - apps/website-v2/**/*
+  - packages/**/*
+  - .npmrc
+  - package.json
+  - pnpm-workspace.yaml
+  - turbo.json
+
 website-v2:
   - .github/filter.yaml
+  - .github/workflows/app-*.yaml
   - .github/workflows/website-v2-*.yaml
   - apps/website-v2/**/*
   - packages/**/*
