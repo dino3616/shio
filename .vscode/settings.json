@@ -167,7 +167,8 @@
     "packages/jest/",
     "packages/postcss/",
     "packages/stylelint",
-    "packages/tailwind/"
+    "packages/tailwind/",
+    "packages/type/"
   ],
   "files.encoding": "utf8",
   "files.eol": "\n",
@@ -175,5 +176,8 @@
   "tailwindCSS.classAttributes": ["class", "className", "outsideClass"],
   "tailwindCSS.experimental.classRegex": [
     ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
-  ]
+  ],
+  "[prisma]": {
+    "editor.defaultFormatter": "Prisma.prisma"
+  }
 }

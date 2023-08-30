@@ -1,0 +1,28 @@
+{
+  "name": "@shio/type",
+  "version": "0.1.0",
+  "repository": "https://github.com/dino3616/shio.git",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "module": "nodenext",
+  "main": "./src/index.ts",
+  "scripts": {
+    "lint": "eslint './**/{*.*js,*.*ts,*.*tsx}'",
+    "lint:fix": "eslint './**/{*.*js,*.*ts,*.*tsx}' --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write .",
+    "test": "jest --silent=false --verbose false --passWithNoTests"
+  },
+  "dependencies": {
+    "dotenv": "16.3.1"
+  },
+  "devDependencies": {
+    "@shio/jest": "workspace:*",
+    "@shio/prettier": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
+    "add": "2.0.6",
+    "eslint-config-shio-esm": "workspace:*",
+    "ts-essentials": "9.4.0"
+  }
+}
