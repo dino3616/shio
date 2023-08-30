@@ -1,15 +1,15 @@
 import clsx, { type ClassValue } from 'clsx';
-import { extendTailwindMerge, type Config as TailwindMergeConfig } from 'tailwind-merge';
+import { type Config as TailwindMergeConfig, extendTailwindMerge } from 'tailwind-merge';
 import {
-  tv as tvBase,
   type ClassValue as TVClassValue,
-  type VariantProps,
   type TVCompoundSlots,
-  type TVReturnType,
-  type TVVariants,
-  type TVSlots,
   type TVCompoundVariants,
   type TVDefaultVariants,
+  type TVReturnType,
+  type TVSlots,
+  type TVVariants,
+  type VariantProps,
+  tv as tvBase,
 } from 'tailwind-variants';
 import type { TVConfig } from 'tailwind-variants/dist/config.js';
 
@@ -89,3 +89,8 @@ export const tv = <
 }): TVReturnType<V, S, B, typeof tvConfig, EV, ES> => tvBase(options, tvConfig);
 
 export type { VariantProps };
+
+export type VariantInterface<T extends string | Record<string, string | undefined> | undefined> = Record<
+  Extract<Exclude<T, undefined>, string>,
+  string
+>;

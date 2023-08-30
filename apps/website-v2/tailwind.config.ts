@@ -1,9 +1,8 @@
-import { createConfig } from '@shio/tailwind';
+import { createConfig } from '@shio/tailwind/config';
 
-const config = createConfig({
-  mode: 'jit',
+const config = createConfig((defaultConfig) => ({
+  ...defaultConfig,
   content: ['./src/**/*.{ts,tsx}', '../../packages/**/*.{ts,tsx}'],
-  darkMode: ['class', '[data-theme="dark"]'],
-});
+}));
 
 export default config;

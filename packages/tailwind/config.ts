@@ -1,4 +1,4 @@
-import { breakpoints, colors } from '@shio/design-token';
+import { breakpoints, colors, fonts } from '@shio/design-token';
 import svgToDataUri from 'mini-svg-data-uri';
 import { withTV } from 'tailwind-variants/transformer';
 import type { Config } from 'tailwindcss';
@@ -19,12 +19,18 @@ const flattenColorPalette = (colorPalette: ResolvableTo<RecursiveKeyValuePair<st
   );
 
 const defaultConfig: Config = {
+  mode: 'jit',
   content: [],
+  darkMode: ['class', '[data-theme="dark"]'],
   theme: {
     colors,
     fontFamily: {
-      sans: ['var(--font-noto-sans)', ...defaultTheme.fontFamily.sans],
-      code: ['var(--font-fira-code)'],
+      sans: [`var(${fonts['noto-sans'].variable})`, ...defaultTheme.fontFamily.sans],
+      code: [`var(${fonts['fira-code'].variable})`, ...defaultTheme.fontFamily.mono],
+    },
+    fontWeight: {
+      normal: '400',
+      bold: '700',
     },
     screens: {
       mobile: `${breakpoints.mobile.minWidth}px`,
@@ -52,13 +58,8 @@ const defaultConfig: Config = {
     },
     require('tailwindcss-animate'),
   ],
-  variants: {
-    scrollbar: ['rounded'],
-  },
 };
 
-export const createConfig = (config: Config): Config =>
-  withTV({
-    ...defaultConfig,
-    ...config,
-  });
+type CreateConfig = (config: (c: Config) => Config) => Config;
+
+export const createConfig: CreateConfig = (config) => withTV(config(defaultConfig));
