@@ -2,7 +2,11 @@ type Config = {
   forceCustomDomain?: boolean;
 };
 
-export const getBaseUrl = ({ forceCustomDomain = false }: Config = {}): URL => {
+const defaultConfig: Config = {
+  forceCustomDomain: false,
+};
+
+export const getBaseUrl = ({ forceCustomDomain }: Config = defaultConfig): URL => {
   let baseUrl: URL;
   if (process.env['VERCEL_URL'] && !forceCustomDomain) {
     baseUrl = new URL(`https://${process.env['VERCEL_URL']}`);
