@@ -2,7 +2,7 @@ import NextLink, { type LinkProps as NextLinkProps } from 'next/link';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
 type LinkProps<T> =
-  | NextLinkProps<T>
+  | (ComponentPropsWithoutRef<typeof NextLink> & NextLinkProps<T>)
   | (ComponentPropsWithoutRef<'a'> & {
       external: true;
     });
