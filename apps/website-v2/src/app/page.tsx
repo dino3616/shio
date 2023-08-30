@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react';
-import { FeatureSection } from '@/module/root/ui/page/feature-section';
 import { HeroSection } from '@/module/root/ui/page/hero-section';
 import { ProfileSection } from '@/module/root/ui/page/profile-section';
 
@@ -7,7 +6,8 @@ const RootPage = (): ReactNode => (
   <>
     <HeroSection />
     <ProfileSection />
-    <FeatureSection />
+    {/* TODO: Uncomment out when implementation is complete. */}
+    {/* <FeatureSection /> */}
   </>
 );
 
