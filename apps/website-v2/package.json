@@ -24,11 +24,11 @@
     "@shio/tailwind": "workspace:*",
     "@vercel/analytics": "1.0.2",
     "dotenv": "16.3.1",
-    "framer-motion": "10.15.1",
-    "next": "13.4.13",
+    "framer-motion": "10.16.1",
+    "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "0.32.4"
+    "sharp": "0.32.5"
   },
   "devDependencies": {
     "@shio/jest": "workspace:*",
@@ -36,8 +36,9 @@
     "@shio/prettier": "workspace:*",
     "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "@storybook/react": "7.2.2",
-    "@types/react": "18.2.20",
+    "@shio/type": "workspace:*",
+    "@storybook/react": "7.4.0",
+    "@types/react": "18.2.21",
     "@types/react-dom": "18.2.7",
     "eslint-config-shio-nextjs": "workspace:*"
   }

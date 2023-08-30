@@ -17,6 +17,7 @@
     "@shio/prettier": "workspace:*",
     "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
+    "@shio/type": "workspace:*",
     "eslint-config-shio-esm": "workspace:*"
   }
 }

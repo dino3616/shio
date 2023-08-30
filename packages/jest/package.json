@@ -12,13 +12,13 @@
     "fmt:fix": "prettier --write ."
   },
   "devDependencies": {
-    "@types/jest": "29.5.3",
     "@shio/prettier": "workspace:*",
     "@shio/tsconfig": "workspace:*",
+    "@types/jest": "29.5.4",
     "eslint-config-shio-esm": "workspace:*",
-    "jest": "29.6.2",
-    "jest-environment-jsdom": "29.6.2",
-    "next": "13.4.13",
+    "jest": "29.6.4",
+    "jest-environment-jsdom": "29.6.4",
+    "next": "13.4.19",
     "ts-jest": "29.1.1"
   }
 }

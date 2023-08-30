@@ -25,13 +25,15 @@
     "@shio/prettier": "workspace:*",
     "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "autoprefixer": "10.4.14",
+    "@shio/type": "workspace:*",
+    "add": "2.0.6",
+    "autoprefixer": "10.4.15",
     "eslint-config-shio-esm": "workspace:*",
     "mini-svg-data-uri": "1.4.4",
-    "postcss": "8.4.27",
+    "postcss": "8.4.29",
     "postcss-import": "15.1.0",
     "tailwindcss": "3.3.3",
-    "tailwindcss-animate": "1.0.6",
-    "tw-colors": "2.0.3"
+    "tailwindcss-animate": "1.0.7",
+    "tw-colors": "2.2.0"
   }
 }
