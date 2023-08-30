@@ -1,10 +1,8 @@
-import { config as coreConfig } from '@shio/tailwind';
+import { createConfig } from '@shio/tailwind/config';
 
-const config: typeof coreConfig = {
-  ...coreConfig,
-  mode: 'jit',
+const config = createConfig((defaultConfig) => ({
+  ...defaultConfig,
   content: ['./**/*.{ts,tsx}'],
-  darkMode: ['class', '[data-theme="dark"]'],
-};
+}));
 
 export default config;

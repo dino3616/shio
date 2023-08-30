@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@radix-ui/react-select": "1.2.2",
+    "@shio/design-token": "workspace:*",
     "@shio/tailwind": "workspace:*",
     "dotenv": "16.3.1",
     "framer-motion": "10.16.1",
@@ -25,17 +26,14 @@
     "react-icons": "4.10.1"
   },
   "devDependencies": {
-    "@storybook/nextjs": "7.4.0",
-    "@storybook/react": "7.4.0",
-    "@tsconfig/create-react-app": "2.0.1",
-    "@tsconfig/strictest": "2.0.2",
-    "@types/react": "18.2.21",
-    "@types/react-dom": "18.2.7",
     "@shio/jest": "workspace:*",
     "@shio/postcss": "workspace:*",
     "@shio/prettier": "workspace:*",
-    "@shio/stylelint": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "eslint-config-shio-nextjs": "workspace:*"
+    "@storybook/nextjs": "7.4.0",
+    "@storybook/react": "7.4.0",
+    "@types/react": "18.2.21",
+    "@types/react-dom": "18.2.7",
+    "eslint-config-shio-react": "workspace:*"
   }
 }

@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Image } from './image.presenter';
 import BrandIconImage from '#core/asset/brand/icon.webp';
+import { Image } from './image.presenter';
 
 type Story = StoryObj<typeof Image>;
 

@@ -14,7 +14,10 @@ const preview: Preview = {
   decorators: [
     (Story) => (
       <ThemeProvider attribute={themeDataAttribute} defaultTheme={defaultTheme}>
-        <div className={cn(fontFamily, 'bg-mauve-2 font-sans text-mauve-12')}>
+        {/* FIXME: I'm trying to add fontFamily to className and load the font by next/font, but oddly enough this does not work correctly.
+            Probably due to the fact that it work on monorepo.
+        */}
+        <div className={cn(fontFamily, 'font-sans')}>
           <Story />
         </div>
       </ThemeProvider>

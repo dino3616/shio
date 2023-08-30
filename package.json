@@ -21,13 +21,15 @@
     "website-v2": "pnpm --filter @shio/website-v2"
   },
   "devDependencies": {
+    "@types/eslint": "8.44.2",
     "@types/jest": "29.5.4",
     "@types/node": "20.5.7",
     "cross-env": "7.0.3",
+    "dotenv-cli": "7.3.0",
     "eslint": "8.48.0",
     "husky": "8.0.3",
     "jest": "29.6.4",
-    "lint-staged": "13.3.0",
+    "lint-staged": "14.0.1",
     "prettier": "3.0.3",
     "rimraf": "5.0.1",
     "stylelint": "15.10.3",

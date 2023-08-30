@@ -24,13 +24,13 @@ export const ProfileSection = ({ ...props }: ProfileSectionProps): ReactNode => 
             src={BrandShioImage}
             alt="A brand icon for shio."
             sizes={`${breakpoints.laptop.mediaQuery} 200px, 180px`}
-            className="h-[180px] w-[180px] laptop:h-[200px] laptop:w-[200px]"
+            className="h-[180px] w-[180px] object-cover laptop:h-[200px] laptop:w-[200px]"
           />
           <Image
             src={ProfileActualPictureImage}
             alt="An actual picture for shio."
             sizes={`${breakpoints.laptop.mediaQuery} 200px, 180px`}
-            className="hidden h-[180px] w-[180px] laptop:block laptop:h-[200px] laptop:w-[200px]"
+            className="hidden h-[180px] w-[180px] object-cover laptop:block laptop:h-[200px] laptop:w-[200px]"
           />
         </div>
         <p className="text-lg text-mauve-11">

@@ -1,5 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from './select.presenter';
+import { SelectContent } from './select-content.presenter';
+import { SelectGroup } from './select-group.presenter';
+import { SelectItem } from './select-item.presenter';
+import { SelectLabel } from './select-label.presenter';
+import { SelectTrigger } from './select-trigger.presenter';
+import { SelectValue } from './select-value.presenter';
+import { Select } from './select.presenter';
 
 type Story = StoryObj<typeof Select>;
 

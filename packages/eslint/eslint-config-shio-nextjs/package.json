@@ -11,6 +11,7 @@
     "lint:fix": "eslint './**/*.*js' --fix"
   },
   "devDependencies": {
-    "eslint-config-shio-base": "workspace:*"
+    "eslint-config-shio-base": "workspace:*",
+    "eslint-config-shio-react": "workspace:*"
   }
 }

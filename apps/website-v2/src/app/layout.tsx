@@ -18,12 +18,12 @@ type RootLayoutProps = {
 const RootLayout = ({ children }: RootLayoutProps): ReactNode => (
   <html lang="en" suppressHydrationWarning>
     <head />
-    <body className={cn(fontFamily, 'flex min-h-screen flex-col bg-purple-1 font-sans', 'bg-grid-light-purple-5/50 dark:bg-grid-dark-purple-5/50')}>
+    <body className={cn(fontFamily, 'bg-purple-1 font-sans', 'bg-grid-light-purple-5/50 dark:bg-grid-dark-purple-5/50')}>
       <Analytics />
       <ThemeProvider attribute="data-theme" enableSystem defaultTheme="system">
-        <Header outsideClass="fixed left-0 top-0 z-10 grow-0" />
+        <Header outsideClass="fixed left-0 top-0 z-10" />
         <PageTransitionAnimationProvider>
-          <main className="min-h-full grow">{children}</main>
+          <main className="min-h-screen">{children}</main>
         </PageTransitionAnimationProvider>
         <Footer outsideClass="mt-24" />
       </ThemeProvider>
@@ -45,21 +45,6 @@ export const generateMetadata = (): Metadata => {
       template: '%s | shio.studio',
     },
     description,
-    keywords: [
-      'shio',
-      'studio',
-      'shio.studio',
-      'shio3616',
-      'dino',
-      'dino3616',
-      'frontend',
-      'developer',
-      'designer',
-      'accessibility',
-      'a11y',
-      'web',
-      'portfolio',
-    ],
     openGraph: {
       title,
       description,

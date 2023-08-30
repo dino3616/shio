@@ -6,6 +6,8 @@ const RootPage = (): ReactNode => (
   <>
     <HeroSection />
     <ProfileSection />
+    {/* TODO: Uncomment out when implementation is complete. */}
+    {/* <FeatureSection /> */}
   </>
 );
 

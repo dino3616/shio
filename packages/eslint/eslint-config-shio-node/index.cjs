@@ -1,23 +1,17 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   $schema: "https://json.schemastore.org/eslintrc",
-  env: {
-    es6: true,
-    node: true,
-    jest: true,
-  },
   extends: [
     "airbnb-base",
-    "eslint:recommended",
-    "prettier",
+    "shio-base",
     "plugin:@typescript-eslint/recommended",
   ],
-  plugins: ["@typescript-eslint", "import", "prettier"],
+  plugins: ["@typescript-eslint"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "./tsconfig.json",
     ecmaVersion: "latest",
-    sourceType: "module",
+    sourceType: "commonjs",
   },
   rules: {
     "@typescript-eslint/consistent-type-imports": [
@@ -26,30 +20,9 @@ module.exports = {
         fixStyle: "inline-type-imports",
       },
     ],
-    "import/extensions": "off",
-    "import/no-default-export": "error",
-    "import/no-extraneous-dependencies": ["error", { packageDir: ["./"] }],
-    "import/order": [
-      "error",
-      {
-        pathGroups: [
-          {
-            pattern: "@/**",
-            group: "internal",
-            position: "before",
-          },
-          {
-            pattern: "#**",
-            group: "internal",
-            position: "before",
-          },
-        ],
-        alphabetize: {
-          order: "asc",
-        },
-      },
-    ],
-    "import/prefer-default-export": "off",
+    "class-methods-use-this": "off",
+    "dot-notation": "off",
+    "no-empty-function": "off",
     "no-useless-constructor": "off",
   },
   overrides: [
@@ -61,5 +34,14 @@ module.exports = {
         "import/prefer-default-export": "off",
       },
     },
+    {
+      files: ["./*.*js"],
+      extends: ["plugin:@typescript-eslint/disable-type-checked"],
+    },
   ],
+  settings: {
+    "import/resolver": {
+      typescript: {},
+    },
+  },
 };
