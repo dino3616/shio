@@ -45,6 +45,13 @@ module.exports = {
       },
     },
     {
+      files: ["./.storybook/*"],
+      rules: {
+        "import/no-default-export": "off",
+        "import/prefer-default-export": "off",
+      },
+    },
+    {
       files: ["./**/*.story.*"],
       rules: {
         "import/no-default-export": "off",

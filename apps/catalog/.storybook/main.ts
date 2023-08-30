@@ -1,5 +1,5 @@
-import type { StorybookConfig } from '@storybook/nextjs';
 import path from 'path';
+import type { StorybookConfig } from '@storybook/nextjs';
 
 const config: StorybookConfig = {
   addons: ['@storybook/addon-a11y', '@storybook/addon-essentials', '@storybook/addon-styling'],
@@ -30,13 +30,13 @@ const config: StorybookConfig = {
       include: ['../../../**/*.tsx'],
     },
   },
-  webpackFinal: (config) => {
-    const finalConfig: typeof config = {
-      ...config,
+  webpackFinal: (webpackConfig) => {
+    const finalConfig: typeof webpackConfig = {
+      ...webpackConfig,
       resolve: {
-        ...config.resolve,
+        ...webpackConfig.resolve,
         alias: {
-          ...config.resolve?.alias,
+          ...webpackConfig.resolve?.alias,
           '@': path.resolve(__dirname, '../../website-v2/src'),
           '#core': path.resolve(__dirname, '../../../packages/core'),
         },

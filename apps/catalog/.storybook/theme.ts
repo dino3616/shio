@@ -1,5 +1,5 @@
+import { getBaseUrl } from '@shio/core/util/get-base-url';
 import { create } from '@storybook/theming';
-import { getBaseUrl } from '../../../packages/core/util/get-base-url';
 
 const brandLogo = `
 <svg width="262" height="54" viewBox="0 0 262 54" fill="none" xmlns="http://www.w3.org/2000/svg"

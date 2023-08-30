@@ -1,3 +1,4 @@
+!.storybook/
 .storybook/static/
 coverage/
 generated/
