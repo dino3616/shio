@@ -8,4 +8,4 @@ export const Image = forwardRef<ElementRef<typeof NextImage>, Omit<ImageProps, '
   <NextImage ref={ref} placeholder={priority ? undefined : 'blur'} {...props} />
 ));
 
-Image.displayName = 'Image';
+Image.displayName = Image.name;
