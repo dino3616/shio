@@ -5,7 +5,12 @@ type Story = StoryObj<typeof HeroSection>;
 
 const meta = {
   component: HeroSection,
-  argTypes: {},
+  argTypes: {
+    onAboutMeButtonClick: {
+      description: 'A callback function to be called when the about me button is clicked.',
+      action: 'onAboutMeButtonClick',
+    },
+  },
 } satisfies Meta<typeof HeroSection>;
 
 export default meta;
