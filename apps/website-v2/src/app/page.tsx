@@ -1,14 +1,24 @@
-import type { ReactNode } from 'react';
+'use client';
+
+import { type ElementRef, type ReactNode, useRef } from 'react';
 import { HeroSection } from '@/module/root/ui/page/hero-section';
+import { JobSection } from '@/module/root/ui/page/job-section';
 import { ProfileSection } from '@/module/root/ui/page/profile-section';
 
-const RootPage = (): ReactNode => (
-  <>
-    <HeroSection />
-    <ProfileSection />
-    {/* TODO: Uncomment out when implementation is complete. */}
-    {/* <FeatureSection /> */}
-  </>
-);
+const RootPage = (): ReactNode => {
+  const profileSectionRef = useRef<ElementRef<typeof ProfileSection>>(null);
+
+  return (
+    <>
+      <HeroSection
+        onAboutMeButtonClick={() => {
+          profileSectionRef.current?.scrollIntoView({ behavior: 'smooth' });
+        }}
+      />
+      <ProfileSection ref={profileSectionRef} />
+      <JobSection />
+    </>
+  );
+};
 
 export default RootPage;

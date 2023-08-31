@@ -1,9 +1,13 @@
+import { Button } from '@shio/core/component/button';
+import { LinkButton } from '@shio/core/component/link-button';
 import { cn } from '@shio/tailwind';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 
-type HeroSectionProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
+type HeroSectionProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'> & {
+  onAboutMeButtonClick?: ComponentPropsWithoutRef<typeof Button>['onClick'];
+};
 
-export const HeroSection = ({ ...props }: HeroSectionProps): ReactNode => (
+export const HeroSection = ({ onAboutMeButtonClick, ...props }: HeroSectionProps): ReactNode => (
   <section className="relative flex h-screen items-center justify-center overflow-hidden px-5 tablet:overflow-visible tablet:px-20" {...props}>
     <div
       aria-hidden
@@ -21,17 +25,12 @@ export const HeroSection = ({ ...props }: HeroSectionProps): ReactNode => (
         </p>
       </hgroup>
       <div className="flex flex-col items-center gap-6 tablet:flex-row">
-        <button className="w-full self-stretch rounded-lg bg-light-mauve-3 px-8 py-3 text-light-purple-12 transition hover:bg-light-mauve-7 hover:text-light-purple-12 focus:bg-light-mauve-7 focus:text-light-purple-12 tablet:w-auto tablet:text-xl">
+        <Button color="purple" border="purple" onClick={onAboutMeButtonClick}>
           About Me
-        </button>
-        <button
-          className={cn(
-            'relative m-0.5 w-full rounded-lg bg-dark-purple-3 px-8 py-3 text-dark-purple-12 transition hover:bg-dark-purple-4 focus:bg-dark-purple-4 tablet:w-auto tablet:text-xl',
-            'after:absolute after:-inset-0.5 after:z-[-1] after:rounded-lg after:bg-gradient-to-br after:from-pink-8 after:to-purple-8 after:content-[""]',
-          )}
-        >
+        </Button>
+        <LinkButton href="mailto:me@shio.studio" color="purple" textColor="purple" border="gradient-pink-purple" fontWeight="bold">
           Get in Touch
-        </button>
+        </LinkButton>
       </div>
       <div aria-hidden>
         <div
