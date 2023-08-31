@@ -8,6 +8,10 @@ const linkButtonVariant = tv({
       mauve: 'bg-mauve-3 text-mauve-11 hover:bg-mauve-4',
       purple: 'bg-purple-3 text-purple-11 hover:bg-purple-4',
     },
+    textSize: {
+      xl: 'text-base tablet:text-xl',
+      '2xl': 'text-lg tablet:text-2xl',
+    },
     textColor: {
       mauve: 'text-mauve-12',
       'accent-mauve': 'text-mauve-11',
@@ -25,16 +29,25 @@ const linkButtonVariant = tv({
       normal: 'font-normal',
       bold: 'font-bold',
     },
+    width: {
+      fit: 'w-fit',
+    },
   },
 });
 
-type LinkButtonProps = ComponentPropsWithoutRef<typeof Link> & VariantProps<typeof linkButtonVariant>;
+type LinkButtonProps = ComponentPropsWithoutRef<typeof Link> &
+  VariantProps<typeof linkButtonVariant> & {
+    outsideClass?: ComponentPropsWithoutRef<typeof Link>['className'];
+  };
 
 export const LinkButton = ({
   color = 'mauve',
+  textSize = 'xl',
   textColor = undefined,
   border = undefined,
   fontWeight = 'normal',
+  width = undefined,
+  outsideClass,
   children,
   ...props
 }: LinkButtonProps): ReactNode => (
@@ -42,8 +55,9 @@ export const LinkButton = ({
     role="button"
     tabIndex={0}
     className={cn(
-      'inline-block w-full self-stretch rounded-lg px-8 py-3 text-center transition tablet:w-auto tablet:text-xl',
-      linkButtonVariant({ color, textColor, border, fontWeight }),
+      'inline-block w-full self-stretch rounded-lg px-8 py-3 text-center transition tablet:w-auto',
+      linkButtonVariant({ color, textSize, textColor, border, fontWeight, width }),
+      outsideClass,
     )}
     {...props}
   >
