@@ -30,6 +30,7 @@
     "@shio/postcss": "workspace:*",
     "@shio/prettier": "workspace:*",
     "@shio/tsconfig": "workspace:*",
+    "@shio/type": "workspace:*",
     "@storybook/nextjs": "7.4.0",
     "@storybook/react": "7.4.0",
     "@types/react": "18.2.21",
