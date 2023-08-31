@@ -39,9 +39,9 @@ export const JobSection = ({ ...props }: JobSectionProps): ReactNode => {
         <span
           data-copy={jobs[jobLabel].copy}
           className={cn(
-            'block max-w-5xl text-center text-3xl font-bold leading-tight tablet:text-5xl tablet:leading-tight laptop:text-6xl laptop:leading-tight',
+            'block max-w-5xl py-1 text-center text-3xl font-bold leading-tight tablet:text-5xl tablet:leading-tight laptop:text-6xl laptop:leading-tight',
             'bg-gradient-to-br from-mauve-12 bg-clip-text text-transparent',
-            'before:absolute before:inset-0 before:-z-10 before:h-full before:w-full before:text-dark-mauve-12 before:content-[attr(data-copy)] before:dark:text-light-mauve-12',
+            'before:absolute before:inset-0 before:-z-10 before:h-full before:w-full before:py-1 before:text-dark-mauve-12 before:content-[attr(data-copy)] before:dark:text-light-mauve-12',
           )}
         >
           {jobs[jobLabel].copy}
