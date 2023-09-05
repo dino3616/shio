@@ -126,9 +126,6 @@ export const Footer = ({ outsideClass, ...props }: FooterProps): ReactNode => (
                 <NavigationLink href="/">Service</NavigationLink>
               </li>
               <li>
-                <NavigationLink href="/">Skill</NavigationLink>
-              </li>
-              <li>
                 <NavigationLink href="/">Experience</NavigationLink>
               </li>
               <li>
@@ -137,16 +134,11 @@ export const Footer = ({ outsideClass, ...props }: FooterProps): ReactNode => (
             </ul>
           </li>
           <li className="flex flex-col gap-5">
-            <p className="font-bold text-mauve-11 tablet:text-lg">Blog</p>
-            <ul className="flex flex-col gap-4">
-              <li>
-                <NavigationLink href="/">List</NavigationLink>
-              </li>
-            </ul>
-          </li>
-          <li className="flex flex-col gap-5">
             <p className="font-bold text-mauve-11 tablet:text-lg">Me</p>
             <ul className="flex flex-col gap-4">
+              <li>
+                <NavigationLink href="/">Blog</NavigationLink>
+              </li>
               <li>
                 <NavigationLink href="/">Contact</NavigationLink>
               </li>
@@ -156,13 +148,16 @@ export const Footer = ({ outsideClass, ...props }: FooterProps): ReactNode => (
             <p className="font-bold text-mauve-11 tablet:text-lg">Reference</p>
             <ul className="flex flex-col gap-4">
               <li>
-                <NavigationLink href="/" external>
+                <NavigationLink href="https://github.com/dino3616/shio/" external>
                   Source code
                   <ExternalLinkIcon className="h-4 w-4 stroke-mauve-12 transition group-hover:stroke-mauve-11" />
                 </NavigationLink>
               </li>
               <li>
-                <NavigationLink href="/" external>
+                <NavigationLink
+                  href="https://www.figma.com/file/wIpzL4L6xxDhB7TGejMBBk/shio.studio?type=design&node-id=0%3A1&t=kBxA06Gtzi3Y0i09-1/"
+                  external
+                >
                   Design
                   <ExternalLinkIcon className="h-4 w-4 stroke-mauve-12 transition group-hover:stroke-mauve-11" />
                 </NavigationLink>
