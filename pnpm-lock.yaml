@@ -156,8 +156,8 @@ importers:
         specifier: 16.3.1
         version: 16.3.1
       framer-motion:
-        specifier: 10.16.3
-        version: 10.16.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: 10.16.4
+        version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: 13.4.19
         version: 13.4.19(@babel/core@7.22.11)(react-dom@18.2.0)(react@18.2.0)
@@ -217,8 +217,8 @@ importers:
         specifier: 16.3.1
         version: 16.3.1
       framer-motion:
-        specifier: 10.16.3
-        version: 10.16.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: 10.16.4
+        version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
       next:
         specifier: 13.4.19
         version: 13.4.19(@babel/core@7.22.11)(react-dom@18.2.0)(react@18.2.0)
@@ -8039,8 +8039,8 @@ packages:
     resolution: {integrity: sha512-nx0cki48JBA6ThPeUpeKCNpdhEl/9bRS+dAEYnRUod+Z1jhFfC3K/mBLorZZntqHM+GTH3/dkkpfoT3QITYe7g==}
     dev: true
 
-  /framer-motion@10.16.3(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-1OMs6wY964hX8YjiCeYQlgrZDbkKvZztnynTUgUZjdzq2au6PZUsodmUY6GAudUgImrWqTrtpSwMbi1ETmIx4A==}
+  /framer-motion@10.16.4(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-p9V9nGomS3m6/CALXqv6nFGMuFOxbWsmaOrdmhyQimMIlLl3LC7h7l86wge/Js/8cRu5ktutS/zlzgR7eBOtFA==}
     peerDependencies:
       react: ^18.0.0
       react-dom: ^18.0.0
