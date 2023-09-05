@@ -18,7 +18,7 @@ jobs:
       website-v2: ${{ steps.changes.outputs.website-v2 }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: check for file changes
         uses: dorny/paths-filter@v2
@@ -35,7 +35,7 @@ jobs:
       STORE_PATH: ${{ steps.pnpm-env.outputs.STORE_PATH }}
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -66,7 +66,7 @@ jobs:
     needs: install
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -97,7 +97,7 @@ jobs:
     needs: install
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -128,7 +128,7 @@ jobs:
     needs: install
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -159,7 +159,7 @@ jobs:
     needs: install
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -190,7 +190,7 @@ jobs:
     needs: [install, build]
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: setup node
         uses: actions/setup-node@v3
@@ -222,7 +222,7 @@ jobs:
     if: needs.filter.outputs.catalog == 'true'
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.event.workflow_run.head_sha }}
