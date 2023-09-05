@@ -493,8 +493,8 @@ importers:
         specifier: 1.0.7
         version: 1.0.7(tailwindcss@3.3.3)
       tw-colors:
-        specifier: 2.2.0
-        version: 2.2.0(tailwindcss@3.3.3)
+        specifier: 3.0.3
+        version: 3.0.3(tailwindcss@3.3.3)
 
   packages/tsconfig:
     devDependencies:
@@ -13127,8 +13127,8 @@ packages:
       turbo-windows-arm64: 1.10.13
     dev: true
 
-  /tw-colors@2.2.0(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-Frl87y0o/Ofiv5k+7+f5CF/oJfDAGxn/qoxtAmMoYP0BbqkobqWEgHBeCIyEZ7iYaZ7HgtqoINQf89MddEAhqA==}
+  /tw-colors@3.0.3(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-R/PK1W0Df8+uZRgpFbceqTDUnn8H/n36I9spt4pY/GTGG1RchEIi4QCNmFYfEtDdB6w7lDLI0q5qXTar6HrEZA==}
     peerDependencies:
       tailwindcss: '>=3.0.0'
     dependencies:
