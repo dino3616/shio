@@ -129,8 +129,8 @@ importers:
         specifier: 18.2.7
         version: 18.2.7
       chromatic:
-        specifier: 7.0.0
-        version: 7.0.0
+        specifier: 7.1.0
+        version: 7.1.0
       eslint-config-shio-react:
         specifier: workspace:*
         version: link:../../packages/eslint/eslint-config-shio-react
@@ -232,8 +232,8 @@ importers:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
       react-icons:
-        specifier: 4.10.1
-        version: 4.10.1(react@18.2.0)
+        specifier: 4.11.0
+        version: 4.11.0(react@18.2.0)
     devDependencies:
       '@shio/jest':
         specifier: workspace:*
@@ -6162,8 +6162,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /chromatic@7.0.0:
-    resolution: {integrity: sha512-ZPHRO/6v0jAKk0G1oW+HAngQmbq+opAVkgjy3Yx5Cvxvpfv+Y7zyfBuQ8KHewoNuIqLTfvRTbKzekqbGYT+7UQ==}
+  /chromatic@7.1.0:
+    resolution: {integrity: sha512-4hvWVxj2TxsgmzQK7zsAIVapxF+mzAXFuYIoAKKACdKtI+kjz0GfKJYpnzD4xciY3SGaySsis6gWxJ9q8GIxiQ==}
     hasBin: true
     dev: true
 
@@ -11367,8 +11367,8 @@ packages:
       react-is: 18.1.0
     dev: true
 
-  /react-icons@4.10.1(react@18.2.0):
-    resolution: {integrity: sha512-/ngzDP/77tlCfqthiiGNZeYFACw85fUjZtLbedmJ5DTlNDIwETxhwBzdOJ21zj4iJdvc0J3y7yOsX3PpxAJzrw==}
+  /react-icons@4.11.0(react@18.2.0):
+    resolution: {integrity: sha512-V+4khzYcE5EBk/BvcuYRq6V/osf11ODUM2J8hg2FDSswRrGvqiYUYPRy4OdrWaQOBj4NcpJfmHZLNaD+VH0TyA==}
     peerDependencies:
       react: '*'
     dependencies:
