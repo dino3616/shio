@@ -28,7 +28,7 @@ export const HeroSection = ({ onAboutMeButtonClick, ...props }: HeroSectionProps
         <Button color="purple" border="purple" onClick={onAboutMeButtonClick}>
           About Me
         </Button>
-        <LinkButton href="mailto:me@shio.studio" color="purple" textColor="purple" border="gradient-pink-purple" fontWeight="bold">
+        <LinkButton href="mailto:me@shio.studio" external color="purple" textColor="purple" border="gradient-pink-purple" fontWeight="bold">
           Get in Touch
         </LinkButton>
       </div>

@@ -26,6 +26,7 @@ export const ContactSection = ({ ...props }: ContactSectionProps): ReactNode => 
       </h1>
       <LinkButton
         href="mailto:me@shio.studio"
+        external
         color="purple"
         textSize="2xl"
         border="gradient-pink-purple"
