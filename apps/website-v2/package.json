@@ -28,7 +28,7 @@
     "next": "13.4.19",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "sharp": "0.32.5"
+    "sharp": "0.32.6"
   },
   "devDependencies": {
     "@shio/jest": "workspace:*",
@@ -38,7 +38,7 @@
     "@shio/tsconfig": "workspace:*",
     "@shio/type": "workspace:*",
     "@storybook/react": "7.4.2",
-    "@types/react": "18.2.21",
+    "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
     "eslint-config-shio-nextjs": "workspace:*"
   }
