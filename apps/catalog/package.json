@@ -40,9 +40,9 @@
     "@storybook/nextjs": "7.4.2",
     "@storybook/react": "7.4.2",
     "@storybook/theming": "7.4.2",
-    "@types/react": "18.2.21",
+    "@types/react": "18.2.22",
     "@types/react-dom": "18.2.7",
-    "chromatic": "7.1.0",
+    "chromatic": "7.2.0",
     "eslint-config-shio-react": "workspace:*",
     "storybook": "7.4.2"
   }
