@@ -7,6 +7,29 @@ import { jobs } from '@/module/root/constant/job';
 import { Feature } from '@/module/root/ui/component/feature';
 import { JobSelect } from '@/module/root/ui/component/job-select';
 
+type ScrollRevealPresenceProps = ComponentPropsWithoutRef<typeof motion.div>;
+
+const ScrollRevealPresence = ({ children, ...props }: ScrollRevealPresenceProps): ReactNode => (
+  <motion.div
+    variants={{
+      offscreen: {
+        opacity: 0,
+      },
+      onscreen: {
+        opacity: 1,
+      },
+    }}
+    initial="offscreen"
+    whileInView="onscreen"
+    exit="offscreen"
+    viewport={{ once: true }}
+    transition={{ duration: 0.4, ease: 'easeOut' }}
+    {...props}
+  >
+    {children}
+  </motion.div>
+);
+
 type JobSectionProps = Omit<ComponentPropsWithoutRef<'section'>, 'children' | 'className'>;
 
 export const JobSection = ({ ...props }: JobSectionProps): ReactNode => {
@@ -48,23 +71,19 @@ export const JobSection = ({ ...props }: JobSectionProps): ReactNode => {
         </span>
       </motion.p>
       <AnimatePresence>
-        <motion.div
-          key={`feature-container-animation-${jobLabel}`}
-          variants={{
-            offscreen: {
-              opacity: 0,
-            },
-            onscreen: {
-              opacity: 1,
-            },
-          }}
-          initial="offscreen"
-          whileInView="onscreen"
-          exit="offscreen"
-          viewport={{ once: true }}
-          transition={{ duration: 0.4, ease: 'easeOut' }}
-          className="flex flex-col gap-16 laptop:gap-12"
+        <ScrollRevealPresence
+          key={`feature-icon-list-animation-${jobLabel}`}
+          className={cn(
+            'relative flex gap-8 laptop:gap-12',
+            "before:absolute before:right-[calc(100%+24px)] before:top-1/2 before:h-1 before:w-28 before:-translate-y-1/2 before:rounded-full before:bg-gradient-to-l before:from-purple-6 before:content-[''] before:tablet:right-[calc(100%+48px)] before:tablet:w-60",
+            "after:absolute after:left-[calc(100%+24px)] after:top-1/2 after:h-1 after:w-28 after:-translate-y-1/2 after:rounded-full after:bg-gradient-to-r after:from-purple-6 after:content-[''] after:tablet:left-[calc(100%+48px)] after:tablet:w-60",
+          )}
         >
+          {jobs[jobLabel].features.map((feature) => (
+            <feature.icon key={`feature-icon-${feature.label}`} className="h-7 w-7 tablet:h-8 tablet:w-8" />
+          ))}
+        </ScrollRevealPresence>
+        <ScrollRevealPresence key={`feature-list-animation-${jobLabel}`} className="flex flex-col gap-16 laptop:gap-12">
           {jobs[jobLabel].features.map((feature, index) => (
             <Feature
               key={`feature-${feature.label}`}
@@ -76,7 +95,7 @@ export const JobSection = ({ ...props }: JobSectionProps): ReactNode => {
               reverse={index % 2 !== 0}
             />
           ))}
-        </motion.div>
+        </ScrollRevealPresence>
       </AnimatePresence>
     </section>
   );
