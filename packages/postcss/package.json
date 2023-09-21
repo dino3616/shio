@@ -14,7 +14,7 @@
   },
   "devDependencies": {
     "@shio/prettier": "workspace:*",
-    "autoprefixer": "10.4.15",
+    "autoprefixer": "10.4.16",
     "eslint-config-shio-base": "workspace:*",
     "postcss": "8.4.30",
     "postcss-import": "15.1.0",

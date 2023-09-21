@@ -27,7 +27,7 @@
     "@shio/tsconfig": "workspace:*",
     "@shio/type": "workspace:*",
     "add": "2.0.6",
-    "autoprefixer": "10.4.15",
+    "autoprefixer": "10.4.16",
     "eslint-config-shio-esm": "workspace:*",
     "mini-svg-data-uri": "1.4.4",
     "postcss": "8.4.30",
