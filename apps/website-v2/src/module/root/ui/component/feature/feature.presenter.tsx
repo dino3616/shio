@@ -4,41 +4,40 @@ import { type VariantProps, cn, tv } from '@shio/tailwind';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
 import type { Job } from '@/module/root/model/job';
 
-// eslint-disable-next-line tailwindcss/no-custom-classname
 const featureVariant = tv({
   slots: {
-    base: '',
-    imageContainer: '',
-    blurredImage: '',
+    base: null,
+    imageContainer: null,
+    blurredImage: null,
   },
   variants: {
     reverse: {
-      true: '',
+      true: null,
     },
   },
   compoundSlots: [
     {
-      slots: ['base'],
+      slots: [`base`],
       reverse: true,
       className: 'laptop:flex-row-reverse',
     },
     {
-      slots: ['imageContainer'],
+      slots: [`imageContainer`],
       reverse: true,
       className: 'laptop:-translate-x-4 laptop:-translate-y-4',
     },
     {
-      slots: ['imageContainer'],
+      slots: [`imageContainer`],
       reverse: false,
       className: 'laptop:translate-x-4 laptop:translate-y-4',
     },
     {
-      slots: ['blurredImage'],
+      slots: [`blurredImage`],
       reverse: true,
       className: 'laptop:left-8 laptop:top-8',
     },
     {
-      slots: ['blurredImage'],
+      slots: [`blurredImage`],
       reverse: false,
       className: 'laptop:-left-8 laptop:-top-8',
     },

@@ -33,6 +33,7 @@ module.exports = {
     tailwindcss: {
       callees: ["cn", "tv"],
       classRegex: "^(class|className|outsideClass)$",
+      ignoredKeys: ["compoundSlots"],
     },
   },
   overrides: [

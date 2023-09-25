@@ -175,7 +175,7 @@
   "jest.jestCommandLine": "pnpm all -- test",
   "tailwindCSS.classAttributes": ["class", "className", "outsideClass"],
   "tailwindCSS.experimental.classRegex": [
-    ["tv\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"]
+    ["tv\\(([^)]*)\\)", "[\"']([^\"']*).*?[\"']"]
   ],
   "[prisma]": {
     "editor.defaultFormatter": "Prisma.prisma"

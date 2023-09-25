@@ -1,19 +1,23 @@
 'use client';
 
 import * as RadixUiSelect from '@radix-ui/react-select';
-import { type VariantInterface, type VariantProps, cn, tv } from '@shio/tailwind';
+import { type VariantProps, cn, tv } from '@shio/tailwind';
 import { type ComponentPropsWithoutRef, type ElementRef, type ReactNode, forwardRef } from 'react';
 
 const selectTriggerVatiant = tv({
+  slots: {
+    base: null,
+    icon: null,
+  },
   variants: {
     display: {
       flex: 'flex',
       'inline-flex': 'inline-flex',
     },
     color: {
-      transparent: 'border-mauve-6 bg-transparent text-mauve-12 ring-mauve-7 hover:bg-mauve-4 focus:border-mauve-7',
-      mauve: 'border-mauve-6 bg-mauve-3 text-mauve-12 ring-mauve-7 hover:bg-mauve-4 focus:border-mauve-7',
-      purple: 'border-purple-6 bg-purple-3 text-purple-12 ring-purple-7 hover:bg-purple-4 focus:border-purple-7',
+      transparent: null,
+      mauve: null,
+      purple: null,
     },
     textSize: {
       xs: 'text-xs',
@@ -42,16 +46,38 @@ const selectTriggerVatiant = tv({
       true: 'h-auto w-auto rounded-full p-2',
     },
   },
-});
-
-const selectTriggerIconVariant = tv({
-  variants: {
-    color: {
-      transparent: 'fill-mauve-12',
-      mauve: 'fill-mauve-12',
-      purple: 'fill-purple-12',
-    } satisfies VariantInterface<VariantProps<typeof selectTriggerVatiant>['color']>,
-  },
+  compoundSlots: [
+    {
+      slots: [`base`],
+      color: `transparent`,
+      className: 'border-mauve-6 bg-transparent text-mauve-12 ring-mauve-7 hover:bg-mauve-4 focus:border-mauve-7',
+    },
+    {
+      slots: [`base`],
+      color: `mauve`,
+      className: 'border-mauve-6 bg-mauve-3 text-mauve-12 ring-mauve-7 hover:bg-mauve-4 focus:border-mauve-7',
+    },
+    {
+      slots: [`base`],
+      color: `purple`,
+      className: 'border-purple-6 bg-purple-3 text-purple-12 ring-purple-7 hover:bg-purple-4 focus:border-purple-7',
+    },
+    {
+      slots: [`icon`],
+      color: `transparent`,
+      className: 'fill-mauve-12',
+    },
+    {
+      slots: [`icon`],
+      color: `mauve`,
+      className: 'fill-mauve-12',
+    },
+    {
+      slots: [`icon`],
+      color: `purple`,
+      className: 'fill-purple-12',
+    },
+  ],
 });
 
 type SelectTriggerProps = Omit<ComponentPropsWithoutRef<typeof RadixUiSelect.Trigger>, 'className'> &
@@ -60,25 +86,27 @@ type SelectTriggerProps = Omit<ComponentPropsWithoutRef<typeof RadixUiSelect.Tri
   };
 
 export const SelectTrigger = forwardRef<ElementRef<typeof RadixUiSelect.Trigger>, Omit<SelectTriggerProps, 'ref'>>(
-  ({ display = 'flex', color = 'mauve', textSize = 'sm', asIcon = false, rounded = 'md', icon: Icon, children, ...props }, ref) => (
-    <RadixUiSelect.Trigger
-      ref={ref}
-      className={cn(
-        'items-center justify-between gap-8 border p-4 transition',
-        'focus:outline-none focus:ring-2 focus:ring-offset-2',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        selectTriggerVatiant({ display, color, textSize, rounded, asIcon }),
-      )}
-      {...props}
-    >
-      {children}
-      {!asIcon && (
-        <RadixUiSelect.Icon asChild={!!Icon}>
-          {Icon && <Icon className={cn('h-7 w-7 opacity-70', selectTriggerIconVariant({ color }))} />}
-        </RadixUiSelect.Icon>
-      )}
-    </RadixUiSelect.Trigger>
-  ),
+  ({ display = 'flex', color = 'mauve', textSize = 'sm', asIcon = false, rounded = 'md', icon: Icon, children, ...props }, ref) => {
+    const { base, icon } = selectTriggerVatiant({ display, color, textSize, rounded, asIcon });
+
+    return (
+      <RadixUiSelect.Trigger
+        ref={ref}
+        className={cn(
+          'items-center justify-between gap-8 border p-4 transition',
+          'focus:outline-none focus:ring-2 focus:ring-offset-2',
+          'disabled:cursor-not-allowed disabled:opacity-50',
+          base({ display, color, textSize, rounded, asIcon }),
+        )}
+        {...props}
+      >
+        {children}
+        {!asIcon && (
+          <RadixUiSelect.Icon asChild={!!Icon}>{Icon && <Icon className={cn('h-7 w-7 opacity-70', icon({ color }))} />}</RadixUiSelect.Icon>
+        )}
+      </RadixUiSelect.Trigger>
+    );
+  },
 );
 
 SelectTrigger.displayName = RadixUiSelect.Trigger.displayName;
