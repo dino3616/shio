@@ -1,6 +1,6 @@
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import { BsTwitter } from 'react-icons/bs';
+import { RiTwitterXFill } from 'react-icons/ri';
 
 type TwitterIconProps = Omit<ComponentPropsWithoutRef<'svg'>, 'children'>;
 
-export const TwitterIcon = ({ ...props }: TwitterIconProps): ReactNode => <BsTwitter {...props} />;
+export const TwitterIcon = ({ ...props }: TwitterIconProps): ReactNode => <RiTwitterXFill {...props} />;
