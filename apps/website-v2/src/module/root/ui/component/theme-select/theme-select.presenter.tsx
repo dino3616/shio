@@ -26,12 +26,7 @@ export const ThemeSelect = ({ ...props }: ThemeSelectProps) => {
       }}
       {...props}
     >
-      <SelectTrigger
-        aria-label="theme selector"
-        aria-description="Selector to choose between light, dark, or system theme."
-        asIcon
-        bg-color="transparent"
-      >
+      <SelectTrigger aria-label="theme selector" aria-description="Selector to choose between light, dark, or system theme." color="mauve" asIcon>
         {resolvedTheme === 'light' ? (
           <SunIcon className="h-5 w-5 fill-mauve-11 stroke-mauve-11" />
         ) : resolvedTheme === 'dark' ? (
