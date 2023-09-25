@@ -89,8 +89,3 @@ export const tv = <
 }): TVReturnType<V, S, B, typeof tvConfig, EV, ES> => tvBase(options, tvConfig);
 
 export type { VariantProps };
-
-export type VariantInterface<T extends string | Record<string, string | undefined> | undefined> = Record<
-  Extract<Exclude<T, undefined>, string>,
-  string
->;
