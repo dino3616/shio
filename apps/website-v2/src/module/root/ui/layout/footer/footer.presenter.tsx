@@ -39,9 +39,9 @@ export const Footer = ({ outsideClass, ...props }: FooterProps): ReactNode => (
     <div className="flex w-full flex-col justify-between gap-16 border-b-2 border-mauve-6 pb-6 tablet:pb-10 laptop:flex-row">
       <div className="flex flex-col gap-8">
         <div className="flex flex-col gap-4">
-          <Link href="/" className="flex items-center gap-3">
+          <Link href="/" className="flex items-center gap-3 transition hover:opacity-70">
             <Image src={BrandShioImage} alt="A brand icon for shio." width={32} placeholder="empty" className="h-8 w-8 rounded-full" />
-            <p className="text-2xl font-bold text-dark-pure hover:opacity-70 dark:text-light-pure">
+            <p className="text-2xl font-bold text-dark-pure dark:text-light-pure">
               <span className="text-purple-11">shio</span>.studio
             </p>
           </Link>
