@@ -75,8 +75,8 @@ export const JobSection = ({ ...props }: JobSectionProps): ReactNode => {
           key={`feature-icon-list-animation-${jobLabel}`}
           className={cn(
             'relative flex gap-8 laptop:gap-12',
-            "before:absolute before:right-[calc(100%+24px)] before:top-1/2 before:h-1 before:w-28 before:-translate-y-1/2 before:rounded-full before:bg-gradient-to-l before:from-purple-6 before:content-[''] before:tablet:right-[calc(100%+48px)] before:tablet:w-60",
-            "after:absolute after:left-[calc(100%+24px)] after:top-1/2 after:h-1 after:w-28 after:-translate-y-1/2 after:rounded-full after:bg-gradient-to-r after:from-purple-6 after:content-[''] after:tablet:left-[calc(100%+48px)] after:tablet:w-60",
+            "before:absolute before:right-[calc(100%+24px)] before:top-1/2 before:hidden before:h-0.5 before:w-24 before:-translate-y-1/2 before:rounded-full before:bg-gradient-to-l before:from-purple-6 before:content-[''] before:tablet:right-[calc(100%+48px)] before:tablet:block before:tablet:h-1 before:tablet:w-60",
+            "after:absolute after:left-[calc(100%+24px)] after:top-1/2 after:hidden after:h-0.5 after:w-24 after:-translate-y-1/2 after:rounded-full after:bg-gradient-to-r after:from-purple-6 after:content-[''] after:tablet:left-[calc(100%+48px)] after:tablet:block after:tablet:h-1 after:tablet:w-60",
           )}
         >
           {jobs[jobLabel].features.map((feature) => (
