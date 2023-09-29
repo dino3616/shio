@@ -32,7 +32,7 @@ export class EnvService {
   get ApolloStudioConfig(): ApolloConfigInput {
     const apolloConfigInput: ApolloConfigInput = {
       key: this.configService.getOrThrow('APOLLO_KEY'),
-      graphId: this.configService.getOrThrow('APOLLO_GRAPH_ID'),
+      graphRef: this.configService.getOrThrow('APOLLO_GRAPH_REF'),
     };
 
     return apolloConfigInput;

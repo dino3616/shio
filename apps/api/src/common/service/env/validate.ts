@@ -12,7 +12,7 @@ export class EnvValidator {
 
   APOLLO_KEY!: string;
 
-  APOLLO_GRAPH_ID!: string;
+  APOLLO_GRAPH_REF!: string;
 }
 
 export const validate = (config: Record<string, unknown>) => {
