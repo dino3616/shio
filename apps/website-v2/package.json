@@ -7,6 +7,7 @@
   "type": "module",
   "module": "nodenext",
   "scripts": {
+    "generate": "graphql-codegen --config codegen.ts -r dotenv/config",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
@@ -16,7 +17,8 @@
     "fmt:fix": "prettier --write .",
     "style": "stylelint ./**/*.{css,scss}",
     "style:fix": "stylelint ./**/*.{css,scss} --fix",
-    "test": "jest --silent=false --verbose false --passWithNoTests"
+    "test": "jest --silent=false --verbose false --passWithNoTests",
+    "gql:introspect": "graphql-codegen --config codegen-introspect.ts -r dotenv/config"
   },
   "dependencies": {
     "@shio/core": "workspace:*",
@@ -25,12 +27,19 @@
     "@vercel/analytics": "1.0.2",
     "dotenv": "16.3.1",
     "framer-motion": "10.16.4",
+    "graphql-tag": "2.12.6",
     "next": "13.5.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "sharp": "0.32.6"
   },
   "devDependencies": {
+    "@graphql-codegen/cli": "5.0.0",
+    "@graphql-codegen/introspection": "4.0.0",
+    "@graphql-codegen/typescript": "4.0.1",
+    "@graphql-codegen/typescript-operations": "4.0.1",
+    "@graphql-codegen/typescript-urql": "4.0.0",
+    "@graphql-codegen/urql-introspection": "3.0.0",
     "@shio/jest": "workspace:*",
     "@shio/postcss": "workspace:*",
     "@shio/prettier": "workspace:*",

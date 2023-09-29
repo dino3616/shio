@@ -168,7 +168,8 @@
     "packages/postcss/",
     "packages/stylelint",
     "packages/tailwind/",
-    "packages/type/"
+    "packages/type/",
+    "packages/urql/"
   ],
   "files.encoding": "utf8",
   "files.eol": "\n",

@@ -23,6 +23,7 @@ module.exports = {
     "class-methods-use-this": "off",
     "dot-notation": "off",
     "no-empty-function": "off",
+    "no-nested-ternary": "off",
     "no-useless-constructor": "off",
   },
   overrides: [

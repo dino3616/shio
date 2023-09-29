@@ -3,6 +3,9 @@ name: app test
 on: push
 
 env:
+  DATABASE_URL: mongodb://localhost:27017/test
+  NEXT_PUBLIC_GRAPHQL_ENDPOINT: ${{ secrets.NEXT_PUBLIC_GRAPHQL_ENDPOINT }}
+  NEXT_PUBLIC_WS_ENDPOINT: ${{ secrets.NEXT_PUBLIC_WS_ENDPOINT }}
   TURBO_TOKEN: ${{ secrets.TURBO_TOKEN }}
   TURBO_TEAM: ${{ secrets.TURBO_TEAM }}
 
@@ -14,8 +17,10 @@ jobs:
       pull-requests: read
     outputs:
       app: ${{ steps.changes.outputs.app }}
+      api: ${{ steps.changes.outputs.api }}
       catalog: ${{ steps.changes.outputs.catalog }}
       website-v2: ${{ steps.changes.outputs.website-v2 }}
+      graphql: ${{ steps.changes.outputs.graphql }}
     steps:
       - name: checkout
         uses: actions/checkout@v4
@@ -249,7 +254,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: generate
-        run: pnpm turbo run generate --filter @shio/website-v2
+        run: pnpm turbo run generate --filter='@shio/website-*'
 
       - name: publish
         uses: chromaui/action@v1
