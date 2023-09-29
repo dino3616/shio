@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "website-v2": {
+      "schema": ["./apps/website-v2/graphql.schema.json"]
+    }
+  }
+}
