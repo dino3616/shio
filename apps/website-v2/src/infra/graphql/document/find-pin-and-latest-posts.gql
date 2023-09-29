@@ -1,0 +1,22 @@
+query FindPinAndLatestPosts {
+  findPinnedPosts {
+    category
+    createdAt
+    id
+    pinIndex
+    thumbnailUrl
+    title
+    updatedAt
+    views
+  }
+  findLatestPosts {
+    category
+    createdAt
+    id
+    pinIndex
+    thumbnailUrl
+    title
+    updatedAt
+    views
+  }
+}
