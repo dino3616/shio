@@ -23,7 +23,7 @@
   "devDependencies": {
     "@types/eslint": "8.44.3",
     "@types/jest": "29.5.5",
-    "@types/node": "20.7.0",
+    "@types/node": "20.7.1",
     "cross-env": "7.0.3",
     "dotenv-cli": "7.3.0",
     "eslint": "8.50.0",
@@ -39,6 +39,9 @@
     "typescript": "5.2.2"
   },
   "pnpm": {
+    "overrides": {
+      "esbuild-register": "3.4.2"
+    },
     "patchedDependencies": {
       "esbuild-register@3.4.2": "patches/esbuild-register@3.4.2.patch"
     }
