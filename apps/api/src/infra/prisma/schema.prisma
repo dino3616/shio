@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum PostCategory {
+  TECH
+  LIFE
+}
+
+model Post {
+  id           String       @id @default(auto()) @map("_id") @db.ObjectId
+  pinIndex     Int?         @map("pin_index")
+  title        String
+  thumbnailUrl String       @map("thumbnail_url")
+  content      String
+  category     PostCategory
+  // TODO: When the following issue is fixed, specify DB field name by @map("tag_ids").
+  // https://github.com/prisma/prisma/issues/17970
+  tagIds       String[]     @db.ObjectId
+  tags         Tag[]        @relation(fields: [tagIds], references: [id])
+  views        Int          @default(0)
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
+
+  @@map("posts")
+}
+
+model Tag {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  uniqueName  String   @unique @map("unique_name")
+  displayName String   @map("display_name")
+  postIds     String[] @db.ObjectId
+  posts       Post[]   @relation(fields: [postIds], references: [id])
+
+  @@map("tags")
+}
