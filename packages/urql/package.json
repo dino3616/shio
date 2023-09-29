@@ -1,0 +1,31 @@
+{
+  "name": "@shio/urql",
+  "version": "0.1.0",
+  "repository": "https://github.com/dino3616/shio.git",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "lint": "eslint './**/{*.*js,*.*ts}'",
+    "lint:fix": "eslint './**/{*.*js,*.*ts}' --fix",
+    "fmt": "prettier --check .",
+    "fmt:fix": "prettier --write .",
+    "test": "jest --silent=false --verbose false --passWithNoTests"
+  },
+  "dependencies": {
+    "@urql/core": "4.1.3",
+    "@urql/devtools": "2.0.3",
+    "@urql/next": "1.0.0",
+    "date-fns": "2.30.0",
+    "graphql": "16.8.1",
+    "graphql-ws": "5.14.0",
+    "urql-custom-scalars-exchange": "1.0.1"
+  },
+  "devDependencies": {
+    "@shio/jest": "workspace:*",
+    "@shio/prettier": "workspace:*",
+    "@shio/tsconfig": "workspace:*",
+    "@shio/type": "workspace:*",
+    "eslint-config-shio-esm": "workspace:*"
+  }
+}
