@@ -67,9 +67,19 @@ export const fonts = {
     subsets: ['latin'],
     variable: '--font-fira-code',
   },
+  inter: {
+    weight: ['400', '700'],
+    subsets: ['latin'],
+    variable: '--font-inter',
+  },
   'noto-sans': {
     weight: ['400', '700'],
     subsets: ['latin'],
     variable: '--font-noto-sans',
+  },
+  rakkas: {
+    weight: ['400'],
+    subsets: ['latin'],
+    variable: '--font-rakkas',
   },
 } as const satisfies DeepReadonly<Fonts>;
