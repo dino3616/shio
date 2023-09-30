@@ -3,9 +3,9 @@
 import { cn } from '@shio/tailwind';
 import { AnimatePresence, motion } from 'framer-motion';
 import { type ComponentPropsWithoutRef, type ReactNode, useState } from 'react';
-import { jobs } from '@/module/root/constant/job';
-import { Feature } from '@/module/root/ui/component/feature';
-import { JobSelect } from '@/module/root/ui/component/job-select';
+import { jobs } from '#website-v2/module/root/constant/job';
+import { Feature } from '#website-v2/module/root/ui/component/feature';
+import { JobSelect } from '#website-v2/module/root/ui/component/job-select';
 
 type ScrollRevealPresenceProps = ComponentPropsWithoutRef<typeof motion.div>;
 

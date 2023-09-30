@@ -1,5 +1,5 @@
-import type { Post } from '@/module/post/domain/post.model';
-import type { Tag } from '@/module/tag/domain/tag.model';
+import type { Post } from '#api/module/post/domain/post.model';
+import type { Tag } from '#api/module/tag/domain/tag.model';
 
 export interface PostUseCaseInterface {
   findPost(postId: Post['id']): Promise<Post | null>;

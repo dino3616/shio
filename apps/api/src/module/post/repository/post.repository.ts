@@ -1,6 +1,6 @@
-import type { Increment, SortOrder } from '@/common/type/repository';
-import type { Post } from '@/module/post/domain/post.model';
-import { type Tag } from '@/module/tag/domain/tag.model';
+import type { Increment, SortOrder } from '#api/common/type/repository';
+import type { Post } from '#api/module/post/domain/post.model';
+import { type Tag } from '#api/module/tag/domain/tag.model';
 
 export interface PostRepositoryInterface {
   find(postId: Post['id']): Promise<Post | null>;

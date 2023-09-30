@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { jobs } from '@/module/root/constant/job';
+import { jobs } from '#website-v2/module/root/constant/job';
 import { Feature } from './feature.presenter';
 
 type Story = StoryObj<typeof Feature>;

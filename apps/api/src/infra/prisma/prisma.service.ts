@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger, type OnModuleDestroy, type OnModuleInit } f
 import { PrismaClient } from '@prisma/client';
 import type { LogLevel } from '@prisma/client/runtime/library';
 import { match } from 'ts-pattern';
-import { EnvService } from '@/common/service/env/env.service';
+import { EnvService } from '#api/common/service/env/env.service';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {

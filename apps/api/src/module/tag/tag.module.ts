@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { InjectionToken } from '@/common/constant/injection-token';
-import { PostModule } from '@/module/post/post.module';
+import { InjectionToken } from '#api/common/constant/injection-token';
+import { PostModule } from '#api/module/post/post.module';
 import { TagQuery } from './controller/tag-query.resolver';
 import { TagResolver } from './controller/tag.resolver';
 import { TagPostsDataLoader } from './dataloader/tag-posts.dataloader';

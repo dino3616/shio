@@ -1,5 +1,5 @@
 import { Field, ID, InputType } from '@nestjs/graphql';
-import type { Post } from '@/module/post/domain/post.model';
+import type { Post } from '#api/module/post/domain/post.model';
 
 @InputType()
 export class PostWhereUniqueInput implements Record<'postId', Post['id']> {

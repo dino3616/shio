@@ -1,10 +1,10 @@
 import { Inject, Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
-import { InjectionToken } from '@/common/constant/injection-token';
-import type { Post } from '@/module/post/domain/post.model';
+import { InjectionToken } from '#api/common/constant/injection-token';
+import type { Post } from '#api/module/post/domain/post.model';
 // TODO: Once this issue is resolved, modify to use `import type` syntax.
 // https://github.com/typescript-eslint/typescript-eslint/issues/5468
-import { type PostUseCaseInterface } from '@/module/post/use-case/post.use-case';
+import { type PostUseCaseInterface } from '#api/module/post/use-case/post.use-case';
 import { PostWhereUniqueInput } from './dto/input/post-where-unique.input';
 import { PostObject } from './dto/object/post.object';
 

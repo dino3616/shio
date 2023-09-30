@@ -4,7 +4,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger } from '@
 import { ArrowHeadIcon } from '@shio/core/icon/arrow-head-icon';
 import { toKebabCase, toTitleCase } from '@shio/core/util/change-case';
 import { type ComponentPropsWithoutRef, type ReactNode, useEffect, useState } from 'react';
-import { jobs } from '@/module/root/constant/job';
+import { jobs } from '#website-v2/module/root/constant/job';
 
 type JobSelectProps = Omit<ComponentPropsWithoutRef<typeof Select>, 'children' | 'className' | 'onValueChange' | 'value'> & {
   selectedJobLabel: keyof typeof jobs;

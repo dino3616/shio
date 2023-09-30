@@ -4,7 +4,7 @@ import { ApolloDriver, type ApolloDriverConfig } from '@nestjs/apollo';
 import { GraphQLModule } from '@nestjs/graphql';
 import { createComplexityLimitRule } from 'graphql-validation-complexity';
 import { match } from 'ts-pattern';
-import { EnvService } from '@/common/service/env/env.service';
+import { EnvService } from '#api/common/service/env/env.service';
 
 const baseConfig: ApolloDriverConfig = {
   autoSchemaFile: join(process.cwd(), './schema.gql'),

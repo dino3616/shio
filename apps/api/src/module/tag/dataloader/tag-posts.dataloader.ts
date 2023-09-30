@@ -1,11 +1,11 @@
 import { Inject, Injectable, Scope } from '@nestjs/common';
-import { InjectionToken } from '@/common/constant/injection-token';
-import { BaseDataLoader } from '@/common/service/cache/base.dataloader';
-import type { Post } from '@/module/post/domain/post.model';
+import { InjectionToken } from '#api/common/constant/injection-token';
+import { BaseDataLoader } from '#api/common/service/cache/base.dataloader';
+import type { Post } from '#api/module/post/domain/post.model';
 // TODO: Once this issue is resolved, modify to use `import type` syntax.
 // https://github.com/typescript-eslint/typescript-eslint/issues/5468
-import { type PostRepositoryInterface } from '@/module/post/repository/post.repository';
-import type { Tag } from '@/module/tag/domain/tag.model';
+import { type PostRepositoryInterface } from '#api/module/post/repository/post.repository';
+import type { Tag } from '#api/module/tag/domain/tag.model';
 
 @Injectable({ scope: Scope.REQUEST })
 export class TagPostsDataLoader extends BaseDataLoader<string, Post[]> {
