@@ -1,8 +1,8 @@
 import { Parent, ResolveField, Resolver } from '@nestjs/graphql';
-import { PostObject } from '@/module/post/controller/dto/object/post.object';
-import type { Post } from '@/module/post/domain/post.model';
-import { TagPostsDataLoader } from '@/module/tag/dataloader/tag-posts.dataloader';
-import { Tag } from '@/module/tag/domain/tag.model';
+import { PostObject } from '#api/module/post/controller/dto/object/post.object';
+import type { Post } from '#api/module/post/domain/post.model';
+import { TagPostsDataLoader } from '#api/module/tag/dataloader/tag-posts.dataloader';
+import { Tag } from '#api/module/tag/domain/tag.model';
 import { TagObject } from './dto/object/tag.object';
 
 @Resolver(() => TagObject)

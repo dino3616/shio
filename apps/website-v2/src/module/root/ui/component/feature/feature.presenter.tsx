@@ -2,7 +2,7 @@ import { Image } from '@shio/core/component/image';
 import { breakpoints } from '@shio/design-token';
 import { type VariantProps, cn, tv } from '@shio/tailwind';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import type { Job } from '@/module/root/model/job';
+import type { Job } from '#website-v2/module/root/model/job';
 
 const featureVariant = tv({
   slots: {

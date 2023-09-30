@@ -4,7 +4,7 @@
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
+      "#website-v2/*": ["./src/*"],
       "#core/*": ["../../packages/core/*"]
     }
   },

@@ -1,6 +1,6 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { PostCategoryEnum } from '@/module/post/controller/dto/enum/post-category.enum';
-import type { Post } from '@/module/post/domain/post.model';
+import { PostCategoryEnum } from '#api/module/post/controller/dto/enum/post-category.enum';
+import type { Post } from '#api/module/post/domain/post.model';
 
 @InputType()
 export class PostCreateInput implements Omit<Post, 'id' | 'views' | 'createdAt' | 'updatedAt' | 'tagIds' | 'isPinned'> {

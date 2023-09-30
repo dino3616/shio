@@ -10,8 +10,13 @@ const config: StorybookConfig = {
     name: '@storybook/nextjs',
     options: {},
   },
-  staticDirs: ['../../website-v2/public'],
+  staticDirs: ['../../website-v1/public', '../../website-v2/public'],
   stories: [
+    {
+      directory: '../../website-v1/src',
+      files: '**/*.story.tsx',
+      titlePrefix: 'website-v1',
+    },
     {
       directory: '../../website-v2/src',
       files: '**/*.story.tsx',
@@ -37,7 +42,8 @@ const config: StorybookConfig = {
         ...webpackConfig.resolve,
         alias: {
           ...webpackConfig.resolve?.alias,
-          '@': path.resolve(__dirname, '../../website-v2/src'),
+          '#website-v1': path.resolve(__dirname, '../../website-v1/src'),
+          '#website-v2': path.resolve(__dirname, '../../website-v2/src'),
           '#core': path.resolve(__dirname, '../../../packages/core'),
         },
       },

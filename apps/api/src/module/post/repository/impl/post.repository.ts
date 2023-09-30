@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { PrismaService } from '@/infra/prisma/prisma.service';
-import { Post } from '@/module/post/domain/post.model';
-import type { PostRepositoryInterface } from '@/module/post/repository/post.repository';
+import { PrismaService } from '#api/infra/prisma/prisma.service';
+import { Post } from '#api/module/post/domain/post.model';
+import type { PostRepositoryInterface } from '#api/module/post/repository/post.repository';
 
 @Injectable()
 export class PostRepository implements PostRepositoryInterface {

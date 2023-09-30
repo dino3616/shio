@@ -5,12 +5,12 @@ import { PuzzlePieceIcon } from '@shio/core/icon/puzzle-piece-icon';
 import { TimerIcon } from '@shio/core/icon/timer-icon';
 import { cn } from '@shio/tailwind';
 import type { DeepReadonly } from '@shio/type';
-import Feature1Image from '@/module/root/asset/job/feature-1.png';
-import Feature2Image from '@/module/root/asset/job/feature-2.png';
-import Feature3Image from '@/module/root/asset/job/feature-3.png';
-import Feature4Image from '@/module/root/asset/job/feature-4.png';
-import Feature5Image from '@/module/root/asset/job/feature-5.png';
-import type { Job } from '@/module/root/model/job';
+import Feature1Image from '#website-v2/module/root/asset/job/feature-1.png';
+import Feature2Image from '#website-v2/module/root/asset/job/feature-2.png';
+import Feature3Image from '#website-v2/module/root/asset/job/feature-3.png';
+import Feature4Image from '#website-v2/module/root/asset/job/feature-4.png';
+import Feature5Image from '#website-v2/module/root/asset/job/feature-5.png';
+import type { Job } from '#website-v2/module/root/model/job';
 
 export const jobs = {
   'frontend-engineer': {

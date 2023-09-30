@@ -25,8 +25,10 @@ const defaultConfig: Config = {
   theme: {
     colors,
     fontFamily: {
-      sans: [`var(${fonts['noto-sans'].variable})`, ...defaultTheme.fontFamily.sans],
       code: [`var(${fonts['fira-code'].variable})`, ...defaultTheme.fontFamily.mono],
+      inter: [`var(${fonts.inter.variable})`, ...defaultTheme.fontFamily.sans],
+      rakkas: [`var(${fonts.rakkas.variable})`, ...defaultTheme.fontFamily.serif],
+      sans: [`var(${fonts['noto-sans'].variable})`, ...defaultTheme.fontFamily.sans],
     },
     fontWeight: {
       normal: '400',

@@ -7,7 +7,7 @@ import { TagIcon } from '@shio/core/icon/tag-icon';
 import { TwitterIcon } from '@shio/core/icon/twitter-icon';
 import { cn } from '@shio/tailwind';
 import type { ComponentPropsWithoutRef, ReactNode } from 'react';
-import { ThemeSelect } from '@/module/root/ui/component/theme-select';
+import { ThemeSelect } from '#website-v2/module/root/ui/component/theme-select';
 
 export type HeaderProps = Omit<ComponentPropsWithoutRef<'header'>, 'children' | 'className'> & {
   outsideClass?: ComponentPropsWithoutRef<'header'>['className'];
