@@ -1,3 +1,4 @@
+import { getBaseUrl } from '#core/util/get-base-url';
 import BrandShioImage from '@shio/core/asset/brand/icon.webp';
 import { Image } from '@shio/core/component/image';
 import { Link } from '@shio/core/component/link';
@@ -163,7 +164,7 @@ export const Footer = ({ outsideClass, ...props }: FooterProps): ReactNode => (
                 </NavigationLink>
               </li>
               <li>
-                <NavigationLink href="https://shio-dk9irnoaf-noir3616-gmailcom.vercel.app/" external>
+                <NavigationLink href={getBaseUrl({ app: 'website-v1' })} external>
                   Version 1
                   <ExternalLinkIcon className="h-4 w-4 stroke-mauve-12 transition group-hover:stroke-mauve-11" />
                 </NavigationLink>

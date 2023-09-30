@@ -7,7 +7,7 @@ const robots = (): MetadataRoute.Robots => ({
     allow: '/',
     disallow: ['/api', '/_next'],
   },
-  sitemap: `${getBaseUrl({ app: 'website-v2', forceCustomDomain: true }).toString()}sitemap.xml`,
+  sitemap: `${getBaseUrl({ app: 'website-v2' }).toString()}sitemap.xml`,
 });
 
 export default robots;

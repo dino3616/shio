@@ -24,6 +24,6 @@ const brandLogo = `
 export const theme = create({
   base: 'dark',
   brandTitle: 'shio.studio',
-  brandUrl: getBaseUrl({ forceCustomDomain: true }).toString(),
+  brandUrl: getBaseUrl({ app: 'website-v2' }).toString(),
   brandImage: `data:image/svg+xml;base64,${btoa(brandLogo)}`,
 });

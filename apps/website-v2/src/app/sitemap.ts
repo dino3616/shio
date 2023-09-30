@@ -3,7 +3,7 @@ import type { MetadataRoute } from 'next';
 
 const sitemap = (): MetadataRoute.Sitemap => [
   {
-    url: getBaseUrl({ app: 'website-v2', forceCustomDomain: true }).toString(),
+    url: getBaseUrl({ app: 'website-v2' }).toString(),
     lastModified: new Date(),
   },
 ];
