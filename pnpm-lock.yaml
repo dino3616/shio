@@ -223,8 +223,8 @@ importers:
         specifier: 18.2.8
         version: 18.2.8
       chromatic:
-        specifier: 7.2.0
-        version: 7.2.0
+        specifier: 9.1.0
+        version: 9.1.0
       eslint-config-shio-react:
         specifier: workspace:*
         version: link:../../packages/eslint/eslint-config-shio-react
@@ -8358,8 +8358,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /chromatic@7.2.0:
-    resolution: {integrity: sha512-EbuvmsM6XAVFC4EQpqR2AT2PaXY4IS8qWxxg6N10AhpRulfX2b2AtW1hUc88cCosRyztd6esxkBdj3FSKR7zVw==}
+  /chromatic@9.1.0:
+    resolution: {integrity: sha512-9ib8k4LIfg/88kKufxz1N8vgCB7nlLhJqmx+Vx55cM/6DCB/M6oqroirVRXfdeC7qaZuhyUemPF2QHxBh7GXtQ==}
     hasBin: true
     dev: true
 
