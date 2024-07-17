@@ -617,8 +617,8 @@ importers:
         specifier: 11.0.0
         version: 11.0.0(postcss@8.4.31)(stylelint@15.10.3)
       stylelint-prettier:
-        specifier: 4.0.2
-        version: 4.0.2(prettier@3.0.3)(stylelint@15.10.3)
+        specifier: 5.0.2
+        version: 5.0.2(prettier@3.0.3)(stylelint@15.10.3)
 
   packages/tailwind:
     dependencies:
@@ -15402,12 +15402,12 @@ packages:
       stylelint: 15.10.3(typescript@5.2.2)
     dev: true
 
-  /stylelint-prettier@4.0.2(prettier@3.0.3)(stylelint@15.10.3):
-    resolution: {integrity: sha512-EoHnR2PiaWgpGtoI4VW7AzneMfwmwQsNwQ+3/E2k/a+ju5yO6rfPfop4vzPQKcJN4ZM1YbspEOPu88D8538sbg==}
-    engines: {node: ^14.17.0 || >=16.0.0}
+  /stylelint-prettier@5.0.2(prettier@3.0.3)(stylelint@15.10.3):
+    resolution: {integrity: sha512-qJ+BN+1T2ZcKz9WIrv0x+eFGHzSUnXfXd5gL///T6XoJvr3D8/ztzz2fhtmXef7Vb8P33zBXmLTTveByr0nwBw==}
+    engines: {node: '>=18.12.0'}
     peerDependencies:
       prettier: '>=3.0.0'
-      stylelint: '>=15.8.0'
+      stylelint: '>=16.0.0'
     dependencies:
       prettier: 3.0.3
       prettier-linter-helpers: 1.0.0
