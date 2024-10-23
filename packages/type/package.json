@@ -15,7 +15,7 @@
     "test": "jest --silent=false --verbose false --passWithNoTests"
   },
   "dependencies": {
-    "dotenv": "16.3.1"
+    "dotenv": "16.4.5"
   },
   "devDependencies": {
     "@shio/jest": "workspace:*",
@@ -23,6 +23,6 @@
     "@shio/tsconfig": "workspace:*",
     "add": "2.0.6",
     "eslint-config-shio-esm": "workspace:*",
-    "ts-essentials": "9.4.0"
+    "ts-essentials": "9.4.2"
   }
 }
