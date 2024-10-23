@@ -14,11 +14,11 @@
   "devDependencies": {
     "@shio/prettier": "workspace:*",
     "@shio/tsconfig": "workspace:*",
-    "@types/jest": "29.5.5",
+    "@types/jest": "29.5.14",
     "eslint-config-shio-esm": "workspace:*",
     "jest": "29.7.0",
     "jest-environment-jsdom": "29.7.0",
-    "next": "13.5.4",
-    "ts-jest": "29.1.1"
+    "next": "13.5.7",
+    "ts-jest": "29.2.5"
   }
 }
