@@ -4,7 +4,15 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 
 エンジニア兼デザイナーとして、仕事の実績だけでなく「自分はこういう人間です」を伝えるためのサイト。
 
-> **Status: 設計フェーズ**(実装未着手)。ドキュメントと環境設定(`.bun-version`)のみ。
+> **Status: 実装フェーズ**。モノレポのスキャフォールド済み(`apps/website` はビルド可能、`apps/mcp` はスケルトン)。
+
+## セットアップ
+
+```bash
+bun install     # 依存のインストール(Bun 1.3.14 — .bun-version 参照)
+bun run dev     # website の開発サーバー(localhost:3000)
+bun run build   # website のプロダクションビルド
+```
 
 ## ドキュメント
 

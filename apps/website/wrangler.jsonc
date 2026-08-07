@@ -1,0 +1,9 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "shio-website",
+  "compatibility_date": "2025-09-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "main": "@tanstack/react-start/server-entry",
+  // ISR 相当: Worker の前段キャッシュ(docs/architecture.md「配信キャッシュ」参照)
+  "cache": { "enabled": true }
+}

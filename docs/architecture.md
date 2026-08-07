@@ -30,7 +30,7 @@
 ### なぜ MCP か(検討した代替案)
 
 | 案 | 評価 |
-|---|---|
+| --- | --- |
 | **自作 MCP サーバー(採用)** | 更新体験がチャットそのもの。スキーマで守れる。既存スタック(Bun/Drizzle)と完全に一致。「LLMで更新できるポートフォリオ」自体が作品性を持つ |
 | Notion を CMS にして既存 Notion MCP で更新 | 実装ゼロで今日から使えるのが強み。ただしスキーマが緩く、サイト側が Notion API のレイテンシ・レート制限・仕様変更に依存する。つなぎとしてはアリ |
 | REST API + LLM に HTTP を叩かせる | MCP の下位互換。ツール定義の標準化・クライアント側サポートの恩恵がない |
@@ -43,7 +43,7 @@
 
 ## バリデーション(決定: Valibot)
 
-- MCP TypeScript SDK v2 はツールスキーマが **Standard Schema 対応**になり、Valibot を公式サポート。`@valibot/to-json-schema` の `toStandardJsonSchema` で包んで `inputSchema` に渡す: https://ts.sdk.modelcontextprotocol.io/v2/advanced/schema-libraries
+- MCP TypeScript SDK v2 はツールスキーマが **Standard Schema 対応**になり、Valibot を公式サポート。`@valibot/to-json-schema` の `toStandardJsonSchema` で包んで `inputSchema` に渡す: <https://ts.sdk.modelcontextprotocol.io/v2/advanced/schema-libraries>
 - SDK のデフォルト JSON Schema バリデータは workerd 上では `@cfworker/json-schema` が自動選択される(Workers が一級ランタイム)
 - Drizzle スキーマからの導出は `drizzle-valibot`。Better Auth も含め、リポジトリ内のバリデーションは Valibot に統一
 
@@ -51,7 +51,7 @@
 
 MCP SDK v2 も Better Auth(fetch ベース + WebCrypto)も workerd で動くため、コンテナは不要。**Docker / distroless イメージ / Elysia はスタックから外れる**。Bun は開発ランタイム・パッケージマネージャー・テストランナーとして残る(本番はすべて workerd)。
 
-経緯: 当初 Cloudflare Containers(`oven/bun` distroless)を検討したが、コンテナのディスクはエフェメラル(スリープ復帰・再デプロイでリセット)なのでコンテナ内 SQLite は不可と判明( https://developers.cloudflare.com/containers/faq/ )。DB を Turso に外出しした上で、MCP+認可も workerd で動くと確認できたため Workers に一本化した。
+経緯: 当初 Cloudflare Containers(`oven/bun` distroless)を検討したが、コンテナのディスクはエフェメラル(スリープ復帰・再デプロイでリセット)なのでコンテナ内 SQLite は不可と判明( <https://developers.cloudflare.com/containers/faq/> )。DB を Turso に外出しした上で、MCP+認可も workerd で動くと確認できたため Workers に一本化した。
 
 その上で、サイトと MCP+認可は **別 Worker として分離する**:
 
@@ -92,16 +92,16 @@ packages/
 
 ## 配信キャッシュ(ISR 相当)
 
-TanStack Start に Next.js 式の ISR 機構はないが、**Workers Cache** で同じ挙動を作る(公式ガイドも HTTP キャッシュ方式: https://tanstack.com/start/latest/docs/framework/react/guide/isr )。
+TanStack Start に Next.js 式の ISR 機構はないが、**Workers Cache** で同じ挙動を作る(公式ガイドも HTTP キャッシュ方式: <https://tanstack.com/start/latest/docs/framework/react/guide/isr> )。
 
-- 注意: Worker は CDN キャッシュの「前」で実行されるため、`Cache-Control` ヘッダーだけでは何もキャッシュされない(既知の罠: https://github.com/TanStack/router/issues/7527 )
+- 注意: Worker は CDN キャッシュの「前」で実行されるため、`Cache-Control` ヘッダーだけでは何もキャッシュされない(既知の罠: <https://github.com/TanStack/router/issues/7527> )
 - 解決: `wrangler.jsonc` に `"cache": { "enabled": true }` を設定して Worker の前にキャッシュ層を付け、ルートごとに `Cache-Control: public, s-maxage=…, stale-while-revalidate=…` を返す
 - ガード: デフォルトは `private, no-store` とし、キャッシュしたいルートだけ明示的に opt-in する(認証系ページの誤キャッシュを防ぐ)
 - **更新即時反映**: 書き込み口は MCP サーバーだけなので、MCP ツールの書き込み直後に該当 URL のキャッシュをパージする。TTL を長めにしてヒット率を稼ぎつつ、更新は数秒で反映される(時限式 ISR より良い性質)
 
 ## 認証(決定: パスキー)
 
-MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サーバーは OAuth 2.1 + PKCE が必須**。静的な Bearer トークンはローカル限定で、リモートでは非準拠。現行仕様: https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization
+MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サーバーは OAuth 2.1 + PKCE が必須**。静的な Bearer トークンはローカル限定で、リモートでは非準拠。現行仕様: <https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization>
 
 本人確認は **パスキー(WebAuthn)**。Google / GitHub 等の外部 IdP も使わない(Google Cloud Console などの GUI 作業が不要になる)。
 

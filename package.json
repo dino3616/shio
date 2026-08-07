@@ -1,0 +1,13 @@
+{
+  "name": "shio",
+  "private": true,
+  "type": "module",
+  "packageManager": "bun@1.3.14",
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "bun run --cwd apps/website dev",
+    "dev:mcp": "bun run --cwd apps/mcp dev",
+    "build": "bun run --cwd apps/website build",
+    "deploy": "bun run --cwd apps/website deploy && bun run --cwd apps/mcp deploy"
+  }
+}

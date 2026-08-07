@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+/*
+ * カラーパレット(docs/design-direction.md)
+ * ダーク6 : ネオン2 : パステル1 : アクセント1
+ */
+@theme {
+  --color-void: #0e0a14; /* ボイドブラック(ベース) */
+  --color-navy: #181c3f; /* ディープネイビー(ベース補助) */
+  --color-pink: #f2549e; /* ネオンピンク(メイン) */
+  --color-purple: #8b5cf6; /* エレクトリックパープル(メイン補助) */
+  --color-pale: #f2c4dc; /* ペールピンク(サブ) */
+  --color-ice: #a6d3ea; /* アイスブルー(サブ) */
+  --color-prism: #f2e85c; /* プリズムイエロー(アクセント) */
+  --color-star: #f7f2fa; /* 本文のオフホワイト */
+
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "Zen Kaku Gothic New", sans-serif;
+  --font-pixel: "DotGothic16", monospace;
+  --font-crt: "VT323", monospace;
+  --font-mono: "IBM Plex Mono", monospace;
+}
+
+body {
+  font-family: var(--font-body);
+}
