@@ -7,6 +7,7 @@ import { Contact } from "~/components/sections/contact";
 import { Logs } from "~/components/sections/logs";
 import { Playground } from "~/components/sections/playground";
 import { Works } from "~/components/sections/works";
+import { SpacePlankton } from "~/components/space-plankton";
 import { Starfield } from "~/components/starfield";
 
 const NAV_ITEMS = ["ABOUT", "WORKS", "PLAYGROUND", "LOGS", "CONTACT"];
@@ -169,6 +170,8 @@ const Home = () => (
       <Logs />
       <Contact />
     </div>
+    {/* 時々画面を横切っていく宇宙プランクトンの群れ */}
+    <SpacePlankton />
   </main>
 );
 
