@@ -39,7 +39,7 @@ export const Route = createRootRoute({
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DotGothic16&family=IBM+Plex+Mono:wght@400;500&family=VT323&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Noto+Sans+JP:wght@400;700;900&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=DotGothic16&family=IBM+Plex+Mono:wght@400;500&family=VT323&display=swap",
       },
     ],
   }),

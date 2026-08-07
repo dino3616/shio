@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring } from "motion/react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -84,7 +84,8 @@ const createCapillaries = (): Stroke[] => {
 
   for (let i = 0; i < 8; i++) {
     const baseAngle = (i / 8) * Math.PI * 2 + rand() * 0.5;
-    walk(baseAngle, 97, 62 + rand() * 8, 1 + rand() * 0.6, 0.16 + rand() * 0.16, 0);
+    // 開始点はクリップ円の外: 追従で動いても根元が縁から浮かない
+    walk(baseAngle, 112, 62 + rand() * 8, 1 + rand() * 0.6, 0.16 + rand() * 0.16, 0);
   }
   return strokes;
 };
@@ -183,6 +184,10 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
   const targetY = useMotionValue(0);
   const x = useSpring(targetX, { stiffness: 160, damping: 15, mass: 0.6 });
   const y = useSpring(targetY, { stiffness: 160, damping: 15, mass: 0.6 });
+  // 毛細血管は眼球表面にあるので虹彩と一緒に動く。
+  // ただし虹彩より赤道寄りにあるぶん見かけの移動量は小さい
+  const capillaryX = useTransform(x, (value) => value * 0.55);
+  const capillaryY = useTransform(y, (value) => value * 0.55);
 
   const maxOffset = 30;
 
@@ -296,8 +301,13 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
         {/* 白目 */}
         <circle cx="100" cy="100" r="98" fill="url(#eye-sclera)" />
 
-        {/* 毛細血管: ジグザグ+分岐(かわいくて、不穏) */}
-        <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+        {/* 毛細血管: ジグザグ+分岐(かわいくて、不穏)。眼球ごと回るので虹彩に追従 */}
+        <motion.g
+          style={{ x: capillaryX, y: capillaryY }}
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
           {CAPILLARIES.map((vessel) => (
             <path
               key={vessel.d}
@@ -307,7 +317,7 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
               opacity={vessel.opacity}
             />
           ))}
-        </g>
+        </motion.g>
 
         {/* 上まぶたの環境光遮蔽 */}
         <ellipse

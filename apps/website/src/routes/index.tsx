@@ -33,27 +33,22 @@ const Hero = () => (
     </nav>
 
     <div className="relative z-10 flex flex-1 items-center px-8 md:px-28">
-      <div>
-        <p className="font-mono text-pink flex items-center gap-4 text-sm tracking-[0.3em]">
-          <span className="bg-pink inline-block h-px w-10" />
-          ENGINEER / DESIGNER — SHIO.STUDIO
-        </p>
-        <h1 className="font-display mt-9 text-4xl font-black uppercase leading-[1.14] sm:text-5xl md:text-7xl">
-          <span className="from-star via-pale to-ice bg-gradient-to-r bg-clip-text text-transparent">
+      <div className="relative">
+        {/* テキスト背後の暗幕: マーブルをぼかして沈め、文字を浮かせる */}
+        <div
+          aria-hidden="true"
+          className="bg-void/45 absolute -inset-x-24 -inset-y-16 rounded-full blur-3xl"
+        />
+        <div className="relative">
+          <h1 className="font-name text-6xl font-black leading-[1.1] text-white sm:text-7xl md:text-8xl">
             Haruto
-          </span>
-          <br />
-          <span className="text-transparent" style={{ WebkitTextStroke: "2px #cbb8dc" }}>
+            <br />
             Shiohata
-          </span>
-        </h1>
-        <div className="mt-9 flex items-center gap-5">
-          <p className="font-pixel text-ice text-2xl tracking-[0.5em]">塩畑 晴人</p>
-          <span className="bg-ice/40 inline-block h-px w-16" />
+          </h1>
+          <p className="mt-8 text-xl font-medium tracking-[0.2em] text-white md:text-2xl">
+            矛盾ごと、かたちにする<span className="text-pink">。</span>
+          </p>
         </div>
-        <p className="text-pale mt-5 text-lg tracking-[0.25em]">
-          矛盾ごと、かたちにする<span className="text-pink">。</span>
-        </p>
       </div>
     </div>
 
