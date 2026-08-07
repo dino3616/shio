@@ -28,3 +28,4 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 ## 参照
 
 - ムードボード: [Figma](https://www.figma.com/design/sdp2RPY3x1ysSxQd6LtWra?node-id=158-17)(「ムードボード」セクション、image 1〜30)
+- デザインモック: [Figma「🛸 Website Mock」ページ](https://www.figma.com/design/sdp2RPY3x1ysSxQd6LtWra?node-id=226-3)(トップページ全5セクション)
