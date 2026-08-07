@@ -147,6 +147,6 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 - [ ] Works に載せる作品の追加(現状 Locker.ai の1件。Playground 行きの小ネタでも可)
 - [ ] 自分の写真 / アバターを使うか(エイリアンをアバター代わりにする案あり)
 - [ ] プレイリスト・メイク手順の初期データ
-- [ ] DB のホスティング(サーバー同居の SQLite ファイルか、Turso か)
-- [ ] アプリ全体のホスティング先(Bun が動く場所: Fly.io / Railway など)
+- [ ] DB のホスティング → **Turso が有力**。ホスティング先を Cloudflare Containers にする場合、コンテナのディスクはエフェメラル(スリープ復帰・再デプロイでリセット)なので、コンテナ内 SQLite ファイルは不可: https://developers.cloudflare.com/containers/faq/
+- [ ] アプリ全体のホスティング先 → **Cloudflare Containers + `oven/bun` distroless イメージが候補**。代替は Fly.io / Railway(永続ボリュームがあるので内蔵 SQLite も成立)。distroless はシェルなしのため Cloudflare の SSH デバッグは実質使えない点に注意
 - [ ] About の自己紹介文の確定(人格メモの候補をベースに)
