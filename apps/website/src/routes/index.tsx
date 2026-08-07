@@ -16,14 +16,26 @@ const Hero = () => (
     <FluidBackground />
     <Starfield sparkles={12} dust={60} />
 
-    <nav className="relative z-10 flex items-center justify-between px-8 py-8 md:px-20">
-      <span className="font-pixel text-pale text-xl">shio🧂</span>
+    <nav className="font-name relative z-10 flex items-center justify-between px-8 py-8 md:px-20">
+      {/* 旧サイト(shio-archive)と同じブランドロゴ */}
+      <a href="/" className="flex items-center gap-3 transition-opacity hover:opacity-70">
+        <img
+          src="/brand-icon.webp"
+          alt="shio のブランドアイコン"
+          width={32}
+          height={32}
+          className="h-8 w-8 rounded-full"
+        />
+        <p className="text-2xl font-bold text-white">
+          <span className="text-purple">shio</span>.studio
+        </p>
+      </a>
       <ul className="hidden gap-9 md:flex">
         {NAV_ITEMS.map((item) => (
           <li key={item}>
             <a
               href={`#${item.toLowerCase()}`}
-              className="font-mono text-ice hover:text-pink text-sm tracking-[0.2em] transition-colors"
+              className="text-sm tracking-[0.2em] text-white/60 transition-colors hover:text-white"
             >
               {item}
             </a>
