@@ -31,12 +31,17 @@ type PlanktonSpec = {
   blur: number;
 };
 
+/** 回遊イベントの舞台(スポーン時のビューポートをドキュメント座標で切り取った矩形) */
+type Region = { left: number; right: number; top: number; bottom: number };
+
 type Agent = {
   spec: PlanktonSpec;
+  /** ドキュメント座標。スクロールしても画面に追従せず、ページに留まる */
   pos: Vec;
   vel: Vec;
   /** 回遊の目標方向(単位ベクトル)。群れ全体をゆるく出口へ導く */
   migration: Vec;
+  region: Region;
   phase: number;
   spawnedAt: number;
 };
@@ -225,22 +230,24 @@ const rotate = (v: Vec, angle: number): Vec => ({
   y: v.x * Math.sin(angle) + v.y * Math.cos(angle),
 });
 
-/** 画面内の origin から direction 方向に進んで画面境界に達するまでの距離 */
-const distanceToEdge = (origin: Vec, direction: Vec, vw: number, vh: number): number => {
+/** region 内の origin から direction 方向に進んで region の境界に達するまでの距離 */
+const distanceToEdge = (origin: Vec, direction: Vec, region: Region): number => {
   let t = Number.POSITIVE_INFINITY;
   if (direction.x > 1e-6) {
-    t = Math.min(t, (vw - origin.x) / direction.x);
+    t = Math.min(t, (region.right - origin.x) / direction.x);
   }
   if (direction.x < -1e-6) {
-    t = Math.min(t, -origin.x / direction.x);
+    t = Math.min(t, (region.left - origin.x) / direction.x);
   }
   if (direction.y > 1e-6) {
-    t = Math.min(t, (vh - origin.y) / direction.y);
+    t = Math.min(t, (region.bottom - origin.y) / direction.y);
   }
   if (direction.y < -1e-6) {
-    t = Math.min(t, -origin.y / direction.y);
+    t = Math.min(t, (region.top - origin.y) / direction.y);
   }
-  return Number.isFinite(t) ? t : Math.hypot(vw, vh);
+  return Number.isFinite(t)
+    ? t
+    : Math.hypot(region.right - region.left, region.bottom - region.top);
 };
 
 export const SpacePlankton = () => {
@@ -283,7 +290,7 @@ export const SpacePlankton = () => {
       timers.add(timer);
     };
 
-    const spawn = (pos: Vec, vel: Vec, migration: Vec) => {
+    const spawn = (pos: Vec, vel: Vec, migration: Vec, region: Region) => {
       const spec: PlanktonSpec = {
         id: nextId++,
         seed: Math.floor(Math.random() * 2 ** 31),
@@ -297,6 +304,7 @@ export const SpacePlankton = () => {
         pos,
         vel,
         migration,
+        region,
         phase: Math.random() * Math.PI * 2,
         spawnedAt: performance.now(),
       });
@@ -304,18 +312,23 @@ export const SpacePlankton = () => {
     };
 
     /**
-     * 目標地点に incoming 方向で入ってくるよう、上流の画面外に配置してスポーンする。
+     * 目標地点に incoming 方向で入ってくるよう、region の外側に配置してスポーンする。
      * 方向は自由(全方位)で、入場位置は目標から逆算する
      */
-    const spawnToward = (target: Vec, incoming: Vec, speed: number, migration: Vec) => {
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
+    const spawnToward = (
+      target: Vec,
+      incoming: Vec,
+      speed: number,
+      migration: Vec,
+      region: Region,
+    ) => {
       const back = { x: -incoming.x, y: -incoming.y };
-      const entryDistance = distanceToEdge(target, back, vw, vh) + SPAWN_MARGIN;
+      const entryDistance = distanceToEdge(target, back, region) + SPAWN_MARGIN;
       spawn(
         { x: target.x - incoming.x * entryDistance, y: target.y - incoming.y * entryDistance },
         { x: incoming.x * speed, y: incoming.y * speed },
         migration,
+        region,
       );
     };
 
@@ -324,18 +337,30 @@ export const SpacePlankton = () => {
     // 回遊方向は毎回ランダム(横断・縦断・斜めのどれもあり得る)
     const spawnMigration = () => {
       // 非表示タブでは rAF(移動・退場)が止まる一方タイマーは動き続けるので、
-      // スポーンを見送らないと復帰時に画面が群れで溢れる
-      if (document.hidden) {
+      // スポーンを見送らないと復帰時に画面が群れで溢れる。
+      // rAF だけ止まる環境(スロットリング)もあるため総数の上限でも守る
+      if (document.hidden || agentsRef.current.length > 10) {
         later(spawnMigration, 15000);
         return;
       }
       const vw = window.innerWidth;
       const vh = window.innerHeight;
+      // 舞台はスポーン時点のビューポート(ドキュメント座標)。スクロールしても
+      // 群れはこの矩形の中〜周辺に留まり、画面には追従しない
+      const region: Region = {
+        left: 0,
+        right: vw,
+        top: window.scrollY,
+        bottom: window.scrollY + vh,
+      };
       const angle = Math.random() * Math.PI * 2;
       const migration = { x: Math.cos(angle), y: Math.sin(angle) };
       const perpendicular = { x: -migration.y, y: migration.x };
-      // レーンの基準点: 画面中央寄りを通るようにして必ず視界を横切らせる
-      const anchor = { x: vw * (0.3 + Math.random() * 0.4), y: vh * (0.3 + Math.random() * 0.4) };
+      // レーンの基準点: 舞台の中央寄りを通るようにして必ず視界を横切らせる
+      const anchor = {
+        x: vw * (0.3 + Math.random() * 0.4),
+        y: region.top + vh * (0.3 + Math.random() * 0.4),
+      };
 
       // 群れ本体: 3〜4体が数秒差で同じレーンに入ってくる
       const schoolCount = 3 + Math.floor(Math.random() * 2);
@@ -349,6 +374,7 @@ export const SpacePlankton = () => {
               jitter,
               40 + Math.random() * 20,
               migration,
+              region,
             );
           },
           i * (1300 + Math.random() * 1700),
@@ -369,6 +395,7 @@ export const SpacePlankton = () => {
               incoming,
               34 + Math.random() * 16,
               migration,
+              region,
             );
           },
           3500 + Math.random() * 8000 + i * 4000,
@@ -385,8 +412,6 @@ export const SpacePlankton = () => {
     const step = (now: number) => {
       const dt = Math.min((now - lastTime) / 1000, 0.05);
       lastTime = now;
-      const vw = window.innerWidth;
-      const vh = window.innerHeight;
       const t = now / 1000;
       const agents = agentsRef.current;
       const removed: number[] = [];
@@ -461,11 +486,12 @@ export const SpacePlankton = () => {
           const half = agent.spec.size / 2;
           const rotate = Math.sin(t * 0.9 + agent.phase) * 10;
           nodes.root.style.transform = `translate(${(agent.pos.x - half).toFixed(1)}px, ${(agent.pos.y - half).toFixed(1)}px) rotate(${rotate.toFixed(1)}deg)`;
-          // 瞳: 常にカーソルの方を見る(座標が来るまでは中央)
+          // 瞳: 常にカーソルの方を見る(座標が来るまでは中央)。
+          // カーソルはビューポート座標なのでスクロール量を足してドキュメント座標に直す
           const pointer = pointerRef.current;
           if (pointer !== null) {
             const dx = pointer.x - agent.pos.x;
-            const dy = pointer.y - agent.pos.y;
+            const dy = pointer.y + window.scrollY - agent.pos.y;
             const distance = Math.hypot(dx, dy);
             const offset = Math.min(distance / 40, 4.5);
             const direction = normalize(dx, dy);
@@ -473,13 +499,13 @@ export const SpacePlankton = () => {
           }
         }
 
-        // 画面外に十分出た個体は退場
+        // 舞台(スポーン時のビューポート矩形)から十分出た個体は退場
         const age = now - agent.spawnedAt;
         const out =
-          agent.pos.x < -REMOVE_MARGIN ||
-          agent.pos.x > vw + REMOVE_MARGIN ||
-          agent.pos.y < -REMOVE_MARGIN ||
-          agent.pos.y > vh + REMOVE_MARGIN;
+          agent.pos.x < agent.region.left - REMOVE_MARGIN ||
+          agent.pos.x > agent.region.right + REMOVE_MARGIN ||
+          agent.pos.y < agent.region.top - REMOVE_MARGIN ||
+          agent.pos.y > agent.region.bottom + REMOVE_MARGIN;
         // 2分居座っている個体はどこにいても退場させる(タブ非表示中の滞留対策)
         if ((age > 12000 && out) || age > 120000) {
           removed.push(agent.spec.id);
@@ -506,7 +532,8 @@ export const SpacePlankton = () => {
   }, []);
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-[5] overflow-hidden" aria-hidden="true">
+    // ドキュメント全体を覆う絶対配置(fixed だとスクロールに追従してしまう)
+    <div className="pointer-events-none absolute inset-0 z-[5] overflow-hidden" aria-hidden="true">
       {specs.map((spec) => (
         <Plankton key={spec.id} spec={spec} register={register} />
       ))}

@@ -15,56 +15,17 @@ const GRAIN_SVG = encodeURIComponent(
 type Tile = {
   label: string;
   height: string;
-  background: string;
-  dark: boolean;
   tilt: number;
   live?: boolean;
 };
 
 const TILES: Tile[] = [
-  {
-    label: "シェーダー遊び",
-    height: "h-60",
-    background: "linear-gradient(150deg, #8b5cf6, #4c2e8f)",
-    dark: true,
-    tilt: -1.2,
-    live: true,
-  },
-  {
-    label: "落書き",
-    height: "h-40",
-    background: "linear-gradient(150deg, #f7d3e4, #f2c4dc)",
-    dark: false,
-    tilt: 1,
-  },
-  {
-    label: "作曲メモ",
-    height: "h-36",
-    background: "linear-gradient(150deg, #f2549e, #b23a77)",
-    dark: true,
-    tilt: 1.6,
-  },
-  {
-    label: "3D実験",
-    height: "h-64",
-    background: "linear-gradient(150deg, #222850, #181c3f)",
-    dark: true,
-    tilt: -1,
-  },
-  {
-    label: "ボツ案供養",
-    height: "h-52",
-    background: "linear-gradient(150deg, #bfe0f0, #a6d3ea)",
-    dark: false,
-    tilt: 1.4,
-  },
-  {
-    label: "???",
-    height: "h-48",
-    background: "linear-gradient(150deg, #16101f, #0e0a14)",
-    dark: true,
-    tilt: -1.8,
-  },
+  { label: "シェーダー遊び", height: "h-60", tilt: -1.2, live: true },
+  { label: "落書き", height: "h-40", tilt: 1 },
+  { label: "作曲メモ", height: "h-36", tilt: 1.6 },
+  { label: "3D実験", height: "h-64", tilt: -1 },
+  { label: "ボツ案供養", height: "h-52", tilt: 1.4 },
+  { label: "???", height: "h-48", tilt: -1.8 },
 ];
 
 export const Playground = () => (
@@ -75,12 +36,15 @@ export const Playground = () => (
         {TILES.map((tile) => (
           <div
             key={tile.label}
-            className={`${tile.height} relative mb-5 overflow-hidden break-inside-avoid rounded-2xl p-5 transition-transform duration-300 hover:scale-[1.03] hover:rotate-0`}
+            className={`${tile.height} relative mb-5 overflow-hidden break-inside-avoid rounded-2xl p-5 transition-transform duration-300 hover:scale-[1.03] hover:rotate-0 ${
+              tile.live === true ? "" : "border border-white/10 bg-white/[0.04] backdrop-blur-md"
+            }`}
             style={{
-              background: tile.background,
               rotate: `${tile.tilt}deg`,
               boxShadow:
-                "inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 8px 30px rgba(0, 0, 0, 0.35)",
+                tile.live === true
+                  ? "inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 8px 30px rgba(0, 0, 0, 0.35)"
+                  : "inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 8px 30px rgba(0, 0, 0, 0.25)",
             }}
           >
             {/* ライブタイル: Hero と同じ流体シェーダーが小窓の中で動く */}
@@ -93,10 +57,7 @@ export const Playground = () => (
                 backgroundSize: "140px 140px",
               }}
             />
-            <span
-              className="font-pixel relative text-sm"
-              style={{ color: tile.dark ? "#f7f2fa" : "#0e0a14" }}
-            >
+            <span className="font-pixel text-star/80 relative text-sm">
               {tile.label}
               {tile.live === true && <span className="text-prism ml-2 animate-pulse">●</span>}
             </span>
