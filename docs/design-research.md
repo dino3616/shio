@@ -23,59 +23,59 @@
 
 ### A. 壊れたレトロテック軸
 
-**Henry Heffernan — henryheffernan.com**
+**Henry Heffernan — [henryheffernan.com](https://henryheffernan.com/)**([ソース](https://github.com/henryjeff/portfolio-website))
 90年代のデスクを丸ごと3D化し、CRTモニタの中に本物の2D OS(別リポジトリ)が動くポートフォリオ。走査線・色収差・画面の湾曲をカスタムシェーダーで再現。「サイトそのものが技術力の証明」の最高峰で、うちの「ブラウン管=額縁」「エンジニア×デザイナーの証明」の直系の先行例。ソースは公開(MIT)。
 学ぶ点: CRTシェーダーの層構成(走査線+蛍光体ドット+RGBずれ+バレル歪み)。注意点: フル3D没入は重く、閲覧ハードルが上がる(HNでも「素の閲覧手段が欲しい」の声)。
 
-**Windows93 — windows93.net**
+**Windows93 — [windows93.net](https://windows93.net/)**
 Web OSパロディの古典(2014〜)。ミーム・シュール・カウンターカルチャーを「機能するOS」として提示。かわいくはないが、「壊れたテクノロジーを遊び場にする」精神の源流。
 学ぶ点: 装飾ではなく「動くおもちゃ」を置くことで滞在が体験になる。
 
-**ZezinOS — zezinos.site**
+**ZezinOS — [zezinos.site](https://zezinos.site/)**([ソース](https://github.com/jm-works/ZezinOS))
 ブラウザOS型ポートフォリオの最近の例(2026)。ブートスクリーン、ドラッグできるウィンドウ、ターミナル、ペイント、CRTオーバーレイ。フレームワークなしの手作り。「OSの中に実績が埋まっている」構成はやりすぎると情報探索が苦行になる、という反面教師でもある。
 
-**Cameron's World — cameronsworld.net**
+**Cameron's World — [cameronsworld.net](https://www.cameronsworld.net/)**
 GeoCities遺跡から700個以上のGIFを発掘して組んだウェブコラージュ(2015)。「洗練より熱量」「常に工事中であることの美学」の記念碑。うちのPlaygroundセクションとムードボード的コラージュAboutの参照元として最適。
 学ぶ点: コラージュはテーマ別の「列」に整理されているから見られる。無秩序に見えて情報設計がある。
 
 **Neocities / SpaceHey の weirdcore 個人サイト文化**
-例: jackkael.neocities.org、nochuli.neocities.org など。目玉・リミナル・低解像度テクスチャ・キラキラGIF。Z世代が「企業の店先ではなく個人の銀河」として個人サイトを再発明している現場で、うちの「仕事以外も含めて自分を伝える」という動機そのものが、このシーンの動機と同じ。
+例: [jackkael.neocities.org](https://jackkael.neocities.org/)、[nochuli.neocities.org](https://nochuli.neocities.org/) など。目玉・リミナル・低解像度テクスチャ・キラキラGIF。Z世代が「企業の店先ではなく個人の銀河」として個人サイトを再発明している現場で、うちの「仕事以外も含めて自分を伝える」という動機そのものが、このシーンの動機と同じ。
 学ぶ点: interests の羅列、更新履歴(changelog)、キリ番的な遊びなど「人柄の伝え方」の語彙。注意点: 仕事用に耐える情報設計・可読性はほぼ皆無なので、そのまま真似ない。
 
 ### B. 世界内ナビゲーション・遊び軸
 
-**Bruno Simon — bruno-simon.com**
+**Bruno Simon — [bruno-simon.com](https://bruno-simon.com/)**([ソース](https://github.com/brunosimon/folio-2025))
 車を運転して世界を巡るポートフォリオ(Awwwards SOTM)。「遊びすぎて時間を溶かすサイトこそ最良」という制作哲学。物理演算+音楽+隠し要素。
 学ぶ点: 遊び=ナビゲーションにすると体験と実績紹介が一体化する。うちの規模ではフル3Dワールドは過剰だが、「隠し要素」「触って気持ちいい物理」は借りられる。
 
-**Jesse Zhou — jesse-zhou.com**
+**Jesse Zhou — [jesse-zhou.com](https://www.jesse-zhou.com/)**([制作記](https://jesse-zhou.medium.com/jesses-ramen-case-study-77bae77ab5f0))
 サイバーパンクなラーメン屋の中を探索するポートフォリオ。「媒体そのものがメッセージ」の好例で、一貫した世界観(照明・質感・音)がテイストの証明になる。
 学ぶ点: コンセプトの一貫性。うちなら「宇宙×目玉×レトロテック」の世界を1つ作り、その中に Works が「ブラウン管」として置いてある、という絵が描ける。
 
-**Poolsuite FM — poolsuite.net**
+**Poolsuite FM — [poolsuite.net](https://poolsuite.net/)**
 レトロMac風UIの音楽プレイヤーサイト。ポートフォリオではないが、「音楽×レトロUI×バイブス全振り」で世界中に愛される個人プロジェクトの代表。うちの「音楽」モチーフと「いま聴いてる曲」ウィジェットの参照元。
 
 ### C. かわいくて、不穏軸
 
-**蚕ちゃん — dark-side.info**
+**蚕ちゃん — [dark-side.info](https://www.dark-side.info/)**
 病みかわいい・地雷系のイラストレーターの実例サイト。ピンク×黒の世界観をプロフィールとイラストで見せる。ただし**サイト自体は既製テンプレート(Wix)で、世界観はイラスト頼み**。
 重要な発見: 病みかわ・地雷系シーンの作家サイトを探すと、多くがテンプレサイトかSNSリンク集で、**「サイトのデザインとインタラクション自体が病みかわを体現している」例はほぼ見つからない**。ここが空白地帯。
 
-**Huluween: The Screamlands(Awwwards SOTD 2020)ほかホラー演出系**
+**[Huluween: The Screamlands](https://www.awwwards.com/sites/huluween-the-screamlands)(Awwwards SOTD 2020)ほかホラー演出系**
 ホラーテーマでも Usability 30% の審査を通る作りが評価されている。最近の horror 系ポートフォリオの良例は「エフェクトは `prefers-reduced-motion` を尊重」「ジャンプスケアはトグル可能」「音はデフォルトOFF」を明記している。
 学ぶ点: 「不穏」はユーザーの同意の上で出す。うちの盛りすぎ注意ルールと同じ思想が受賞レベルでも通用している。
 
 **目玉カーソル追従の実例**
-nooneswatching.me(目が訪問者を見続けるだけのサイト)、Creative-Eyes-Hero(Three.js製の視線追従+ジッター物理+プロシージャルな虹彩のReactコンポーネント)など、実装素材は豊富。atan2ベースの2D実装なら自作も数十行。
+[nooneswatching.me](https://www.nooneswatching.me/)(目が訪問者を見続けるだけのサイト)、[Creative-Eyes-Hero](https://github.com/dhileepkumargm/Creative-Eyes-Hero---React-Component)(Three.js製の視線追従+ジッター物理+プロシージャルな虹彩のReactコンポーネント)など、実装素材は豊富。atan2ベースの2D実装なら自作も数十行。
 学ぶ点: 瞳のマイクロサッカード(微細な揺れ)や瞳孔の開閉を入れると「生きている」感が出る — 不穏さの演出として有効。
 
 ### D. 継続リサーチ源(ギャラリー)
 
-- **Recent(旧 godly)— godly.website**: dark / interactive / unusual layout のフィルタで実験系を掘れる
-- **Brutalist Websites — brutalistwebsites.com**: 反洗練・生々しい系。ポートフォリオ多数
-- **SpaceHey Layouts**: dreamcore/weirdcore タグで Z 世代の美学の語彙を観察できる
-- **Neocities 探索**: weirdcore / webcore タグ。美学の一次資料
-- **One Terabyte of Kilobyte Age**: GeoCities スクリーンショットの Tumblr アーカイブ(Cameron's World の元ネタ)
+- **Recent(旧 godly)— [godly.website](https://godly.website/)**: dark / interactive / unusual layout のフィルタで実験系を掘れる
+- **Brutalist Websites — [brutalistwebsites.com](https://brutalistwebsites.com/)**: 反洗練・生々しい系。ポートフォリオ多数
+- **[SpaceHey Layouts](https://layouts.spacehey.com/)**: dreamcore/weirdcore タグで Z 世代の美学の語彙を観察できる
+- **[Neocities](https://neocities.org/browse) 探索**: weirdcore / webcore タグ。美学の一次資料
+- **[One Terabyte of Kilobyte Age](https://oneterabyteofkilobyteage.tumblr.com/)**: GeoCities スクリーンショットの Tumblr アーカイブ(Cameron's World の元ネタ)
 
 ## 統合分析
 
