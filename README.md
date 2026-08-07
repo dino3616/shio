@@ -19,6 +19,7 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 | ランタイム | 開発 = **Bun** / 本番 = **workerd**(Cloudflare Workers) | Node 非依存 |
 | ツールチェーン | **Vite+**(`vp` CLI) | ビルド・テスト・リントを統合した Vite ベースのツールチェーン |
 | フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング(website Worker) |
+| スタイリング | **Tailwind CSS** + **Motion** | 21st.dev 等の shadcn 形式レジストリと互換にするため。詳細は `docs/design-direction.md` の制作フロー |
 | バリデーション | **Valibot** | MCP SDK v2 の Standard Schema 対応で公式サポート。`drizzle-valibot` で DB スキーマと共有 |
 | DB / ORM | **Drizzle ORM + Turso**(libSQL) | 更新頻度の高いコンテンツの置き場(下記) |
 | コンテンツ更新 | **自作 MCP サーバー**(`@modelcontextprotocol/server`) | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
