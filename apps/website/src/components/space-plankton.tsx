@@ -144,7 +144,14 @@ const Plankton = ({
         transform: `translate(${-spec.size}px, ${-spec.size}px)`,
       }}
     >
-      <svg viewBox="0 0 200 200" width="100%" height="100%" role="presentation">
+      {/* モーフのピークで輪郭が viewBox を超えることがあるのでクリップしない */}
+      <svg
+        viewBox="0 0 200 200"
+        width="100%"
+        height="100%"
+        className="overflow-visible"
+        role="presentation"
+      >
         <defs>
           {/* 中腹が明るいリング状のグラデーションで img26 の同心円マーブルを再現 */}
           <radialGradient id={gradientId("outer")} cx="50%" cy="50%" r="50%">
