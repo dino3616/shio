@@ -21,6 +21,7 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 | サーバー | Elysia.js | 必要になったら導入(Bun ネイティブ) |
 | DB / ORM | Drizzle ORM + SQLite(libSQL/Turso 想定) | 更新頻度の高いコンテンツの置き場(下記) |
 | コンテンツ更新 | **自作 MCP サーバー** | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
+| 認証 | **Better Auth**(passkey + MCP プラグイン) | パスキーのみ。パスワードも外部 IdP も持たない |
 
 ## 参照
 
