@@ -37,16 +37,95 @@ const Hero = () => (
         {/* テキスト背後の暗幕: マーブルをぼかして沈め、文字を浮かせる */}
         <div
           aria-hidden="true"
-          className="bg-void/45 absolute -inset-x-24 -inset-y-16 rounded-full blur-3xl"
+          className="bg-void/25 absolute -inset-x-24 -inset-y-16 rounded-full blur-3xl"
         />
         <div className="relative">
-          <h1 className="font-name text-6xl font-black leading-[1.1] text-white sm:text-7xl md:text-8xl">
-            Haruto
-            <br />
-            Shiohata
-          </h1>
-          <p className="mt-8 text-xl font-medium tracking-[0.2em] text-white md:text-2xl">
-            矛盾ごと、かたちにする<span className="text-pink">。</span>
+          <h1 className="sr-only">Haruto Shiohata</h1>
+          {/*
+           * フロストガラスの名前: SVG clipPath の文字形状で backdrop-filter を
+           * 切り抜き、グリフの中に「ぼかされた背景」が透ける
+           */}
+          <div
+            aria-hidden="true"
+            className="relative h-[250px] w-[560px] origin-left scale-[0.6] sm:scale-75 md:scale-100"
+          >
+            {/* ガラスに映り込む光源: 背後の淡いネビュラ発光 */}
+            <div
+              className="absolute -inset-x-16 -inset-y-10 blur-2xl"
+              style={{
+                background:
+                  "radial-gradient(ellipse 55% 60% at 30% 30%, rgba(242, 84, 158, 0.34), transparent 70%), radial-gradient(ellipse 55% 60% at 72% 72%, rgba(139, 92, 246, 0.32), transparent 70%), radial-gradient(ellipse 40% 45% at 55% 20%, rgba(166, 211, 234, 0.16), transparent 70%)",
+              }}
+            />
+            <svg width="0" height="0" className="absolute" aria-hidden="true">
+              <defs>
+                <clipPath id="hero-name-clip">
+                  <text
+                    x="0"
+                    y="96"
+                    fontFamily="'Noto Sans JP', sans-serif"
+                    fontWeight="900"
+                    fontSize="96"
+                  >
+                    Haruto
+                  </text>
+                  <text
+                    x="0"
+                    y="212"
+                    fontFamily="'Noto Sans JP', sans-serif"
+                    fontWeight="900"
+                    fontSize="96"
+                  >
+                    Shiohata
+                  </text>
+                </clipPath>
+              </defs>
+            </svg>
+            {/* 文字形に切り抜かれたすりガラス層(斜めのシャイン入り) */}
+            <div
+              className="absolute inset-0 backdrop-blur-lg"
+              style={{
+                clipPath: "url(#hero-name-clip)",
+                background:
+                  "linear-gradient(115deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.14) 34%, rgba(255, 255, 255, 0.52) 46%, rgba(255, 255, 255, 0.1) 56%, rgba(255, 255, 255, 0.08) 78%, rgba(255, 255, 255, 0.24) 100%)",
+              }}
+            />
+            {/* エッジの輪郭線: ガラスの縁の光 */}
+            <svg
+              viewBox="0 0 560 250"
+              width="560"
+              height="250"
+              className="absolute inset-0"
+              role="presentation"
+            >
+              <text
+                x="0"
+                y="96"
+                fontFamily="'Noto Sans JP', sans-serif"
+                fontWeight="900"
+                fontSize="96"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.75)"
+                strokeWidth="1.4"
+              >
+                Haruto
+              </text>
+              <text
+                x="0"
+                y="212"
+                fontFamily="'Noto Sans JP', sans-serif"
+                fontWeight="900"
+                fontSize="96"
+                fill="none"
+                stroke="rgba(255, 255, 255, 0.75)"
+                strokeWidth="1.4"
+              >
+                Shiohata
+              </text>
+            </svg>
+          </div>
+          <p className="font-brush mt-6 text-2xl tracking-[0.15em] text-white md:text-3xl">
+            矛盾ごと、かたちにする。
           </p>
         </div>
       </div>
