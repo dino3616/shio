@@ -134,11 +134,12 @@ const buildStars = (stars: number, crosses: number): StarBuffers => {
     b.twinkle.push((0.3 + Math.random() * 1.4) / (1 + size * 0.08));
     b.color.push(...color);
     b.kind.push(kind);
+    // リサージュドリフト: 角速度は 0.05〜0.2Hz(旧Canvas版と同じ体感速度)
     b.drift.push(
-      2 + Math.random() * 7,
-      2 + Math.random() * 6,
-      0.05 + Math.random() * 0.25,
-      0.05 + Math.random() * 0.25,
+      4 + Math.random() * 12,
+      4 + Math.random() * 10,
+      (0.05 + Math.random() * 0.15) * Math.PI * 2,
+      (0.05 + Math.random() * 0.15) * Math.PI * 2,
     );
   };
 
@@ -249,17 +250,6 @@ export const Starfield = ({ stars = 240, crosses = 2 }: { stars?: number; crosse
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // 視差: マウス(±8px)+スクロール(0.05倍)を深度1の星に与える
-    let mouseX = 0;
-    let mouseY = 0;
-    const handlePointerMove = (event: PointerEvent) => {
-      mouseX = (event.clientX / window.innerWidth - 0.5) * 2;
-      mouseY = (event.clientY / window.innerHeight - 0.5) * 2;
-    };
-    if (!reducedMotion) {
-      window.addEventListener("pointermove", handlePointerMove);
-    }
-
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio, 2);
       const width = Math.floor(canvas.clientWidth * dpr);
@@ -277,8 +267,9 @@ export const Starfield = ({ stars = 240, crosses = 2 }: { stars?: number; crosse
     const render = () => {
       const dpr = resize();
       const t = reducedMotion ? 0 : (performance.now() - startedAt) / 1000;
-      const parallaxX = mouseX * -8;
-      const parallaxY = mouseY * -8 - window.scrollY * 0.05;
+      // 視差はスクロールのみ(深度1の星ほど大きくずれる)
+      const parallaxX = 0;
+      const parallaxY = -window.scrollY * 0.05;
 
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
@@ -304,7 +295,6 @@ export const Starfield = ({ stars = 240, crosses = 2 }: { stars?: number; crosse
     return () => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", handleResize);
-      window.removeEventListener("pointermove", handlePointerMove);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [stars, crosses]);
