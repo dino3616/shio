@@ -16,9 +16,11 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 | 項目 | 選定 | 備考 |
 |---|---|---|
 | ランタイム | **Bun** | Node 非依存で統一する |
-| フレームワーク | **TanStack Start**(Vite ベース) | SSR + ファイルベースルーティング |
+| ツールチェーン | **Vite+**(`vp` CLI) | ビルド・テスト・リントを統合した Vite ベースのツールチェーン |
+| フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング |
 | サーバー | Elysia.js | 必要になったら導入(Bun ネイティブ) |
-| DB / ORM | Drizzle ORM | 必要になったら導入 |
+| DB / ORM | Drizzle ORM + SQLite(libSQL/Turso 想定) | 更新頻度の高いコンテンツの置き場(下記) |
+| コンテンツ更新 | **自作 MCP サーバー** | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
 
 ## 参照
 
