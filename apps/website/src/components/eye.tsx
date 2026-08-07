@@ -195,6 +195,14 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
   // 角膜反射は光源の像なので、眼球が回ってもほぼその場に留まる
   const glintX = useTransform(x, (value) => value * 0.15);
   const glintY = useTransform(y, (value) => value * 0.15);
+  // 瞳孔径: カーソルが近づくほど開く(散瞳=興味の反応)。
+  // 対光反射より遅いので、視線よりゆるいバネで追従させる
+  const targetPupilScale = useMotionValue(1);
+  const pupilScale = useSpring(targetPupilScale, {
+    stiffness: 90,
+    damping: 18,
+    mass: 0.8,
+  });
 
   const maxOffset = 30;
 
@@ -210,19 +218,25 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       const dx = event.clientX - centerX;
       const dy = event.clientY - centerY;
       const angle = Math.atan2(dy, dx);
-      const distance = Math.min(Math.hypot(dx, dy) / 6, maxOffset);
+      const rawDistance = Math.hypot(dx, dy);
+      const distance = Math.min(rawDistance / 6, maxOffset);
       targetX.set(Math.cos(angle) * distance);
       targetY.set(Math.sin(angle) * distance);
+      // 散瞳: 近いほど開く(0px→1.35倍、800px以上→0.82倍)
+      const proximity = 1 - Math.min(rawDistance / 800, 1);
+      targetPupilScale.set(0.82 + proximity * 0.53);
     };
     window.addEventListener("pointermove", handlePointerMove);
 
-    // マイクロサッカード: 視線がわずかに泳ぐ
+    // マイクロサッカード: 視線がわずかに泳ぐ。
+    // ついでに瞳孔ヒップス(瞳孔径の不随意な微振動)も入れる
     let saccadeTimer = 0;
     const scheduleSaccade = () => {
       saccadeTimer = window.setTimeout(
         () => {
           targetX.set(targetX.get() + (Math.random() - 0.5) * 6);
           targetY.set(targetY.get() + (Math.random() - 0.5) * 6);
+          targetPupilScale.set(targetPupilScale.get() + (Math.random() - 0.5) * 0.07);
           scheduleSaccade();
         },
         800 + Math.random() * 1200,
@@ -251,7 +265,7 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       window.clearTimeout(saccadeTimer);
       window.clearTimeout(blinkTimer);
     };
-  }, [targetX, targetY]);
+  }, [targetX, targetY, targetPupilScale]);
 
   return (
     <div
@@ -369,8 +383,17 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
               />
             ))}
           </g>
-          {/* 瞳孔まわり: 球面の最前面なので追加のパララックスで視線方向に寄る */}
-          <motion.g style={{ x: pupilX, y: pupilY }}>
+          {/* 瞳孔まわり: 球面の最前面なので追加のパララックスで視線方向に寄る。
+              カーソル距離で開閉(散瞳/縮瞳) */}
+          <motion.g
+            style={{
+              x: pupilX,
+              y: pupilY,
+              scale: pupilScale,
+              transformBox: "fill-box",
+              transformOrigin: "center",
+            }}
+          >
             {/* コラレット: 瞳孔周りの波状リング */}
             <path
               d={COLLARETTE_PATH}
