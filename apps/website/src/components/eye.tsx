@@ -269,6 +269,17 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
     };
     window.addEventListener("pointermove", handlePointerMove);
 
+    // リロード直後はカーソルが動くまで pointermove が発火しない。
+    // Chromium は静止カーソルの下に要素が描画された時点で pointerover を
+    // 発火するので、それを初期視線に使う(最初は中央→すぐカーソルを向く)
+    const handlePointerOver = (event: PointerEvent) => {
+      if (lastPointer === null) {
+        lastPointer = { x: event.clientX, y: event.clientY };
+        updateGaze(event.clientX, event.clientY);
+      }
+    };
+    window.addEventListener("pointerover", handlePointerOver);
+
     const handleScroll = () => {
       if (lastPointer !== null) {
         updateGaze(lastPointer.x, lastPointer.y);
@@ -311,6 +322,7 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerover", handlePointerOver);
       window.removeEventListener("scroll", handleScroll);
       window.clearTimeout(saccadeTimer);
       window.clearTimeout(blinkTimer);

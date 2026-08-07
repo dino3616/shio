@@ -92,7 +92,7 @@ const CROSS_COLORS: [number, number, number][] = [
   [0.65, 0.83, 0.92], // アイスブルー
 ];
 
-// 配置を焼き込むためのシード。?star-seed=N で一時的に差し替えて探索できる
+// 焼き込まれた星配置のシード
 const DEFAULT_STAR_SEED = 119;
 
 // mulberry32: シード付き擬似乱数。Math.random と違い同じシードなら同じ星空を再現する
@@ -239,10 +239,7 @@ export const Starfield = ({
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
 
-    // ?star-seed=N でシードを一時上書きして好みの配置を探索できる
-    const seedParam = new URLSearchParams(window.location.search).get("star-seed");
-    const effectiveSeed = seedParam !== null && seedParam !== "" ? Number(seedParam) : seed;
-    const data = buildStars(stars, crosses, effectiveSeed);
+    const data = buildStars(stars, crosses, seed);
     const starCount = data.size.length;
 
     const bindAttribute = (name: string, values: number[], size: number) => {
