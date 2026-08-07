@@ -239,7 +239,7 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       }
     }, 60);
 
-    const handlePointerMove = (event: PointerEvent) => {
+    const updateGaze = (clientX: number, clientY: number) => {
       const container = containerRef.current;
       if (container === null) {
         return;
@@ -247,8 +247,8 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       const rect = container.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      const dx = event.clientX - centerX;
-      const dy = event.clientY - centerY;
+      const dx = clientX - centerX;
+      const dy = clientY - centerY;
       const angle = Math.atan2(dy, dx);
       const rawDistance = Math.hypot(dx, dy);
       const distance = Math.min(rawDistance / 6, maxOffset);
@@ -258,7 +258,23 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       const proximity = 1 - Math.min(rawDistance / 800, 1);
       pupilQueue.push({ at: performance.now(), value: 0.82 + proximity * 0.53 });
     };
+
+    // スクロール中は pointermove が発火しないので、最後のカーソル位置を
+    // 覚えておき、スクロールで目とカーソルの相対位置が変わったら再計算する
+    let lastPointer: { x: number; y: number } | null = null;
+
+    const handlePointerMove = (event: PointerEvent) => {
+      lastPointer = { x: event.clientX, y: event.clientY };
+      updateGaze(event.clientX, event.clientY);
+    };
     window.addEventListener("pointermove", handlePointerMove);
+
+    const handleScroll = () => {
+      if (lastPointer !== null) {
+        updateGaze(lastPointer.x, lastPointer.y);
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     // マイクロサッカード: 視線がわずかに泳ぐ。
     // ついでに瞳孔ヒップス(瞳孔径の不随意な微振動)も入れる
@@ -295,6 +311,7 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
 
     return () => {
       window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("scroll", handleScroll);
       window.clearTimeout(saccadeTimer);
       window.clearTimeout(blinkTimer);
       window.clearInterval(pupilTimer);
