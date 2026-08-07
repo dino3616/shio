@@ -4,7 +4,7 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 
 エンジニア兼デザイナーとして、仕事の実績だけでなく「自分はこういう人間です」を伝えるためのサイト。
 
-> **Status: 設計フェーズ**(実装未着手)。現時点ではドキュメントのみ。
+> **Status: 設計フェーズ**(実装未着手)。ドキュメントと環境設定(`.bun-version`)のみ。
 
 ## ドキュメント
 
@@ -22,12 +22,12 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 | フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング(website Worker) |
 | スタイリング | **Tailwind CSS** + **Motion** | 21st.dev 等の shadcn 形式レジストリと互換にするため。詳細は `docs/design-direction.md` の制作フロー |
 | バリデーション | **Valibot** | MCP SDK v2 の Standard Schema 対応で公式サポート。`drizzle-valibot` で DB スキーマと共有 |
-| DB / ORM | **Drizzle ORM + Turso**(libSQL) | 更新頻度の高いコンテンツの置き場(下記) |
-| コンテンツ更新 | **自作 MCP サーバー**(`@modelcontextprotocol/server`) | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
+| DB / ORM | **Drizzle ORM + Turso**(libSQL) | 更新頻度の高いコンテンツの置き場。詳細は `docs/architecture.md` |
+| コンテンツ更新 | **自作 MCP サーバー**(`@modelcontextprotocol/server`) | LLM を介してプレイリスト等を更新。詳細は `docs/architecture.md` |
 | 認証 | **Better Auth**(passkey + MCP プラグイン) | パスキーのみ。パスワードも外部 IdP も持たない |
 | ホスティング | **Cloudflare Workers(website / mcp の 2 Worker)** | **shio.studio** = サイト、**mcp.shio.studio** = MCP+認可(Cloudflare 管理)。Bun workspaces のモノレポ(`apps/website`, `apps/mcp`, `packages/db`) |
 
 ## 参照
 
 - ムードボード: [Figma](https://www.figma.com/design/sdp2RPY3x1ysSxQd6LtWra?node-id=158-17)(「ムードボード」セクション、image 1〜30)
-- デザインモック: [Figma「🛸 Website Mock」ページ](https://www.figma.com/design/sdp2RPY3x1ysSxQd6LtWra?node-id=226-3)(トップページ全5セクション)
+- デザインモック: [Figma「🛸 Website Mock」ページ](https://www.figma.com/design/sdp2RPY3x1ysSxQd6LtWra?node-id=226-3)(トップページ全6セクション)
