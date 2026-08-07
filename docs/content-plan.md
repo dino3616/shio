@@ -125,6 +125,15 @@ packages/
 
 命名メモ: アプリ名は **`website`**(本人の決定)。
 
+### 配信キャッシュ(ISR 相当)
+
+TanStack Start に Next.js 式の ISR 機構はないが、**Workers Cache** で同じ挙動を作る(公式ガイドも HTTP キャッシュ方式: https://tanstack.com/start/latest/docs/framework/react/guide/isr )。
+
+- 注意: Worker は CDN キャッシュの「前」で実行されるため、`Cache-Control` ヘッダーだけでは何もキャッシュされない(既知の罠: https://github.com/TanStack/router/issues/7527 )
+- 解決: `wrangler.jsonc` に `"cache": { "enabled": true }` を設定して Worker の前にキャッシュ層を付け、ルートごとに `Cache-Control: public, s-maxage=…, stale-while-revalidate=…` を返す
+- ガード: デフォルトは `private, no-store` とし、キャッシュしたいルートだけ明示的に opt-in する(認証系ページの誤キャッシュを防ぐ)
+- **更新即時反映**: 書き込み口は MCP サーバーだけなので、MCP ツールの書き込み直後に該当 URL のキャッシュをパージする。TTL を長めにしてヒット率を稼ぎつつ、更新は数秒で反映される(時限式 ISR より良い性質)
+
 ### 認証(決定: パスキー)
 
 MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サーバーは OAuth 2.1 + PKCE が必須**。静的な Bearer トークンはローカル限定で、リモートでは非準拠。現行仕様: https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization
