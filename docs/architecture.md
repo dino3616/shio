@@ -66,6 +66,12 @@ MCP SDK v2 も Better Auth(fetch ベース + WebCrypto)も workerd で動くた�
 
 Workers はステートレスなので DB は外部必須。D1 でなく Turso なのは、ローカル開発や将来の移設が libSQL で素直なため。
 
+## 開発環境
+
+- **Docker は使わない**。本番は Workers(コンテナ不在)、ローカルは `@cloudflare/vite-plugin` が workerd を直接動かすので、開発にもコンテナが要らない。DB のローカル開発は Turso のローカルモード(libSQL ファイル)
+- **Nix は入れない**。ランタイムが Bun 単体でネイティブ依存もゼロのため、Nix が解決する問題がない(将来ネイティブ依存や Linux 開発機が増えたら再検討)
+- **ツールバージョンの固定は proto**(このマシンに導入済み、mise / asdf は不使用)。リポジトリ直下の `.prototools` に Bun のバージョンを固定し、複数マシン(Mac 2台)間で揃える
+
 ## リポジトリ構成
 
 Bun workspaces のモノレポ:
