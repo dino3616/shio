@@ -34,25 +34,39 @@ const Hero = () => (
 
     <div className="relative z-10 flex flex-1 items-center px-8 md:px-28">
       <div>
-        <p className="font-mono text-pink text-sm tracking-[0.3em]">
-          ENGINEER / DESIGNER — shio.studio
+        <p className="font-mono text-pink flex items-center gap-4 text-sm tracking-[0.3em]">
+          <span className="bg-pink inline-block h-px w-10" />
+          ENGINEER / DESIGNER — SHIO.STUDIO
         </p>
-        <h1 className="font-display mt-5 text-7xl font-bold leading-[0.95] md:text-8xl">
-          Haruto
+        <h1 className="font-display mt-9 text-4xl font-black uppercase leading-[1.14] sm:text-5xl md:text-7xl">
+          <span className="from-star via-pale to-ice bg-gradient-to-r bg-clip-text text-transparent">
+            Haruto
+          </span>
           <br />
-          Shiohata
+          <span className="text-transparent" style={{ WebkitTextStroke: "2px #cbb8dc" }}>
+            Shiohata
+          </span>
         </h1>
-        <p className="font-pixel text-ice mt-7 text-xl tracking-[0.4em]">塩畑 晴人</p>
-        <p className="text-pale mt-4 tracking-[0.2em]">矛盾ごと、かたちにする。</p>
+        <div className="mt-9 flex items-center gap-5">
+          <p className="font-pixel text-ice text-2xl tracking-[0.5em]">塩畑 晴人</p>
+          <span className="bg-ice/40 inline-block h-px w-16" />
+        </div>
+        <p className="text-pale mt-5 text-lg tracking-[0.25em]">
+          矛盾ごと、かたちにする<span className="text-pink">。</span>
+        </p>
       </div>
     </div>
 
     {/* 奥行きレイヤー: 傾いたモチーフたち */}
-    <div className="absolute top-[15%] right-[7%] z-10 hidden rotate-12 md:block">
-      <HeartMoon size={140} />
+    <div className="absolute top-[13%] right-[7%] z-10 hidden rotate-12 md:block">
+      <div className="float-slower">
+        <HeartMoon size={150} />
+      </div>
     </div>
     <div className="absolute top-[38%] right-[16%] z-10 hidden -rotate-6 lg:block">
-      <Eye size={190} />
+      <div className="float-slow">
+        <Eye size={190} />
+      </div>
     </div>
 
     <p className="font-mono relative z-10 pb-8 text-center text-xs tracking-[0.3em] text-[#666c96]">

@@ -14,7 +14,7 @@
   --color-prism: #f2e85c; /* プリズムイエロー(アクセント) */
   --color-star: #f7f2fa; /* 本文のオフホワイト */
 
-  --font-display: "Space Grotesk", sans-serif;
+  --font-display: "Unbounded", sans-serif;
   --font-body: "Zen Kaku Gothic New", sans-serif;
   --font-pixel: "DotGothic16", monospace;
   --font-crt: "VT323", monospace;
@@ -23,6 +23,32 @@
 
 body {
   font-family: var(--font-body);
+}
+
+/* モチーフの浮遊: 静止したコラージュではなく無重力で漂わせる */
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+.float-slow {
+  animation: float-slow 7s ease-in-out infinite;
+}
+
+.float-slower {
+  animation: float-slow 10s ease-in-out 1.5s infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .float-slow,
+  .float-slower {
+    animation: none;
+  }
 }
 
 /* グリッチ(壊れたレトロテック): ホバーの瞬間だけ壊れて、離すと直る */
