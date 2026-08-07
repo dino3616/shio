@@ -4,6 +4,9 @@ import { useEffect, useRef } from "react";
  * リサージュ曲線で漂う星空。
  * 各星が x = A·sin(at + φ), y = B·sin(bt) で独立に揺れ、
  * sin 位相で瞬く(design-direction: 数学的モーション)。
+ *
+ * 質感方針: 大きな星はグロー+クロスフレア+白いコアの三層描画、
+ * 背景には小さな星屑を散らして奥行きを出す。
  */
 
 type Star = {
@@ -17,17 +20,19 @@ type Star = {
   freqY: number;
   phase: number;
   twinkleSpeed: number;
+  kind: "sparkle" | "dust";
 };
 
 const STAR_COLORS = ["#f2e85c", "#f2c4dc", "#a6d3ea", "#f7f2fa"];
 
-const createStars = (count: number): Star[] => {
+const createStars = (sparkles: number, dust: number): Star[] => {
   const stars: Star[] = [];
-  for (let i = 0; i < count; i++) {
+  for (let i = 0; i < sparkles + dust; i++) {
+    const isSparkle = i < sparkles;
     stars.push({
       baseX: Math.random(),
       baseY: Math.random(),
-      radius: 1.5 + Math.random() * 4.5,
+      radius: isSparkle ? 3 + Math.random() * 6 : 0.5 + Math.random() * 1.1,
       color: STAR_COLORS[i % STAR_COLORS.length] ?? "#f7f2fa",
       amplitudeX: 6 + Math.random() * 18,
       amplitudeY: 6 + Math.random() * 14,
@@ -35,25 +40,50 @@ const createStars = (count: number): Star[] => {
       freqY: 0.05 + Math.random() * 0.15,
       phase: Math.random() * Math.PI * 2,
       twinkleSpeed: 0.4 + Math.random() * 1.2,
+      kind: isSparkle ? "sparkle" : "dust",
     });
   }
   return stars;
 };
 
-const drawSparkle = (ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number) => {
-  // 4芒星(モックのキラキラと同じ形)
-  const w = r * 0.28;
+const drawSparkle = (
+  ctx: CanvasRenderingContext2D,
+  cx: number,
+  cy: number,
+  r: number,
+  color: string,
+  alpha: number,
+) => {
+  // 三層描画: グロー → クロスフレア(4芒星) → 白いコア
+  const glow = ctx.createRadialGradient(cx, cy, 0, cx, cy, r * 2.4);
+  glow.addColorStop(0, color);
+  glow.addColorStop(1, "rgba(0, 0, 0, 0)");
+  ctx.globalAlpha = alpha * 0.35;
+  ctx.fillStyle = glow;
+  ctx.beginPath();
+  ctx.arc(cx, cy, r * 2.4, 0, Math.PI * 2);
+  ctx.fill();
+
+  const w = r * 0.22;
+  ctx.globalAlpha = alpha;
+  ctx.fillStyle = color;
   ctx.beginPath();
   ctx.moveTo(cx, cy - r);
-  ctx.quadraticCurveTo(cx + w * 0.4, cy - w * 0.4, cx + r, cy);
-  ctx.quadraticCurveTo(cx + w * 0.4, cy + w * 0.4, cx, cy + r);
-  ctx.quadraticCurveTo(cx - w * 0.4, cy + w * 0.4, cx - r, cy);
-  ctx.quadraticCurveTo(cx - w * 0.4, cy - w * 0.4, cx, cy - r);
+  ctx.quadraticCurveTo(cx + w, cy - w, cx + r, cy);
+  ctx.quadraticCurveTo(cx + w, cy + w, cx, cy + r);
+  ctx.quadraticCurveTo(cx - w, cy + w, cx - r, cy);
+  ctx.quadraticCurveTo(cx - w, cy - w, cx, cy - r);
   ctx.closePath();
+  ctx.fill();
+
+  ctx.globalAlpha = Math.min(alpha * 1.4, 1);
+  ctx.fillStyle = "#ffffff";
+  ctx.beginPath();
+  ctx.arc(cx, cy, Math.max(r * 0.16, 0.6), 0, Math.PI * 2);
   ctx.fill();
 };
 
-export const Starfield = ({ count = 36 }: { count?: number }) => {
+export const Starfield = ({ sparkles = 14, dust = 70 }: { sparkles?: number; dust?: number }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -66,7 +96,7 @@ export const Starfield = ({ count = 36 }: { count?: number }) => {
       return;
     }
 
-    const stars = createStars(count);
+    const stars = createStars(sparkles, dust);
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const resize = () => {
@@ -91,9 +121,17 @@ export const Starfield = ({ count = 36 }: { count?: number }) => {
           star.amplitudeX * Math.sin(star.freqX * t * Math.PI * 2 + star.phase);
         const y = star.baseY * height + star.amplitudeY * Math.sin(star.freqY * t * Math.PI * 2);
         const twinkle = 0.35 + 0.65 * (0.5 + 0.5 * Math.sin(star.twinkleSpeed * t + star.phase));
-        ctx.globalAlpha = reducedMotion ? 0.7 : twinkle;
-        ctx.fillStyle = star.color;
-        drawSparkle(ctx, x, y, star.radius);
+        const alpha = reducedMotion ? 0.7 : twinkle;
+
+        if (star.kind === "sparkle") {
+          drawSparkle(ctx, x, y, star.radius, star.color, alpha);
+        } else {
+          ctx.globalAlpha = alpha * 0.8;
+          ctx.fillStyle = star.color;
+          ctx.beginPath();
+          ctx.arc(x, y, star.radius, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
       ctx.globalAlpha = 1;
 
@@ -114,7 +152,7 @@ export const Starfield = ({ count = 36 }: { count?: number }) => {
       cancelAnimationFrame(rafId);
       window.removeEventListener("resize", handleResize);
     };
-  }, [count]);
+  }, [sparkles, dust]);
 
   return (
     <canvas

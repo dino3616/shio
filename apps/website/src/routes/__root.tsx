@@ -1,15 +1,17 @@
 /// <reference types="vite/client" />
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import type * as React from "react";
+import { NoiseOverlay } from "~/components/noise-overlay";
 import appCss from "~/styles/app.css?url";
 
 const RootDocument = ({ children }: { children: React.ReactNode }) => (
-  <html lang="ja">
+  <html lang="ja" className="scroll-smooth">
     <head>
       <HeadContent />
     </head>
     <body className="bg-void text-star min-h-screen antialiased">
       {children}
+      <NoiseOverlay />
       <Scripts />
     </body>
   </html>

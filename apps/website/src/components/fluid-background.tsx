@@ -81,10 +81,10 @@ void main() {
   vec3 ice = vec3(0.651, 0.827, 0.918);
 
   // 暗部を広めに: ダーク6割の比率を守る
-  vec3 col = mix(voidBlack, navy, smoothstep(-0.35, 0.95, f));
-  col = mix(col, purple, smoothstep(0.4, 1.05, q.x) * 0.42);
-  col = mix(col, pink, smoothstep(0.48, 1.05, r.y) * 0.6);
-  col = mix(col, ice, smoothstep(0.7, 1.2, q.y * r.x) * 0.18);
+  vec3 col = mix(voidBlack, navy, smoothstep(-0.35, 0.9, f));
+  col = mix(col, purple, smoothstep(0.32, 1.0, q.x) * 0.5);
+  col = mix(col, pink, smoothstep(0.42, 1.0, r.y) * 0.62);
+  col = mix(col, ice, smoothstep(0.65, 1.15, q.y * r.x) * 0.2);
 
   // ビネット: 端を宇宙の闇に沈める
   float vig = smoothstep(1.35, 0.3, length(p));

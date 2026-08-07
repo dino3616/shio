@@ -24,3 +24,83 @@
 body {
   font-family: var(--font-body);
 }
+
+/* グリッチ(壊れたレトロテック): ホバーの瞬間だけ壊れて、離すと直る */
+@keyframes glitch-shift {
+  0% {
+    text-shadow:
+      2px 0 #f2549e,
+      -2px 0 #a6d3ea;
+    transform: translateX(0);
+  }
+  20% {
+    text-shadow:
+      -3px 0 #f2549e,
+      3px 0 #a6d3ea;
+    transform: translateX(2px);
+  }
+  40% {
+    text-shadow:
+      3px 0 #8b5cf6,
+      -2px 0 #f2e85c;
+    transform: translateX(-2px);
+  }
+  60% {
+    text-shadow:
+      -2px 0 #f2549e,
+      2px 0 #a6d3ea;
+    transform: translateX(1px);
+  }
+  100% {
+    text-shadow:
+      1px 0 #f2549e,
+      -1px 0 #a6d3ea;
+    transform: translateX(0);
+  }
+}
+
+.glitch-hover:hover {
+  animation: glitch-shift 0.35s steps(2) infinite;
+}
+
+/* CRT の走査線 */
+.scanlines {
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 2px,
+    rgba(0, 0, 0, 0.22) 2px,
+    rgba(0, 0, 0, 0.22) 4px
+  );
+}
+
+/* CRT のちらつき */
+@keyframes crt-flicker {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  92% {
+    opacity: 1;
+  }
+  93% {
+    opacity: 0.82;
+  }
+  94% {
+    opacity: 1;
+  }
+  97% {
+    opacity: 0.92;
+  }
+}
+
+.crt-flicker {
+  animation: crt-flicker 4s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glitch-hover:hover,
+  .crt-flicker {
+    animation: none;
+  }
+}
