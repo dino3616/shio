@@ -323,6 +323,12 @@ export const SpacePlankton = () => {
     // 入ってきたはぐれ個体が合流し、全員で下流の画面外へ出ていく。
     // 回遊方向は毎回ランダム(横断・縦断・斜めのどれもあり得る)
     const spawnMigration = () => {
+      // 非表示タブでは rAF(移動・退場)が止まる一方タイマーは動き続けるので、
+      // スポーンを見送らないと復帰時に画面が群れで溢れる
+      if (document.hidden) {
+        later(spawnMigration, 15000);
+        return;
+      }
       const vw = window.innerWidth;
       const vh = window.innerHeight;
       const angle = Math.random() * Math.PI * 2;
@@ -474,7 +480,8 @@ export const SpacePlankton = () => {
           agent.pos.x > vw + REMOVE_MARGIN ||
           agent.pos.y < -REMOVE_MARGIN ||
           agent.pos.y > vh + REMOVE_MARGIN;
-        if (age > 12000 && out) {
+        // 2分居座っている個体はどこにいても退場させる(タブ非表示中の滞留対策)
+        if ((age > 12000 && out) || age > 120000) {
           removed.push(agent.spec.id);
         }
       }

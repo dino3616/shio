@@ -1,9 +1,12 @@
+import { motion, useMotionValue, useSpring } from "motion/react";
 import { useState } from "react";
+import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
 
 /**
  * ブラウン管を額縁にした Works(design-direction: ブラウン管=画面の中に別世界)。
  * ホバーで静電ノイズが晴れて中身が見える(壊れたレトロテック)。
+ * 筐体はカーソル位置に合わせてバネ物理で3Dチルトする(空間的な奥行き)。
  */
 
 const STATIC_NOISE_SVG = encodeURIComponent(
@@ -13,19 +16,37 @@ const STATIC_NOISE_SVG = encodeURIComponent(
 const CrtFrame = ({ children }: { children: React.ReactNode }) => {
   const [isHovered, setIsHovered] = useState(false);
 
+  const targetRotateX = useMotionValue(0);
+  const targetRotateY = useMotionValue(0);
+  const rotateX = useSpring(targetRotateX, { stiffness: 120, damping: 14, mass: 0.6 });
+  const rotateY = useSpring(targetRotateY, { stiffness: 120, damping: 14, mass: 0.6 });
+
   return (
-    <div
-      className="relative w-full max-w-2xl -rotate-2 rounded-[2rem] p-7 pb-12 transition-transform duration-300 hover:rotate-0"
+    <motion.div
+      className="relative w-full max-w-2xl rounded-[2rem] p-7 pb-12"
       style={{
+        rotateX,
+        rotateY,
+        rotateZ: -2,
+        transformPerspective: 900,
         background: "linear-gradient(160deg, #f7d3e4 0%, #f2c4dc 55%, #d8a7c4 100%)",
         boxShadow:
           "0 14px 60px rgba(139, 92, 246, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -3px 6px rgba(120, 70, 100, 0.35)",
+      }}
+      onPointerMove={(event) => {
+        const rect = event.currentTarget.getBoundingClientRect();
+        const px = (event.clientX - rect.left) / rect.width - 0.5;
+        const py = (event.clientY - rect.top) / rect.height - 0.5;
+        targetRotateX.set(-py * 9);
+        targetRotateY.set(px * 11);
       }}
       onPointerEnter={() => {
         setIsHovered(true);
       }}
       onPointerLeave={() => {
         setIsHovered(false);
+        targetRotateX.set(0);
+        targetRotateY.set(0);
       }}
     >
       <div
@@ -62,14 +83,17 @@ const CrtFrame = ({ children }: { children: React.ReactNode }) => {
         <span className="h-3.5 w-3.5 rounded-full bg-[#9c6e8a] shadow-inner" />
         <span className="h-3.5 w-3.5 rounded-full bg-[#9c6e8a] shadow-inner" />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 export const Works = () => (
   <section id="works" className="relative z-10 px-8 py-28 md:px-28">
     <SectionHeader number="02" title="WORKS" jp="ブラウン管に映してます" />
-    <div className="mt-14 flex flex-col items-start gap-10 lg:flex-row lg:items-center">
+    <Reveal
+      delay={0.08}
+      className="mt-14 flex flex-col items-start gap-10 lg:flex-row lg:items-center"
+    >
       <CrtFrame>
         <p className="font-crt text-prism text-lg tracking-wider">CH 01 ▸ DCON 2025</p>
         <h3 className="glitch-hover font-crt text-star mt-3 cursor-default text-6xl">Locker.ai</h3>
@@ -92,6 +116,6 @@ export const Works = () => (
         hover でノイズ → クリア。
         <br />+ more works soon
       </p>
-    </div>
+    </Reveal>
   </section>
 );

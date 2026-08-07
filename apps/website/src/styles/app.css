@@ -132,3 +132,57 @@ body {
     animation: none;
   }
 }
+
+/* Logs のイコライザー: 待機中も微かに脈打つ(生きてるコンテンツの鼓動) */
+@keyframes eq-bounce {
+  0%,
+  100% {
+    transform: scaleY(0.2);
+  }
+  50% {
+    transform: scaleY(0.85);
+  }
+}
+
+.eq-bar {
+  transform-origin: bottom;
+  animation: eq-bounce 1.3s ease-in-out infinite;
+}
+
+/* Contact の UFO: 無重力でゆっくり漂いながら傾く */
+@keyframes ufo-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  50% {
+    transform: translateY(-12px) rotate(2deg);
+  }
+}
+
+.ufo-drift {
+  animation: ufo-drift 6s ease-in-out infinite;
+}
+
+/* ビームの呼吸: 明滅で「電波を出している」ことを伝える */
+@keyframes beam-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+  50% {
+    filter: brightness(1.4);
+  }
+}
+
+.beam-breathe {
+  animation: beam-breathe 4.5s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .eq-bar,
+  .ufo-drift,
+  .beam-breathe {
+    animation: none;
+  }
+}
