@@ -188,6 +188,13 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
   // ただし虹彩より赤道寄りにあるぶん見かけの移動量は小さい
   const capillaryX = useTransform(x, (value) => value * 0.55);
   const capillaryY = useTransform(y, (value) => value * 0.55);
+  // 瞳孔は球面のいちばん手前にあるので、回転時は虹彩よりさらに大きく動いて
+  // 見える(虹彩の中で瞳孔が視線方向に寄る = 3/4視の遠近感)
+  const pupilX = useTransform(x, (value) => value * 0.4);
+  const pupilY = useTransform(y, (value) => value * 0.4);
+  // 角膜反射は光源の像なので、眼球が回ってもほぼその場に留まる
+  const glintX = useTransform(x, (value) => value * 0.15);
+  const glintY = useTransform(y, (value) => value * 0.15);
 
   const maxOffset = 30;
 
@@ -362,23 +369,43 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
               />
             ))}
           </g>
-          {/* コラレット: 瞳孔周りの波状リング */}
-          <path d={COLLARETTE_PATH} fill="none" stroke="#3b2a5f" strokeWidth="1.4" opacity="0.65" />
-          {/* 内繊維: 瞳孔→コラレット(明るく密) */}
-          <g strokeLinecap="round">
-            {INNER_FIBERS.map((fiber) => (
-              <line
-                key={`i-${fiber.x1}-${fiber.y1}`}
-                x1={fiber.x1}
-                y1={fiber.y1}
-                x2={fiber.x2}
-                y2={fiber.y2}
-                stroke={fiber.color}
-                strokeWidth={fiber.width}
-                opacity={fiber.opacity}
-              />
-            ))}
-          </g>
+          {/* 瞳孔まわり: 球面の最前面なので追加のパララックスで視線方向に寄る */}
+          <motion.g style={{ x: pupilX, y: pupilY }}>
+            {/* コラレット: 瞳孔周りの波状リング */}
+            <path
+              d={COLLARETTE_PATH}
+              fill="none"
+              stroke="#3b2a5f"
+              strokeWidth="1.4"
+              opacity="0.65"
+            />
+            {/* 内繊維: 瞳孔→コラレット(明るく密) */}
+            <g strokeLinecap="round">
+              {INNER_FIBERS.map((fiber) => (
+                <line
+                  key={`i-${fiber.x1}-${fiber.y1}`}
+                  x1={fiber.x1}
+                  y1={fiber.y1}
+                  x2={fiber.x2}
+                  y2={fiber.y2}
+                  stroke={fiber.color}
+                  strokeWidth={fiber.width}
+                  opacity={fiber.opacity}
+                />
+              ))}
+            </g>
+            {/* 瞳孔 */}
+            <circle cx="100" cy="100" r="23" fill="url(#eye-pupil)" />
+            <circle
+              cx="100"
+              cy="100"
+              r="23"
+              fill="none"
+              stroke="#0a0710"
+              strokeWidth="1.5"
+              opacity="0.8"
+            />
+          </motion.g>
           {/* 虹彩の外周リング(二重) */}
           <circle
             cx="100"
@@ -398,18 +425,10 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
             strokeWidth="1"
             opacity="0.35"
           />
-          {/* 瞳孔 */}
-          <circle cx="100" cy="100" r="23" fill="url(#eye-pupil)" />
-          <circle
-            cx="100"
-            cy="100"
-            r="23"
-            fill="none"
-            stroke="#0a0710"
-            strokeWidth="1.5"
-            opacity="0.8"
-          />
-          {/* 角膜反射(濡れた質感) */}
+        </motion.g>
+
+        {/* 角膜反射: 光源の像なので眼球が回ってもほぼその場に留まる */}
+        <motion.g style={{ x: glintX, y: glintY }}>
           <circle cx="86" cy="84" r="9" fill="#ffffff" opacity="0.95" />
           <ellipse
             cx="116"
