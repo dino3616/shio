@@ -1,4 +1,4 @@
-import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { animate, motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 
 /**
@@ -196,17 +196,49 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
   const glintX = useTransform(x, (value) => value * 0.15);
   const glintY = useTransform(y, (value) => value * 0.15);
   // 瞳孔径: カーソルが近づくほど開く(散瞳=興味の反応)。
-  // 対光反射より遅いので、視線よりゆるいバネで追従させる
-  const targetPupilScale = useMotionValue(1);
-  const pupilScale = useSpring(targetPupilScale, {
-    stiffness: 90,
-    damping: 18,
-    mass: 0.8,
-  });
+  // 実際の瞳孔反応に合わせて、①約250msの潜時(神経伝達の遅れ)、
+  // ②縮瞳は速く散瞳はじわっと開く非対称バネ、で駆動する
+  const pupilScale = useMotionValue(1);
 
   const maxOffset = 30;
 
   useEffect(() => {
+    const PUPIL_LATENCY_MS = 250;
+
+    // 現在の「本来の目標径」。ヒップスはこの周りをゆらぐだけで、
+    // 進行中の散瞳/縮瞳を打ち消さないようにする
+    let pupilBase = 1;
+
+    const animatePupil = (target: number) => {
+      const isDilating = target > pupilScale.get();
+      animate(pupilScale, target, {
+        type: "spring",
+        // 散瞳(開く)は縮瞳(閉じる)より明らかに遅い生理的非対称性
+        stiffness: isDilating ? 26 : 110,
+        damping: isDilating ? 14 : 16,
+        mass: 0.8,
+      });
+    };
+
+    // 潜時キュー: 目標径は約250ms経ってから神経に届く
+    const pupilQueue: { at: number; value: number }[] = [];
+    const pupilTimer = window.setInterval(() => {
+      const cutoff = performance.now() - PUPIL_LATENCY_MS;
+      let matured: number | null = null;
+      while (pupilQueue.length > 0) {
+        const head = pupilQueue[0];
+        if (head === undefined || head.at > cutoff) {
+          break;
+        }
+        matured = head.value;
+        pupilQueue.shift();
+      }
+      if (matured !== null) {
+        pupilBase = matured;
+        animatePupil(matured);
+      }
+    }, 60);
+
     const handlePointerMove = (event: PointerEvent) => {
       const container = containerRef.current;
       if (container === null) {
@@ -224,7 +256,7 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       targetY.set(Math.sin(angle) * distance);
       // 散瞳: 近いほど開く(0px→1.35倍、800px以上→0.82倍)
       const proximity = 1 - Math.min(rawDistance / 800, 1);
-      targetPupilScale.set(0.82 + proximity * 0.53);
+      pupilQueue.push({ at: performance.now(), value: 0.82 + proximity * 0.53 });
     };
     window.addEventListener("pointermove", handlePointerMove);
 
@@ -236,7 +268,8 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
         () => {
           targetX.set(targetX.get() + (Math.random() - 0.5) * 6);
           targetY.set(targetY.get() + (Math.random() - 0.5) * 6);
-          targetPupilScale.set(targetPupilScale.get() + (Math.random() - 0.5) * 0.07);
+          // ヒップスは不随意運動なので潜時なしで、本来の目標径の周りをゆらす
+          animatePupil(pupilBase + (Math.random() - 0.5) * 0.07);
           scheduleSaccade();
         },
         800 + Math.random() * 1200,
@@ -264,8 +297,9 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       window.removeEventListener("pointermove", handlePointerMove);
       window.clearTimeout(saccadeTimer);
       window.clearTimeout(blinkTimer);
+      window.clearInterval(pupilTimer);
     };
-  }, [targetX, targetY, targetPupilScale]);
+  }, [targetX, targetY, pupilScale]);
 
   return (
     <div
