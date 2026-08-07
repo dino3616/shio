@@ -92,6 +92,21 @@ const CROSS_COLORS: [number, number, number][] = [
   [0.65, 0.83, 0.92], // アイスブルー
 ];
 
+// 配置を焼き込むためのシード。?star-seed=N で一時的に差し替えて探索できる
+const DEFAULT_STAR_SEED = 1;
+
+// mulberry32: シード付き擬似乱数。Math.random と違い同じシードなら同じ星空を再現する
+const createRandom = (seed: number) => {
+  let state = seed >>> 0;
+  return () => {
+    state = (state + 0x6d2b79f5) >>> 0;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+};
+
 type StarBuffers = {
   pos: number[];
   size: number[];
@@ -103,7 +118,8 @@ type StarBuffers = {
   drift: number[];
 };
 
-const buildStars = (stars: number, crosses: number): StarBuffers => {
+const buildStars = (stars: number, crosses: number, seed: number): StarBuffers => {
+  const random = createRandom(seed);
   const b: StarBuffers = {
     pos: [],
     size: [],
@@ -116,7 +132,7 @@ const buildStars = (stars: number, crosses: number): StarBuffers => {
   };
 
   // 星団クラスタ: 完全な一様分布は人工的に見えるので、4割をクラスタに寄せる
-  const clusters = Array.from({ length: 4 }, () => [Math.random(), Math.random()]);
+  const clusters = Array.from({ length: 4 }, () => [random(), random()]);
 
   const pushStar = (
     x: number,
@@ -129,46 +145,39 @@ const buildStars = (stars: number, crosses: number): StarBuffers => {
     b.pos.push(x, y);
     b.size.push(size);
     b.depth.push(depth);
-    b.phase.push(Math.random() * Math.PI * 2);
+    b.phase.push(random() * Math.PI * 2);
     // 大きい星ほどゆっくり瞬く
-    b.twinkle.push((0.3 + Math.random() * 1.4) / (1 + size * 0.08));
+    b.twinkle.push((0.3 + random() * 1.4) / (1 + size * 0.08));
     b.color.push(...color);
     b.kind.push(kind);
     // リサージュドリフト: 角速度は 0.05〜0.2Hz(旧Canvas版と同じ体感速度)
     b.drift.push(
-      4 + Math.random() * 12,
-      4 + Math.random() * 10,
-      (0.05 + Math.random() * 0.15) * Math.PI * 2,
-      (0.05 + Math.random() * 0.15) * Math.PI * 2,
+      4 + random() * 12,
+      4 + random() * 10,
+      (0.05 + random() * 0.15) * Math.PI * 2,
+      (0.05 + random() * 0.15) * Math.PI * 2,
     );
   };
 
   for (let i = 0; i < stars; i++) {
-    let x = Math.random();
-    let y = Math.random();
-    if (Math.random() < 0.4) {
+    let x = random();
+    let y = random();
+    if (random() < 0.4) {
       const cluster = clusters[i % clusters.length] ?? [0.5, 0.5];
-      x = Math.min(Math.max((cluster[0] ?? 0.5) + (Math.random() - 0.5) * 0.3, 0), 1);
-      y = Math.min(Math.max((cluster[1] ?? 0.5) + (Math.random() - 0.5) * 0.3, 0), 1);
+      x = Math.min(Math.max((cluster[0] ?? 0.5) + (random() - 0.5) * 0.3, 0), 1);
+      y = Math.min(Math.max((cluster[1] ?? 0.5) + (random() - 0.5) * 0.3, 0), 1);
     }
     // べき乗分布: 暗く小さい星が大半、明るい星は稀
-    const u = Math.random();
+    const u = random();
     const size = 1.4 + 20 * u ** 7;
-    const depth = 0.15 + 0.85 * Math.random() ** 1.6;
-    const color = STAR_COLORS[Math.floor(Math.random() * STAR_COLORS.length)] ?? [1, 1, 1];
+    const depth = 0.15 + 0.85 * random() ** 1.6;
+    const color = STAR_COLORS[Math.floor(random() * STAR_COLORS.length)] ?? [1, 1, 1];
     pushStar(x, y, size, depth, color, 0);
   }
 
   for (let i = 0; i < crosses; i++) {
     const color = CROSS_COLORS[i % CROSS_COLORS.length] ?? [1, 1, 1];
-    pushStar(
-      0.1 + Math.random() * 0.8,
-      0.1 + Math.random() * 0.8,
-      44 + Math.random() * 22,
-      0.85,
-      color,
-      1,
-    );
+    pushStar(0.1 + random() * 0.8, 0.1 + random() * 0.8, 44 + random() * 22, 0.85, color, 1);
   }
 
   return b;
@@ -188,7 +197,15 @@ const compileShader = (
   return shader;
 };
 
-export const Starfield = ({ stars = 240, crosses = 2 }: { stars?: number; crosses?: number }) => {
+export const Starfield = ({
+  stars = 240,
+  crosses = 2,
+  seed = DEFAULT_STAR_SEED,
+}: {
+  stars?: number;
+  crosses?: number;
+  seed?: number;
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -222,7 +239,10 @@ export const Starfield = ({ stars = 240, crosses = 2 }: { stars?: number; crosse
     gl.enable(gl.BLEND);
     gl.blendFunc(gl.ONE, gl.ONE);
 
-    const data = buildStars(stars, crosses);
+    // ?star-seed=N でシードを一時上書きして好みの配置を探索できる
+    const seedParam = new URLSearchParams(window.location.search).get("star-seed");
+    const effectiveSeed = seedParam !== null && seedParam !== "" ? Number(seedParam) : seed;
+    const data = buildStars(stars, crosses, effectiveSeed);
     const starCount = data.size.length;
 
     const bindAttribute = (name: string, values: number[], size: number) => {
@@ -297,7 +317,7 @@ export const Starfield = ({ stars = 240, crosses = 2 }: { stars?: number; crosse
       window.removeEventListener("resize", handleResize);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [stars, crosses]);
+  }, [stars, crosses, seed]);
 
   return (
     <canvas
