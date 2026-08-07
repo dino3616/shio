@@ -14,7 +14,7 @@ const NAV_ITEMS = ["ABOUT", "WORKS", "PLAYGROUND", "LOGS", "CONTACT"];
 const Hero = () => (
   <div className="relative flex min-h-screen flex-col overflow-hidden">
     <FluidBackground />
-    <Starfield sparkles={12} dust={60} />
+    <Starfield stars={240} crosses={2} />
 
     <nav className="font-name relative z-10 flex items-center justify-between px-8 py-8 md:px-20">
       {/* 旧サイト(shio-archive)と同じブランドロゴ */}
@@ -154,7 +154,7 @@ const Home = () => (
     <Hero />
     {/* 以降のセクション: 宇宙の闇の中を降りていく */}
     <div className="relative">
-      <Starfield sparkles={8} dust={90} />
+      <Starfield stars={420} crosses={3} />
       {/* ネビュラの淡い残光 */}
       <div
         className="pointer-events-none absolute inset-0"
