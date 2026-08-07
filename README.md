@@ -15,13 +15,14 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 
 | 項目 | 選定 | 備考 |
 |---|---|---|
-| ランタイム | **Bun** | Node 非依存で統一する |
+| ランタイム | **Bun** | 開発と MCP コンテナ。Node 非依存(サイト本番のみ workerd) |
 | ツールチェーン | **Vite+**(`vp` CLI) | ビルド・テスト・リントを統合した Vite ベースのツールチェーン |
 | フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング |
-| サーバー | Elysia.js | 必要になったら導入(Bun ネイティブ) |
-| DB / ORM | Drizzle ORM + SQLite(libSQL/Turso 想定) | 更新頻度の高いコンテンツの置き場(下記) |
+| サーバー | **Elysia.js** | MCP + 認可サーバー(Bun ネイティブ) |
+| DB / ORM | **Drizzle ORM + Turso**(libSQL) | 更新頻度の高いコンテンツの置き場(下記) |
 | コンテンツ更新 | **自作 MCP サーバー** | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
 | 認証 | **Better Auth**(passkey + MCP プラグイン) | パスキーのみ。パスワードも外部 IdP も持たない |
+| ホスティング | サイト = **Cloudflare Workers**(エッジ)/ MCP+認可 = **Cloudflare Containers**(`oven/bun` distroless) | Bun workspaces のモノレポ(`apps/site`, `apps/mcp`, `packages/db`) |
 
 ## 参照
 

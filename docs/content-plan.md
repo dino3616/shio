@@ -78,24 +78,41 @@
 ### 方針: DB + 自作 MCP サーバー
 
 ```
-[Cursor / Claude などの MCP クライアント]
-        │  「夏プレイリストにこの曲追加して」
+[訪問者]
+        │
         ▼
-[自作 MCP サーバー]  Bun + MCP TypeScript SDK
-        │  playlist_add_track / beauty_update_routine などの型付きツール
+[サイト]  TanStack Start on Cloudflare Workers(エッジ)
+        │  @libsql/client/web で読み取り(SSR、キャッシュ付き)
         ▼
-[SQLite (libSQL/Turso)]  Drizzle ORM でスキーマ管理
+[Turso (libSQL)]  Drizzle ORM でスキーマ管理
         ▲
-        │  server function で読み取り(SSR、キャッシュ付き)
-[ポートフォリオサイト]  TanStack Start
+        │  型付きツールで書き込み(playlist_add_track など)
+[MCP + 認可サーバー]  Elysia + Better Auth on Cloudflare Containers(bun distroless)
+        ▲  OAuth 2.1 + PKCE
+        │
+[Cursor / Claude などの MCP クライアント]  「夏プレイリストにこの曲追加して」
 ```
 
 - **データは DB に置く**。サイトはリクエスト時に読むので、コミットもビルドも不要で即反映
 - **MCP サーバーが唯一の書き込み口**。ツール定義の入力スキーマ(Zod)と Drizzle スキーマを共有すれば、LLM がどんな雑な指示を受けてもデータの形は崩れない
 - Drizzle を最初から入れる理由がこれ(技術方針の表を更新済み)
-- ホスティング: **最初からリモート**(streamable HTTP)。サイト・MCP・認可サーバーを 1 つの Bun プロセス(Elysia)に同居させる
-  - 同居の理由: (1) 三者が同じ DB / スキーマ(Drizzle・Zod)を触るので import 共有で済む (2) Better Auth は IdP 製品ではなくアプリにマウントするライブラリで、トークン検証もプロセス内で完結する (3) デプロイ・監視・課金対象が 1 つになる (4) セッション Cookie・パスキー RP ID・OAuth resource が同一オリジンに収まる
-  - 強く結合しているのは MCP+認可のペア。サイトだけ後からエッジ(Workers 等)に分離することは可能で、片道切符ではない
+
+### デプロイ単位(決定: サイトはエッジ、MCP+認可はコンテナ)
+
+- **サイト**: TanStack Start を **Cloudflare Workers** にデプロイ。世界中のエッジで配信され、コールドスタートもほぼゼロ。Turso へは HTTP クライアント(`@libsql/client/web`)で接続できるので Workers 上でも問題ない
+- **MCP + 認可サーバー**: **Cloudflare Containers**(`oven/bun` distroless)に同居。この 2 つは強く結合している — Better Auth はアプリにマウントするライブラリで、トークン検証もプロセス内で完結する。使うのは自分だけなので、エッジ性能は不要でスリープ運用と相性が良い
+- 両者は **Turso と共有スキーマパッケージ(Drizzle + Zod)** でつながる。Bun workspaces のモノレポにする:
+
+```
+apps/
+  site/   → Cloudflare Workers(TanStack Start)
+  mcp/    → Cloudflare Containers(Elysia + Better Auth + MCP)
+packages/
+  db/     → Drizzle スキーマ + Zod(両アプリから import)
+```
+
+- ドメインはサブドメインで分ける(例: `shio.dev` = サイト、`mcp.shio.dev` = MCP+認可)。パスキーの RP ID を親ドメイン(`shio.dev`)にしておけばサブドメイン間で有効
+- 注意: サイト本番のランタイムは workerd(V8 isolates)であって Bun ではない。「Bun 統一」は開発時と MCP コンテナに残り、サイトだけエッジランタイムを受け入れるトレードオフ
 
 ### 認証(決定: パスキー)
 
@@ -149,6 +166,6 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 - [ ] Works に載せる作品の追加(現状 Locker.ai の1件。Playground 行きの小ネタでも可)
 - [ ] 自分の写真 / アバターを使うか(エイリアンをアバター代わりにする案あり)
 - [ ] プレイリスト・メイク手順の初期データ
-- [ ] DB のホスティング → **Turso が有力**。ホスティング先を Cloudflare Containers にする場合、コンテナのディスクはエフェメラル(スリープ復帰・再デプロイでリセット)なので、コンテナ内 SQLite ファイルは不可: https://developers.cloudflare.com/containers/faq/
-- [ ] アプリ全体のホスティング先 → **Cloudflare Containers + `oven/bun` distroless イメージが候補**。代替は Fly.io / Railway(永続ボリュームがあるので内蔵 SQLite も成立)。distroless はシェルなしのため Cloudflare の SSH デバッグは実質使えない点に注意
+- [x] DB のホスティング → **Turso に決定**。Cloudflare Containers のディスクはエフェメラル(スリープ復帰・再デプロイでリセット)なのでコンテナ内 SQLite は不可、Workers からも D1 よりコンテナと共用しやすい: https://developers.cloudflare.com/containers/faq/
+- [x] ホスティング先 → **サイト = Cloudflare Workers(エッジ)、MCP+認可 = Cloudflare Containers(`oven/bun` distroless)に決定**。distroless はシェルなしのため Cloudflare の SSH デバッグは実質使えない点に注意
 - [ ] About の自己紹介文の確定(人格メモの候補をベースに)
