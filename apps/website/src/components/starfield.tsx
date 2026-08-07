@@ -93,7 +93,7 @@ const CROSS_COLORS: [number, number, number][] = [
 ];
 
 // 配置を焼き込むためのシード。?star-seed=N で一時的に差し替えて探索できる
-const DEFAULT_STAR_SEED = 1;
+const DEFAULT_STAR_SEED = 119;
 
 // mulberry32: シード付き擬似乱数。Math.random と違い同じシードなら同じ星空を再現する
 const createRandom = (seed: number) => {
