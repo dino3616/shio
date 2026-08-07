@@ -10,6 +10,7 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 
 - [`docs/design-direction.md`](docs/design-direction.md) — デザインディレクション。Pinterest発のムードボード(Figma)30枚の分析から抽出したコンセプトキーワード・カラーパレット・モチーフ・演出方針
 - [`docs/content-plan.md`](docs/content-plan.md) — サイト構成と載せるコンテンツの整理。頻繁に更新するコンテンツ(プレイリスト・メイク)の管理方法を含む
+- [`docs/design-research.md`](docs/design-research.md) — 類似コンセプトのサイト調査レポート。参考サイトカタログと差別化ポイントの分析
 
 ## 技術方針
 
