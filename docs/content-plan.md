@@ -78,17 +78,16 @@
 ### 方針: DB + 自作 MCP サーバー
 
 ```
-[訪問者]                    [Cursor / Claude などの MCP クライアント]
-    │                            │ OAuth 2.1 + PKCE(パスキーでログイン)
-    ▼                            ▼
-[Cloudflare Workers — 1 つの Worker / shio.studio]
-  ├ /            サイト(TanStack Start SSR)
-  ├ /api/auth/*  認可サーバー(Better Auth: passkey + MCP プラグイン)
-  └ /mcp         MCP サーバー(@modelcontextprotocol/server, streamable HTTP)
-    │
-    │ Drizzle + @libsql/client/web
-    ▼
-[Turso (libSQL)]
+[訪問者]                        [Cursor / Claude などの MCP クライアント]
+    │                                │ OAuth 2.1 + PKCE(パスキーでログイン)
+    ▼                                ▼
+[website Worker]                [mcp Worker]
+ shio.studio                     mcp.shio.studio
+ TanStack Start SSR               ├ /mcp     MCP サーバー(@modelcontextprotocol/server)
+    │                             └ /auth/*  認可サーバー(Better Auth: passkey + MCP プラグイン)
+    │ 読み取り                        │ 書き込み(型付きツール)
+    ▼                                ▼
+[Turso (libSQL)]  ←── Drizzle + @libsql/client/web(packages/db を共有)
 ```
 
 - **データは DB に置く**。サイトはリクエスト時に読むので、コミットもビルドも不要で即反映
@@ -101,16 +100,30 @@
 - SDK のデフォルト JSON Schema バリデータは workerd 上では `@cfworker/json-schema` が自動選択される(Workers が一級ランタイム)
 - Drizzle スキーマからの導出は `drizzle-valibot`。Better Auth も含め、リポジトリ内のバリデーションは Valibot に統一
 
-### デプロイ単位(決定: すべて Cloudflare Workers、Worker は 1 つ)
+### デプロイ単位(決定: すべて Cloudflare Workers、website と mcp の 2 Worker)
 
-MCP SDK v2 も Better Auth(fetch ベース + WebCrypto)も workerd で動くため、コンテナが不要になった。
+MCP SDK v2 も Better Auth(fetch ベース + WebCrypto)も workerd で動くため、コンテナは不要。**Docker / distroless イメージ / Elysia はスタックから外れる**。Bun は開発ランタイム・パッケージマネージャー・テストランナーとして残る(本番はすべて workerd)。
 
-- **1 つの Worker** に、サイト(TanStack Start)+ 認可サーバー(`/api/auth/*`)+ MCP(`/mcp`)をルートで同居させる。TanStack Start の server route として Better Auth と MCP のハンドラをマウントする
-- 単一 Worker に戻したことで、同一オリジン・デプロイ 1 回・課金対象 1 つという同居の利点がエッジ上でそのまま復活する
-- **Docker / distroless イメージ / Elysia は不要になり、スタックから外れる**。Bun は開発ランタイム・パッケージマネージャー・テストランナーとして残る(本番はすべて workerd)
-- モノレポも不要。単一アプリ + `src/db/`(Drizzle スキーマ + Valibot)で始める
-- スリープやエフェメラルディスクの心配も消える(Workers はステートレス前提で、状態は最初から Turso にある)
-- 逃げ道: バンドルサイズが Workers の上限に近づいたら、MCP+認可だけ別 Worker(`mcp.shio.studio`)に切り出す。パスキーの RP ID を `shio.studio` にしておけばサブドメインでも有効なまま
+その上で、サイトと MCP+認可は **別 Worker として分離する**:
+
+- **website Worker**(`shio.studio`): TanStack Start のサイト。公開トラフィック用で、バンドルを軽く保てる
+- **mcp Worker**(`mcp.shio.studio`): MCP サーバー + 認可サーバー(Better Auth)。自分専用で、認証まわりの依存をサイトから隔離できる
+- 分離の利点: デプロイが独立(サイトの見た目をいじっても認証系に触れない)、障害・脆弱性の影響範囲が分かれる、バンドルサイズの心配が消える
+- MCP+認可のペアは強結合のまま(Better Auth はアプリにマウントするライブラリで、トークン検証もプロセス内で完結)
+- **パスキーの RP ID は親ドメイン `shio.studio`** にする。認可サーバーは `mcp.shio.studio` にいるが、RP ID を親にしておけばサブドメイン間で有効
+- スリープやエフェメラルディスクの心配はない(Workers はステートレス前提で、状態は最初から Turso にある)
+
+リポジトリは Bun workspaces のモノレポ:
+
+```
+apps/
+  website/  → shio.studio(TanStack Start)
+  mcp/      → mcp.shio.studio(Better Auth + MCP)
+packages/
+  db/       → Drizzle スキーマ + Valibot(両 Worker から import)
+```
+
+命名メモ: アプリ名は **`website`**(本人の決定)。
 
 ### 認証(決定: パスキー)
 
@@ -124,7 +137,7 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 [MCP クライアント (Cursor / Claude)]
         │ 401 → メタデータ発見 → OAuth 2.1 + PKCE フロー(ブラウザが開く)
         ▼
-[認可サーバー]  Better Auth (MCP + passkey プラグイン) を Worker のルートにマウント
+[認可サーバー]  Better Auth (MCP + passkey プラグイン) を mcp Worker のルートにマウント
         │ ログイン画面 = パスキー(Touch ID / 生体認証)のみ。ユーザーは自分 1 人
         ▼
 [MCP サーバー]  リソースサーバーとしてトークンの audience / 有効期限を検証
@@ -165,5 +178,5 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 - [ ] 自分の写真 / アバターを使うか(エイリアンをアバター代わりにする案あり)
 - [ ] プレイリスト・メイク手順の初期データ
 - [x] DB のホスティング → **Turso に決定**(Workers はステートレスなので DB は外部必須。D1 でなく Turso なのはローカル開発や将来の移設が libSQL で素直なため)
-- [x] ホスティング先 → **すべて Cloudflare Workers、単一 Worker に決定**(経緯: Containers 案はディスクがエフェメラルで検討の末、MCP SDK v2 と Better Auth が workerd で動くことが確認できたため Workers に一本化)
+- [x] ホスティング先 → **すべて Cloudflare Workers、website / mcp の 2 Worker に決定**(経緯: Containers 案はディスクがエフェメラルで検討の末、MCP SDK v2 と Better Auth が workerd で動くことが確認できたため Workers に一本化。サイトと MCP+認可の分離は運用・隔離の好みで維持)
 - [ ] About の自己紹介文の確定(人格メモの候補をベースに)
