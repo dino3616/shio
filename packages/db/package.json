@@ -7,10 +7,10 @@
     "./schema": "./src/schema.ts"
   },
   "dependencies": {
-    "@libsql/client": "^0.17.4",
-    "drizzle-orm": "^0.45.2",
-    "drizzle-valibot": "^0.4.2",
-    "valibot": "^1.4.2"
+    "@libsql/client": "0.17.4",
+    "drizzle-orm": "0.45.2",
+    "drizzle-valibot": "0.4.2",
+    "valibot": "1.4.2"
   },
   "devDependencies": {
     "@shio/tsconfig": "workspace:*"

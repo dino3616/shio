@@ -3,6 +3,18 @@ import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import type * as React from "react";
 import appCss from "~/styles/app.css?url";
 
+const RootDocument = ({ children }: { children: React.ReactNode }) => (
+  <html lang="ja">
+    <head>
+      <HeadContent />
+    </head>
+    <body className="bg-void text-star min-h-screen antialiased">
+      {children}
+      <Scripts />
+    </body>
+  </html>
+);
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -31,17 +43,3 @@ export const Route = createRootRoute({
   }),
   shellComponent: RootDocument,
 });
-
-function RootDocument({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="ja">
-      <head>
-        <HeadContent />
-      </head>
-      <body className="bg-void text-star min-h-screen antialiased">
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}

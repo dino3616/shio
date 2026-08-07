@@ -1,6 +1,6 @@
 import { defineConfig } from "vite-plus";
 
-export default defineConfig({
+const config = defineConfig({
   staged: {
     "*": "vp check --fix",
   },
@@ -11,3 +11,5 @@ export default defineConfig({
     options: { typeAware: true, typeCheck: true },
   },
 });
+
+export default config;
