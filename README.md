@@ -15,14 +15,14 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 
 | 項目 | 選定 | 備考 |
 |---|---|---|
-| ランタイム | **Bun** | 開発と MCP コンテナ。Node 非依存(サイト本番のみ workerd) |
+| ランタイム | 開発 = **Bun** / 本番 = **workerd**(Cloudflare Workers) | Node 非依存 |
 | ツールチェーン | **Vite+**(`vp` CLI) | ビルド・テスト・リントを統合した Vite ベースのツールチェーン |
-| フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング |
-| サーバー | **Elysia.js** | MCP + 認可サーバー(Bun ネイティブ) |
+| フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング。server route に認可・MCP もマウント |
+| バリデーション | **Valibot** | MCP SDK v2 の Standard Schema 対応で公式サポート。`drizzle-valibot` で DB スキーマと共有 |
 | DB / ORM | **Drizzle ORM + Turso**(libSQL) | 更新頻度の高いコンテンツの置き場(下記) |
-| コンテンツ更新 | **自作 MCP サーバー** | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
+| コンテンツ更新 | **自作 MCP サーバー**(`@modelcontextprotocol/server`) | LLM を介してプレイリスト等を更新。詳細は `docs/content-plan.md` |
 | 認証 | **Better Auth**(passkey + MCP プラグイン) | パスキーのみ。パスワードも外部 IdP も持たない |
-| ホスティング | サイト = **Cloudflare Workers**(エッジ)/ MCP+認可 = **Cloudflare Containers**(`oven/bun` distroless) | Bun workspaces のモノレポ(`apps/site`, `apps/mcp`, `packages/db`) |
+| ホスティング | **Cloudflare Workers(単一 Worker)** | ドメインは **shio.studio**(Cloudflare 管理)。サイト `/`・認可 `/api/auth/*`・MCP `/mcp` |
 
 ## 参照
 

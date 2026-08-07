@@ -78,41 +78,39 @@
 ### 方針: DB + 自作 MCP サーバー
 
 ```
-[訪問者]
-        │
-        ▼
-[サイト]  TanStack Start on Cloudflare Workers(エッジ)
-        │  @libsql/client/web で読み取り(SSR、キャッシュ付き)
-        ▼
-[Turso (libSQL)]  Drizzle ORM でスキーマ管理
-        ▲
-        │  型付きツールで書き込み(playlist_add_track など)
-[MCP + 認可サーバー]  Elysia + Better Auth on Cloudflare Containers(bun distroless)
-        ▲  OAuth 2.1 + PKCE
-        │
-[Cursor / Claude などの MCP クライアント]  「夏プレイリストにこの曲追加して」
+[訪問者]                    [Cursor / Claude などの MCP クライアント]
+    │                            │ OAuth 2.1 + PKCE(パスキーでログイン)
+    ▼                            ▼
+[Cloudflare Workers — 1 つの Worker / shio.studio]
+  ├ /            サイト(TanStack Start SSR)
+  ├ /api/auth/*  認可サーバー(Better Auth: passkey + MCP プラグイン)
+  └ /mcp         MCP サーバー(@modelcontextprotocol/server, streamable HTTP)
+    │
+    │ Drizzle + @libsql/client/web
+    ▼
+[Turso (libSQL)]
 ```
 
 - **データは DB に置く**。サイトはリクエスト時に読むので、コミットもビルドも不要で即反映
-- **MCP サーバーが唯一の書き込み口**。ツール定義の入力スキーマ(Zod)と Drizzle スキーマを共有すれば、LLM がどんな雑な指示を受けてもデータの形は崩れない
+- **MCP サーバーが唯一の書き込み口**。ツール定義の入力スキーマ(Valibot)と Drizzle スキーマを共有すれば、LLM がどんな雑な指示を受けてもデータの形は崩れない
 - Drizzle を最初から入れる理由がこれ(技術方針の表を更新済み)
 
-### デプロイ単位(決定: サイトはエッジ、MCP+認可はコンテナ)
+### バリデーション(決定: Valibot)
 
-- **サイト**: TanStack Start を **Cloudflare Workers** にデプロイ。世界中のエッジで配信され、コールドスタートもほぼゼロ。Turso へは HTTP クライアント(`@libsql/client/web`)で接続できるので Workers 上でも問題ない
-- **MCP + 認可サーバー**: **Cloudflare Containers**(`oven/bun` distroless)に同居。この 2 つは強く結合している — Better Auth はアプリにマウントするライブラリで、トークン検証もプロセス内で完結する。使うのは自分だけなので、エッジ性能は不要でスリープ運用と相性が良い
-- 両者は **Turso と共有スキーマパッケージ(Drizzle + Zod)** でつながる。Bun workspaces のモノレポにする:
+- MCP TypeScript SDK v2 はツールスキーマが **Standard Schema 対応**になり、Valibot を公式サポート。`@valibot/to-json-schema` の `toStandardJsonSchema` で包んで `inputSchema` に渡す: https://ts.sdk.modelcontextprotocol.io/v2/advanced/schema-libraries
+- SDK のデフォルト JSON Schema バリデータは workerd 上では `@cfworker/json-schema` が自動選択される(Workers が一級ランタイム)
+- Drizzle スキーマからの導出は `drizzle-valibot`。Better Auth も含め、リポジトリ内のバリデーションは Valibot に統一
 
-```
-apps/
-  site/   → Cloudflare Workers(TanStack Start)
-  mcp/    → Cloudflare Containers(Elysia + Better Auth + MCP)
-packages/
-  db/     → Drizzle スキーマ + Zod(両アプリから import)
-```
+### デプロイ単位(決定: すべて Cloudflare Workers、Worker は 1 つ)
 
-- ドメインはサブドメインで分ける(例: `shio.dev` = サイト、`mcp.shio.dev` = MCP+認可)。パスキーの RP ID を親ドメイン(`shio.dev`)にしておけばサブドメイン間で有効
-- 注意: サイト本番のランタイムは workerd(V8 isolates)であって Bun ではない。「Bun 統一」は開発時と MCP コンテナに残り、サイトだけエッジランタイムを受け入れるトレードオフ
+MCP SDK v2 も Better Auth(fetch ベース + WebCrypto)も workerd で動くため、コンテナが不要になった。
+
+- **1 つの Worker** に、サイト(TanStack Start)+ 認可サーバー(`/api/auth/*`)+ MCP(`/mcp`)をルートで同居させる。TanStack Start の server route として Better Auth と MCP のハンドラをマウントする
+- 単一 Worker に戻したことで、同一オリジン・デプロイ 1 回・課金対象 1 つという同居の利点がエッジ上でそのまま復活する
+- **Docker / distroless イメージ / Elysia は不要になり、スタックから外れる**。Bun は開発ランタイム・パッケージマネージャー・テストランナーとして残る(本番はすべて workerd)
+- モノレポも不要。単一アプリ + `src/db/`(Drizzle スキーマ + Valibot)で始める
+- スリープやエフェメラルディスクの心配も消える(Workers はステートレス前提で、状態は最初から Turso にある)
+- 逃げ道: バンドルサイズが Workers の上限に近づいたら、MCP+認可だけ別 Worker(`mcp.shio.studio`)に切り出す。パスキーの RP ID を `shio.studio` にしておけばサブドメインでも有効なまま
 
 ### 認証(決定: パスキー)
 
@@ -126,7 +124,7 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 [MCP クライアント (Cursor / Claude)]
         │ 401 → メタデータ発見 → OAuth 2.1 + PKCE フロー(ブラウザが開く)
         ▼
-[認可サーバー]  Better Auth (MCP + passkey プラグイン) を Elysia にマウント
+[認可サーバー]  Better Auth (MCP + passkey プラグイン) を Worker のルートにマウント
         │ ログイン画面 = パスキー(Touch ID / 生体認証)のみ。ユーザーは自分 1 人
         ▼
 [MCP サーバー]  リソースサーバーとしてトークンの audience / 有効期限を検証
@@ -144,7 +142,7 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 - 認可サーバーに「ログイン済み状態で新デバイスのパスキーを追加」できる極小の管理ページを 1 枚持たせる。Mac2 と Xiaomi の初回だけ QR のクロスデバイス認証(iPad 等で承認)で入り、その場で本体のパスキーを登録
 - 初回ブートストラップ: 「ユーザーが 0 人のときだけ登録を開放」方式(以降は追加登録のみ)
 - セッション/トークンの保存先は Drizzle(サイトと同じ DB)
-- **注意: パスキーはドメイン(RP ID)に紐づく**。localhost で登録したものは本番で使えないため、**ドメイン確定が認証実装の前提条件**
+- **パスキーはドメイン(RP ID)に紐づく**。RP ID は `shio.studio`(決定済みドメイン)。localhost で登録したものは本番で使えない点に注意(開発時は開発用の登録で回す)
 
 ### なぜ MCP か(検討した代替案)
 
@@ -162,10 +160,10 @@ MCP の認可仕様(2025-11-25 改訂以降)で、**公開 URL を持つ MCP サ
 
 ## 未決事項
 
-- [ ] ドメイン(shio.dev など?)— **パスキーが RP ID として紐づくため、認証実装の前提条件**
+- [x] ドメイン → **shio.studio に決定**(Cloudflare でドメイン管理済み。Workers のルーティングも DNS も同一プラットフォームで完結)
 - [ ] Works に載せる作品の追加(現状 Locker.ai の1件。Playground 行きの小ネタでも可)
 - [ ] 自分の写真 / アバターを使うか(エイリアンをアバター代わりにする案あり)
 - [ ] プレイリスト・メイク手順の初期データ
-- [x] DB のホスティング → **Turso に決定**。Cloudflare Containers のディスクはエフェメラル(スリープ復帰・再デプロイでリセット)なのでコンテナ内 SQLite は不可、Workers からも D1 よりコンテナと共用しやすい: https://developers.cloudflare.com/containers/faq/
-- [x] ホスティング先 → **サイト = Cloudflare Workers(エッジ)、MCP+認可 = Cloudflare Containers(`oven/bun` distroless)に決定**。distroless はシェルなしのため Cloudflare の SSH デバッグは実質使えない点に注意
+- [x] DB のホスティング → **Turso に決定**(Workers はステートレスなので DB は外部必須。D1 でなく Turso なのはローカル開発や将来の移設が libSQL で素直なため)
+- [x] ホスティング先 → **すべて Cloudflare Workers、単一 Worker に決定**(経緯: Containers 案はディスクがエフェメラルで検討の末、MCP SDK v2 と Better Auth が workerd で動くことが確認できたため Workers に一本化)
 - [ ] About の自己紹介文の確定(人格メモの候補をベースに)
