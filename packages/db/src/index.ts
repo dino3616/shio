@@ -5,7 +5,7 @@ import * as schema from "./schema";
 export * from "./schema";
 
 export function createDb(url: string, authToken?: string) {
-  const client = createClient({ url, authToken });
+  const client = createClient(authToken === undefined ? { url } : { url, authToken });
   return drizzle(client, { schema });
 }
 

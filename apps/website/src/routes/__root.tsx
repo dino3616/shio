@@ -1,9 +1,5 @@
 /// <reference types="vite/client" />
-import {
-  createRootRoute,
-  HeadContent,
-  Scripts,
-} from "@tanstack/react-router";
+import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import type * as React from "react";
 import appCss from "~/styles/app.css?url";
 
@@ -15,8 +11,7 @@ export const Route = createRootRoute({
       { title: "shio🧂 — Haruto Shiohata" },
       {
         name: "description",
-        content:
-          "塩畑晴人(shio)のポートフォリオ。エンジニア/デザイナー。矛盾ごと、かたちにする。",
+        content: "塩畑晴人(shio)のポートフォリオ。エンジニア/デザイナー。矛盾ごと、かたちにする。",
       },
       { name: "theme-color", content: "#0E0A14" },
     ],

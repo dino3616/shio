@@ -15,15 +15,9 @@ function Home() {
         <br />
         Shiohata
       </h1>
-      <p className="font-pixel text-ice mt-6 text-xl tracking-[0.4em]">
-        塩畑 晴人
-      </p>
-      <p className="text-pale mt-3 tracking-[0.2em]">
-        矛盾ごと、かたちにする。
-      </p>
-      <p className="font-crt text-prism mt-16 text-lg">
-        ▚ UNDER CONSTRUCTION ▞
-      </p>
+      <p className="font-pixel text-ice mt-6 text-xl tracking-[0.4em]">塩畑 晴人</p>
+      <p className="text-pale mt-3 tracking-[0.2em]">矛盾ごと、かたちにする。</p>
+      <p className="font-crt text-prism mt-16 text-lg">▚ UNDER CONSTRUCTION ▞</p>
     </main>
   );
 }

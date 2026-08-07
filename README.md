@@ -8,10 +8,13 @@ Haruto Shiohata / 塩畑 晴人 / shio🧂 のポートフォリオサイト。
 
 ## セットアップ
 
+Bun のバージョンはルート `package.json` の `packageManager` を参照(proto / mise / CI が共通で読む)。[Vite+](https://viteplus.dev/)(`vp`)が必要: `curl -fsSL https://vite.plus | bash`
+
 ```bash
-bun install     # 依存のインストール(Bun 1.3.14 — .bun-version 参照)
-bun run dev     # website の開発サーバー(localhost:3000)
-bun run build   # website のプロダクションビルド
+vp install        # 依存のインストール(Bun に委譲)
+bun run dev       # website の開発サーバー(localhost:3000)
+vp run -r build   # 全ワークスペースのビルド+型チェック
+vp check --fix    # フォーマット + リント + 型チェック(pre-commit でも自動実行)
 ```
 
 ## ドキュメント
@@ -23,17 +26,18 @@ bun run build   # website のプロダクションビルド
 
 ## 技術方針
 
-| 項目 | 選定 | 備考 |
-|---|---|---|
-| ランタイム | 開発 = **Bun** / 本番 = **workerd**(Cloudflare Workers) | Node 非依存 |
-| ツールチェーン | **Vite+**(`vp` CLI) | ビルド・テスト・リントを統合した Vite ベースのツールチェーン |
-| フレームワーク | **TanStack Start** | SSR + ファイルベースルーティング(website Worker) |
-| スタイリング | **Tailwind CSS** + **Motion** | 21st.dev 等の shadcn 形式レジストリと互換にするため。詳細は `docs/design-direction.md` の制作フロー |
-| バリデーション | **Valibot** | MCP SDK v2 の Standard Schema 対応で公式サポート。`drizzle-valibot` で DB スキーマと共有 |
-| DB / ORM | **Drizzle ORM + Turso**(libSQL) | 更新頻度の高いコンテンツの置き場。詳細は `docs/architecture.md` |
-| コンテンツ更新 | **自作 MCP サーバー**(`@modelcontextprotocol/server`) | LLM を介してプレイリスト等を更新。詳細は `docs/architecture.md` |
-| 認証 | **Better Auth**(passkey + MCP プラグイン) | パスキーのみ。パスワードも外部 IdP も持たない |
-| ホスティング | **Cloudflare Workers(website / mcp の 2 Worker)** | **shio.studio** = サイト、**mcp.shio.studio** = MCP+認可(Cloudflare 管理)。Bun workspaces のモノレポ(`apps/website`, `apps/mcp`, `packages/db`) |
+| 項目           | 選定                                                    | 備考                                                                                                                                            |
+| -------------- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| ランタイム     | 開発 = **Bun** / 本番 = **workerd**(Cloudflare Workers) | Node 非依存                                                                                                                                     |
+| ツールチェーン | **Vite+**(`vp` CLI)                                     | ビルド・テスト・リント・フォーマット・モノレポタスク(`vp run`)を統合。Turborepo は不採用(`vp run` と重複)                                       |
+| tsconfig       | **@tsconfig/strictest** ベースの共有設定                | `packages/tsconfig`(base / react / worker)                                                                                                      |
+| フレームワーク | **TanStack Start**                                      | SSR + ファイルベースルーティング(website Worker)                                                                                                |
+| スタイリング   | **Tailwind CSS** + **Motion**                           | 21st.dev 等の shadcn 形式レジストリと互換にするため。詳細は `docs/design-direction.md` の制作フロー                                             |
+| バリデーション | **Valibot**                                             | MCP SDK v2 の Standard Schema 対応で公式サポート。`drizzle-valibot` で DB スキーマと共有                                                        |
+| DB / ORM       | **Drizzle ORM + Turso**(libSQL)                         | 更新頻度の高いコンテンツの置き場。詳細は `docs/architecture.md`                                                                                 |
+| コンテンツ更新 | **自作 MCP サーバー**(`@modelcontextprotocol/server`)   | LLM を介してプレイリスト等を更新。詳細は `docs/architecture.md`                                                                                 |
+| 認証           | **Better Auth**(passkey + MCP プラグイン)               | パスキーのみ。パスワードも外部 IdP も持たない                                                                                                   |
+| ホスティング   | **Cloudflare Workers(website / mcp の 2 Worker)**       | **shio.studio** = サイト、**mcp.shio.studio** = MCP+認可(Cloudflare 管理)。Bun workspaces のモノレポ(`apps/website`, `apps/mcp`, `packages/db`) |
 
 ## 参照
 

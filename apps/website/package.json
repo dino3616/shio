@@ -1,12 +1,12 @@
 {
   "name": "@shio/website",
   "private": true,
-  "sideEffects": false,
   "type": "module",
+  "sideEffects": false,
   "scripts": {
-    "dev": "vite dev",
-    "build": "vite build && tsc --noEmit",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "build": "vp build && tsc --noEmit",
+    "preview": "vp preview",
     "deploy": "bun run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },
@@ -20,6 +20,7 @@
   },
   "devDependencies": {
     "@cloudflare/vite-plugin": "^1.29.0",
+    "@shio/tsconfig": "workspace:*",
     "@tailwindcss/vite": "^4.2.2",
     "@types/node": "^22.5.4",
     "@types/react": "^19.0.8",
@@ -27,7 +28,8 @@
     "@vitejs/plugin-react": "^6.0.1",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.0",
-    "vite": "^8.0.14",
+    "vite": "catalog:",
+    "vite-plus": "catalog:",
     "wrangler": "^4.74.0"
   }
 }

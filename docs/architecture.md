@@ -29,12 +29,12 @@
 
 ### なぜ MCP か(検討した代替案)
 
-| 案 | 評価 |
-| --- | --- |
-| **自作 MCP サーバー(採用)** | 更新体験がチャットそのもの。スキーマで守れる。既存スタック(Bun/Drizzle)と完全に一致。「LLMで更新できるポートフォリオ」自体が作品性を持つ |
+| 案                                         | 評価                                                                                                                                           |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| **自作 MCP サーバー(採用)**                | 更新体験がチャットそのもの。スキーマで守れる。既存スタック(Bun/Drizzle)と完全に一致。「LLMで更新できるポートフォリオ」自体が作品性を持つ       |
 | Notion を CMS にして既存 Notion MCP で更新 | 実装ゼロで今日から使えるのが強み。ただしスキーマが緩く、サイト側が Notion API のレイテンシ・レート制限・仕様変更に依存する。つなぎとしてはアリ |
-| REST API + LLM に HTTP を叩かせる | MCP の下位互換。ツール定義の標準化・クライアント側サポートの恩恵がない |
-| YAML + LLM に auto-commit させる | 「更新のためだけに commit したくない」に反するので却下 |
+| REST API + LLM に HTTP を叩かせる          | MCP の下位互換。ツール定義の標準化・クライアント側サポートの恩恵がない                                                                         |
+| YAML + LLM に auto-commit させる           | 「更新のためだけに commit したくない」に反するので却下                                                                                         |
 
 ### 発展形
 
@@ -70,11 +70,27 @@ Workers はステートレスなので DB は外部必須。D1 でなく Turso �
 
 - **Docker は使わない**。本番は Workers(コンテナ不在)、ローカルは `@cloudflare/vite-plugin` が workerd を直接動かすので、開発にもコンテナが要らない。DB のローカル開発は Turso のローカルモード(libSQL ファイル)
 - **Nix は入れない**。ランタイムが Bun 単体でネイティブ依存もゼロのため、Nix が解決する問題がない(将来ネイティブ依存や Linux 開発機が増えたら再検討)
-- **ツールバージョンの単一情報源はリポジトリ直下の `.bun-version`**。特定のバージョンマネージャーに依存しない、ただのバージョン文字列ファイル
-  - proto: エコシステムファイル検出で `.bun-version` を読む(デフォルトの `detect-strategy = "first-available"` のままで動く。`.prototools` は置かない)
-  - mise: idiomatic バージョンファイルとして対応。マシンごとに一度だけ `mise settings add idiomatic_version_file_enable_tools bun` で有効化(2025.10 からデフォルト無効のため)
-  - CI: GitHub Actions の `oven-sh/setup-bun` も `.bun-version` を読める
-  - `.prototools` / `mise.toml` はリポジトリに置かない(二重管理によるドリフト防止)
+- **Bun バージョンの単一情報源はルート `package.json` の `packageManager` フィールド**(`bun@x.y.z`)
+  - proto: Bun プラグインの検出源に `package.json`(packageManager / engines / volta / devEngines)が含まれる
+  - mise: `package.json` が Bun の idiomatic ファイル。マシンごとに一度だけ `mise settings add idiomatic_version_file_enable_tools bun` で有効化
+  - CI: `oven-sh/setup-bun` は `bun-version-file: package.json` で読める
+  - `.bun-version` / `.prototools` / `mise.toml` はリポジトリに置かない(二重管理によるドリフト防止)
+
+### ツールチェーン(Vite+)
+
+- **Vite+(`vp` CLI)を導入済み**。`vp migrate` で移行し、`vite` はカタログ経由で `@voidzero-dev/vite-plus-core` に解決される
+- **フォーマット・リント・型チェックは `vp check --fix`** に一本化(Oxfmt + Oxlint(type-aware)+ tsc)。設定はルート `vite.config.ts`
+- **pre-commit フックは `.vite-hooks/`**(`vp config` が配線、staged ファイルに `vp check --fix` が走る)
+- **エディタ統合は `.vscode/`**(oxc 拡張をデフォルトフォーマッタに、formatOnSave 有効、推奨拡張 `VoidZero.vite-plus-extension-pack`)
+- **モノレポのタスクランナーは `vp run`**(例: `vp run -r build`、`vp run -F @shio/website dev`)。キャッシュ・依存グラフ・pnpm 流フィルタを内蔵するため **Turborepo は不採用**(役割が完全に重複)
+
+### tsconfig
+
+共有設定は `packages/tsconfig`(`@shio/tsconfig`)。**`@tsconfig/strictest` をベース**に、用途別へ分岐:
+
+- `base.json` — strictest + Bundler resolution / ES2022(packages/db が使用)
+- `react.json` — base + `@tsconfig/vite-react`(apps/website が使用)
+- `worker.json` — base + WebWorker lib(apps/mcp が使用)
 
 ## リポジトリ構成
 

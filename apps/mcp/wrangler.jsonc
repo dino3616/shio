@@ -3,5 +3,5 @@
   "name": "shio-mcp",
   "compatibility_date": "2025-09-24",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/index.ts"
+  "main": "src/index.ts",
 }

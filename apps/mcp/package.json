@@ -11,6 +11,7 @@
     "@shio/db": "workspace:*"
   },
   "devDependencies": {
+    "@shio/tsconfig": "workspace:*",
     "typescript": "^5.9.0",
     "wrangler": "^4.74.0"
   }
