@@ -70,7 +70,11 @@ Workers はステートレスなので DB は外部必須。D1 でなく Turso �
 
 - **Docker は使わない**。本番は Workers(コンテナ不在)、ローカルは `@cloudflare/vite-plugin` が workerd を直接動かすので、開発にもコンテナが要らない。DB のローカル開発は Turso のローカルモード(libSQL ファイル)
 - **Nix は入れない**。ランタイムが Bun 単体でネイティブ依存もゼロのため、Nix が解決する問題がない(将来ネイティブ依存や Linux 開発機が増えたら再検討)
-- **ツールバージョンの固定は proto**(このマシンに導入済み、mise / asdf は不使用)。リポジトリ直下の `.prototools` に Bun のバージョンを固定し、複数マシン(Mac 2台)間で揃える
+- **ツールバージョンの単一情報源はリポジトリ直下の `.bun-version`**。特定のバージョンマネージャーに依存しない、ただのバージョン文字列ファイル
+  - proto: エコシステムファイル検出で `.bun-version` を読む(デフォルトの `detect-strategy = "first-available"` のままで動く。`.prototools` は置かない)
+  - mise: idiomatic バージョンファイルとして対応。マシンごとに一度だけ `mise settings add idiomatic_version_file_enable_tools bun` で有効化(2025.10 からデフォルト無効のため)
+  - CI: GitHub Actions の `oven-sh/setup-bun` も `.bun-version` を読める
+  - `.prototools` / `mise.toml` はリポジトリに置かない(二重管理によるドリフト防止)
 
 ## リポジトリ構成
 
