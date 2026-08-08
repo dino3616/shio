@@ -1,4 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { acquirePointer, getPointer } from "~/lib/pointer";
+import { mulberry32 } from "~/lib/random";
+import { type Frame, prefersReducedMotion, subscribeFrame } from "~/lib/ticker";
 
 /**
  * 宇宙プランクトン(moodboard img26)。
@@ -7,18 +10,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
  * 群れの近くを通ると結合・整列規則で自然に合流し、一緒に画面外へ出ていく。
  * - 輪郭: 調和級数ブロブを SMIL の d モーフで絶えずウニョウニョ蠕動させる
  * - 目玉: 全個体が常にカーソルの方向を見る
+ * シミュレーションは共有 ticker が駆動し、個体がゼロのあいだは購読を外して止める
  */
-
-const mulberry32 = (initialSeed: number) => {
-  let seed = initialSeed;
-  return () => {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-};
 
 type Vec = { x: number; y: number };
 
@@ -254,7 +247,6 @@ export const SpacePlankton = () => {
   const [specs, setSpecs] = useState<PlanktonSpec[]>([]);
   const agentsRef = useRef<Agent[]>([]);
   const nodesRef = useRef(new Map<number, PlanktonNodes>());
-  const pointerRef = useRef<Vec | null>(null);
 
   const register = useCallback((id: number, nodes: PlanktonNodes | null) => {
     if (nodes === null) {
@@ -265,20 +257,12 @@ export const SpacePlankton = () => {
   }, []);
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    if (prefersReducedMotion()) {
       return;
     }
 
-    const handlePointerMove = (event: PointerEvent) => {
-      pointerRef.current = { x: event.clientX, y: event.clientY };
-    };
-    const handlePointerOver = (event: PointerEvent) => {
-      if (pointerRef.current === null) {
-        pointerRef.current = { x: event.clientX, y: event.clientY };
-      }
-    };
-    window.addEventListener("pointermove", handlePointerMove);
-    window.addEventListener("pointerover", handlePointerOver);
+    // 目玉の注視に使うカーソル位置は共有ストアから毎フレーム読む
+    const releasePointer = acquirePointer();
 
     let nextId = 1;
     const timers = new Set<number>();
@@ -309,6 +293,7 @@ export const SpacePlankton = () => {
         spawnedAt: performance.now(),
       });
       setSpecs((prev) => [...prev, spec]);
+      ensureRunning();
     };
 
     /**
@@ -406,14 +391,19 @@ export const SpacePlankton = () => {
     };
     later(spawnMigration, 5000 + Math.random() * 5000);
 
-    // ボイドシミュレーション本体
-    let rafId = 0;
-    let lastTime = performance.now();
-    const step = (now: number) => {
-      const dt = Math.min((now - lastTime) / 1000, 0.05);
-      lastTime = now;
-      const t = now / 1000;
+    // ボイドシミュレーション本体。個体がいるあいだだけ共有 ticker を購読する
+    const step = (frame: Frame) => {
       const agents = agentsRef.current;
+      if (agents.length === 0) {
+        unsubscribe?.();
+        unsubscribe = null;
+        return;
+      }
+      const { now, dt, scrollY } = frame;
+      const t = now / 1000;
+      // カーソルはビューポート座標なのでスクロール量を足してドキュメント座標に直す
+      const pointer = getPointer();
+      const pointerDoc = pointer === null ? null : { x: pointer.x, y: pointer.y + scrollY };
       const removed: number[] = [];
 
       for (const agent of agents) {
@@ -486,12 +476,10 @@ export const SpacePlankton = () => {
           const half = agent.spec.size / 2;
           const rotate = Math.sin(t * 0.9 + agent.phase) * 10;
           nodes.root.style.transform = `translate(${(agent.pos.x - half).toFixed(1)}px, ${(agent.pos.y - half).toFixed(1)}px) rotate(${rotate.toFixed(1)}deg)`;
-          // 瞳: 常にカーソルの方を見る(座標が来るまでは中央)。
-          // カーソルはビューポート座標なのでスクロール量を足してドキュメント座標に直す
-          const pointer = pointerRef.current;
-          if (pointer !== null) {
-            const dx = pointer.x - agent.pos.x;
-            const dy = pointer.y + window.scrollY - agent.pos.y;
+          // 瞳: 常にカーソルの方を見る(座標が来るまでは中央)
+          if (pointerDoc !== null) {
+            const dx = pointerDoc.x - agent.pos.x;
+            const dy = pointerDoc.y - agent.pos.y;
             const distance = Math.hypot(dx, dy);
             const offset = Math.min(distance / 40, 4.5);
             const direction = normalize(dx, dy);
@@ -516,14 +504,18 @@ export const SpacePlankton = () => {
         agentsRef.current = agents.filter((agent) => !removed.includes(agent.spec.id));
         setSpecs((prev) => prev.filter((spec) => !removed.includes(spec.id)));
       }
-      rafId = requestAnimationFrame(step);
     };
-    rafId = requestAnimationFrame(step);
+
+    let unsubscribe: (() => void) | null = null;
+    const ensureRunning = () => {
+      if (unsubscribe === null) {
+        unsubscribe = subscribeFrame(step);
+      }
+    };
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerover", handlePointerOver);
+      unsubscribe?.();
+      releasePointer();
       for (const timer of timers) {
         window.clearTimeout(timer);
       }
