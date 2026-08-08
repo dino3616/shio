@@ -1,5 +1,8 @@
 import { animate, motion, useMotionValue, useSpring, useTransform } from "motion/react";
 import { useEffect, useRef, useState } from "react";
+import { acquirePointer, getPointer } from "~/lib/pointer";
+// SSR とクライアントで同じ絵になるよう、シード付き擬似乱数で生成する
+import { mulberry32 } from "~/lib/random";
 
 /**
  * 訪問者のカーソルを追いかける目玉。
@@ -11,18 +14,6 @@ import { useEffect, useRef, useState } from "react";
  * - 虹彩: 外繊維・内繊維・コラレット(波状リング)・クリプト(暗斑)・
  *   ノイズテクスチャの5層構成
  */
-
-// SSR とクライアントで同じ絵になるよう、シード付き擬似乱数で生成する
-const mulberry32 = (initialSeed: number) => {
-  let seed = initialSeed;
-  return () => {
-    seed |= 0;
-    seed = (seed + 0x6d2b79f5) | 0;
-    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-};
 
 type Stroke = {
   d?: string;
@@ -239,16 +230,31 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       }
     }, 60);
 
-    const updateGaze = (clientX: number, clientY: number) => {
+    // 目の中心のドキュメント座標をキャッシュして、pointermove ごとの
+    // getBoundingClientRect(レイアウト読み取り)をなくす。目は Hero に
+    // 絶対配置されているので位置が変わるのは resize のときだけ。
+    // float アニメーション(CSS transform)による±数px のずれは、
+    // 注視オフセットが距離/6 に丸められるため視認できない
+    let center: { x: number; y: number } | null = null;
+    const measureCenter = () => {
       const container = containerRef.current;
       if (container === null) {
         return;
       }
       const rect = container.getBoundingClientRect();
-      const centerX = rect.left + rect.width / 2;
-      const centerY = rect.top + rect.height / 2;
-      const dx = clientX - centerX;
-      const dy = clientY - centerY;
+      center = {
+        x: rect.left + window.scrollX + rect.width / 2,
+        y: rect.top + window.scrollY + rect.height / 2,
+      };
+    };
+    measureCenter();
+
+    const updateGaze = (clientX: number, clientY: number) => {
+      if (center === null) {
+        return;
+      }
+      const dx = clientX - (center.x - window.scrollX);
+      const dy = clientY - (center.y - window.scrollY);
       const angle = Math.atan2(dy, dx);
       const rawDistance = Math.hypot(dx, dy);
       const distance = Math.min(rawDistance / 6, maxOffset);
@@ -259,33 +265,27 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
       pupilQueue.push({ at: performance.now(), value: 0.82 + proximity * 0.53 });
     };
 
-    // スクロール中は pointermove が発火しないので、最後のカーソル位置を
-    // 覚えておき、スクロールで目とカーソルの相対位置が変わったら再計算する
-    let lastPointer: { x: number; y: number } | null = null;
+    // カーソル位置は共有ストアから受け取る(pointermove リスナーを
+    // サイト全体で1組にする。リロード直後の pointerover 初期化もストア側)
+    const releasePointer = acquirePointer((position) => {
+      updateGaze(position.x, position.y);
+    });
 
-    const handlePointerMove = (event: PointerEvent) => {
-      lastPointer = { x: event.clientX, y: event.clientY };
-      updateGaze(event.clientX, event.clientY);
-    };
-    window.addEventListener("pointermove", handlePointerMove);
-
-    // リロード直後はカーソルが動くまで pointermove が発火しない。
-    // Chromium は静止カーソルの下に要素が描画された時点で pointerover を
-    // 発火するので、それを初期視線に使う(最初は中央→すぐカーソルを向く)
-    const handlePointerOver = (event: PointerEvent) => {
-      if (lastPointer === null) {
-        lastPointer = { x: event.clientX, y: event.clientY };
-        updateGaze(event.clientX, event.clientY);
-      }
-    };
-    window.addEventListener("pointerover", handlePointerOver);
-
+    // スクロール中は pointermove が発火しないので、最後のカーソル位置で
+    // 目とカーソルの相対位置を再計算する
     const handleScroll = () => {
-      if (lastPointer !== null) {
-        updateGaze(lastPointer.x, lastPointer.y);
+      const pointer = getPointer();
+      if (pointer !== null) {
+        updateGaze(pointer.x, pointer.y);
       }
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
+
+    const handleResize = () => {
+      measureCenter();
+      handleScroll();
+    };
+    window.addEventListener("resize", handleResize);
 
     // マイクロサッカード: 視線がわずかに泳ぐ。
     // ついでに瞳孔ヒップス(瞳孔径の不随意な微振動)も入れる
@@ -321,9 +321,9 @@ export const Eye = ({ size = 200 }: { size?: number }) => {
     scheduleBlink();
 
     return () => {
-      window.removeEventListener("pointermove", handlePointerMove);
-      window.removeEventListener("pointerover", handlePointerOver);
+      releasePointer();
       window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleResize);
       window.clearTimeout(saccadeTimer);
       window.clearTimeout(blinkTimer);
       window.clearInterval(pupilTimer);

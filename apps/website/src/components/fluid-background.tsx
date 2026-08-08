@@ -1,10 +1,18 @@
 import { useEffect, useRef } from "react";
+import { type Frame, prefersReducedMotion, subscribeFrame } from "~/lib/ticker";
+import { whenInView } from "~/lib/visibility";
+import { createProgram, trackCanvasSize } from "~/lib/webgl";
 
 /**
  * 流体グラデーション背景。
  * ドメインワープした simplex noise で、ムードボード img 26/30 のマーブルを
  * 「生きた背景」にする(design-direction: Hero の主演出)。
  * ノイズ由来なので二度と同じ絵にならない。
+ *
+ * ピクセルあたりのシェーダーコストが最も高い演出なので、
+ * - 0.5x 解像度で描く(ぼかし気味の絵なので見分けがつかない)
+ * - 動きが極端に遅い(u_time * 0.035)ので 30fps に間引く
+ * - ビューポート外(Hero を過ぎたら)は描画を完全に止める
  */
 
 const VERTEX_SHADER = `
@@ -98,20 +106,6 @@ void main() {
 }
 `;
 
-const compileShader = (
-  gl: WebGLRenderingContext,
-  type: number,
-  source: string,
-): WebGLShader | null => {
-  const shader = gl.createShader(type);
-  if (shader === null) {
-    return null;
-  }
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  return shader;
-};
-
 export const FluidBackground = ({ className }: { className?: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -129,16 +123,10 @@ export const FluidBackground = ({ className }: { className?: string }) => {
       return;
     }
 
-    const vert = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
-    const frag = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
-    const program = gl.createProgram();
-    if (vert === null || frag === null || program === null) {
+    const program = createProgram(gl, VERTEX_SHADER, FRAGMENT_SHADER);
+    if (program === null) {
       return;
     }
-    gl.attachShader(program, vert);
-    gl.attachShader(program, frag);
-    gl.linkProgram(program);
-    gl.useProgram(program);
 
     // フルスクリーントライアングル
     const buffer = gl.createBuffer();
@@ -151,45 +139,59 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     const timeLocation = gl.getUniformLocation(program, "u_time");
 
-    const resize = () => {
-      // シェーダーはぼかし気味の絵なので 0.5x 解像度で十分(負荷を1/4に)
-      const dpr = Math.min(window.devicePixelRatio, 2) * 0.5;
-      const width = Math.floor(canvas.clientWidth * dpr);
-      const height = Math.floor(canvas.clientHeight * dpr);
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-        gl.viewport(0, 0, width, height);
-      }
-    };
-
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    let rafId = 0;
+    const reducedMotion = prefersReducedMotion();
     const startedAt = performance.now();
-    const render = () => {
-      resize();
-      const elapsed = (performance.now() - startedAt) / 1000;
+
+    const render = (elapsedSeconds: number) => {
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
       // reduced motion 時は固定シード(それでも訪問ごとに違う絵にしたければ Date 起点にする)
-      gl.uniform1f(timeLocation, reducedMotion ? 42.0 : elapsed);
+      gl.uniform1f(timeLocation, reducedMotion ? 42.0 : elapsedSeconds);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
-      if (!reducedMotion) {
-        rafId = requestAnimationFrame(render);
-      }
     };
-    rafId = requestAnimationFrame(render);
 
-    const handleResize = () => {
+    // シェーダーはぼかし気味の絵なので 0.5x 解像度で十分(負荷を1/4に)
+    const stopTracking = trackCanvasSize(canvas, 0.5, (width, height) => {
+      gl.viewport(0, 0, width, height);
       if (reducedMotion) {
-        render();
+        render(0);
       }
+    });
+
+    if (reducedMotion) {
+      render(0);
+      return () => {
+        stopTracking();
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+      };
+    }
+
+    // 動きが非常にゆっくりなので 30fps への間引きは視覚的に区別がつかない
+    const frameIntervalMs = 1000 / 30;
+    let lastRenderedAt = Number.NEGATIVE_INFINITY;
+    const handleFrame = (frame: Frame) => {
+      // rAF の刻み(60Hz なら約16.7ms)のゆらぎを吸収する 1ms のマージン
+      if (frame.now - lastRenderedAt < frameIntervalMs - 1) {
+        return;
+      }
+      lastRenderedAt = frame.now;
+      render((frame.now - startedAt) / 1000);
     };
-    window.addEventListener("resize", handleResize);
+
+    // Hero がビューポート外に出たら描画を完全に止める
+    let unsubscribe: (() => void) | null = null;
+    const stopObserving = whenInView(canvas, (visible) => {
+      if (visible && unsubscribe === null) {
+        unsubscribe = subscribeFrame(handleFrame);
+      } else if (!visible && unsubscribe !== null) {
+        unsubscribe();
+        unsubscribe = null;
+      }
+    });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", handleResize);
+      stopObserving();
+      unsubscribe?.();
+      stopTracking();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, []);
