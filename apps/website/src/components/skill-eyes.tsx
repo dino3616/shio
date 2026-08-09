@@ -576,20 +576,17 @@ export const SkillEyes = () => {
         const target = toCanvas(alien.cx + parallax.x * 3, alien.cy + bob + parallax.y * 1.8);
         const startX = chip.side === 0 ? chip.x + chip.w + 6 : chip.x - 6;
         const startY = chip.y + chip.h / 2;
-        const dx = target.x - startX;
-        const dy = target.y - startY;
-        const length = Math.hypot(dx, dy);
-        if (length < 1) {
-          continue;
-        }
-        // 終点はボディの縁の少し外。チップごとに角度をずらして扇状に散らす
-        const spread = (chip.order - (ALIENS[0].items.length - 1) / 2) * 0.24;
-        const baseAngle = Math.atan2(-dy, -dx) + spread;
-        const endX = target.x + Math.cos(baseAngle) * BODY_R * 0.78 * scale;
-        const endY = target.y + Math.sin(baseAngle) * BODY_R * 0.78 * scale;
-        // ゆるい弧: 中点を上下に押し出す(上のチップは上へ、下のチップは下へ膨らむ)
+        // 終点はボディの縁の少し外。チップの縦順と同じ順で固定の扇角に
+        // 割り当てる(順序が保存されるので矢印同士は交差しない)
+        const fan = chip.order - (ALIENS[0].items.length - 1) / 2;
+        const spreadStep = 0.15;
+        const endAngle = chip.side === 0 ? Math.PI - fan * spreadStep : fan * spreadStep;
+        const endX = target.x + Math.cos(endAngle) * BODY_R * 0.78 * scale;
+        const endY = target.y + Math.sin(endAngle) * BODY_R * 0.78 * scale;
+        // ゆるい弧: チップ順に入れ子で膨らませる(上は上へ、下は下へ)
+        const bulgeStep = 22;
         const controlX = (startX + endX) / 2;
-        const controlY = (startY + endY) / 2 + (startY - endY) * 0.4;
+        const controlY = (startY + endY) / 2 + fan * bulgeStep;
         const color = chip.side === 0 ? "#f2c4dc" : "#a6d3ea";
         context.strokeStyle = withAlpha(color, 0.5);
         context.lineWidth = 1.2;
