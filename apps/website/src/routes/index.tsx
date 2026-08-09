@@ -1,5 +1,5 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
-import type { MouseEvent } from "react";
+import { type MouseEvent, useEffect, useRef } from "react";
 import { Eye } from "~/components/eye";
 import { FluidBackground } from "~/components/fluid-background";
 import { HeartMoon } from "~/components/heart-moon";
@@ -10,11 +10,49 @@ import { Playground } from "~/components/sections/playground";
 import { Works } from "~/components/sections/works";
 import { SpacePlankton } from "~/components/space-plankton";
 import { Starfield } from "~/components/starfield";
+import { prefersReducedMotion, subscribeFrame } from "~/lib/ticker";
 
 const NAV_ITEMS = ["ABOUT", "WORKS", "PLAYGROUND", "LOGS", "CONTACT"];
 
 const Hero = () => {
   const router = useRouter();
+  const nameRef = useRef<HTMLDivElement>(null);
+  const moonRef = useRef<HTMLDivElement>(null);
+  const eyeRef = useRef<HTMLDivElement>(null);
+
+  // スクロール離脱パララックス: 奥にあるものほどゆっくり流れ、
+  // フォールドに達する前に Hero の世界から静かに離脱していく
+  useEffect(() => {
+    if (prefersReducedMotion()) {
+      return;
+    }
+    let settled = false;
+    return subscribeFrame((frame) => {
+      const viewportHeight = window.innerHeight;
+      const y = frame.scrollY;
+      if (y > viewportHeight * 1.2) {
+        // 完全に見えなくなったら書き込みを止める
+        if (settled) {
+          return;
+        }
+        settled = true;
+      } else {
+        settled = false;
+      }
+      const fade = String(Math.max(0, 1 - y / (viewportHeight * 0.72)));
+      const layers: [HTMLDivElement | null, number][] = [
+        [nameRef.current, 0.32],
+        [eyeRef.current, 0.24],
+        [moonRef.current, 0.16],
+      ];
+      for (const [element, factor] of layers) {
+        if (element !== null) {
+          element.style.transform = `translateY(${y * factor}px)`;
+          element.style.opacity = fade;
+        }
+      }
+    });
+  }, []);
 
   // アンカーへのスムーズスクロール。自前の scrollIntoView + pushState だと
   // TanStack がハッシュ変更を検知して即時の scrollIntoView で上書きしてしまう。
@@ -33,9 +71,6 @@ const Hero = () => {
 
   return (
     <div className="relative flex min-h-screen flex-col overflow-hidden">
-      <FluidBackground />
-      <Starfield stars={240} crosses={2} />
-
       <nav className="font-name relative z-10 flex items-center justify-between px-8 py-8 md:px-20">
         {/* 旧サイト(shio-archive)と同じブランドロゴ */}
         <a href="/" className="flex items-center gap-3 transition-opacity hover:opacity-70">
@@ -68,7 +103,7 @@ const Hero = () => {
       </nav>
 
       <div className="relative z-10 flex flex-1 items-center px-8 md:px-28">
-        <div className="relative">
+        <div ref={nameRef} className="relative">
           <div className="relative">
             <h1 className="sr-only">Haruto Shiohata</h1>
             {/*
@@ -155,12 +190,12 @@ const Hero = () => {
       </div>
 
       {/* 奥行きレイヤー: 傾いたモチーフたち */}
-      <div className="absolute top-[13%] right-[7%] z-10 hidden rotate-12 md:block">
+      <div ref={moonRef} className="absolute top-[13%] right-[7%] z-10 hidden rotate-12 md:block">
         <div className="float-slower">
           <HeartMoon size={150} />
         </div>
       </div>
-      <div className="absolute top-[38%] right-[16%] z-10 hidden -rotate-6 lg:block">
+      <div ref={eyeRef} className="absolute top-[38%] right-[16%] z-10 hidden -rotate-6 lg:block">
         <div className="float-slow">
           <Eye size={190} />
         </div>
@@ -175,10 +210,41 @@ const Hero = () => {
 
 const Home = () => (
   <main className="relative">
+    {/*
+     * Hero のマーブル: 100vh を越えて About 冒頭の背後まで揺らぎ続け、
+     * 下端はマスクの光の減衰で void に溶ける。境界線を持たない
+     */}
+    <div
+      className="pointer-events-none absolute inset-x-0 top-0 h-[135vh]"
+      style={{
+        maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+      }}
+    >
+      <FluidBackground />
+    </div>
+    {/*
+     * ページ全体で連続するひとつの星空。無限遠の空として視点に固定し、
+     * スクロール視差(深度別)で奥行きだけが流れる。Hero と以降のセクションで
+     * 星の世界が入れ替わらないので、フォールドに継ぎ目が生まれない
+     */}
+    <div className="pointer-events-none fixed inset-0">
+      <Starfield stars={380} crosses={3} />
+    </div>
     <Hero />
     {/* 以降のセクション: 宇宙の闇の中を降りていく */}
     <div className="relative">
-      <Starfield stars={420} crosses={3} />
+      {/*
+       * フォールドをまたぐ残光: Hero の色を受け継ぐ楕円をフォールド中心に置き、
+       * 上下対称に減衰させる(箱の端で切れると新しい境界線になってしまう)
+       */}
+      <div
+        className="pointer-events-none absolute inset-x-0 -top-[22vh] h-[44vh]"
+        style={{
+          background:
+            "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(139, 92, 246, 0.08), transparent 70%), radial-gradient(ellipse 45% 40% at 30% 55%, rgba(242, 84, 158, 0.05), transparent 70%)",
+        }}
+      />
       {/* ネビュラの淡い残光 */}
       <div
         className="pointer-events-none absolute inset-0"
