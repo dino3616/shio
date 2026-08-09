@@ -5,20 +5,23 @@ import { whenInView } from "~/lib/visibility";
 
 /**
  * できること: DESIGN と ENGINEERING のふたつの恒星。
- * - 恒星は canvas に描く流体(輪郭が常にうねるプラズマの球)
+ * - 恒星はブラックホール風(暗黒のコア+うねる発光リム+回転する明るい弧)
  * - 各恒星の周りにスキルの吹き出し(DOM。canvas がリード線を描いて恒星とつなぐ)
- * - 恒星の外縁からエネルギーが無数の粒子として漏れ出し、渦を巻きながら中間へ流れる
- * - 中間で粒子が不定形にうねる輪郭(恒星の約半分の大きさ)に合流し、
- *   「かたち」の外枠を作る(Design ∩ Engineering から生まれるもの。テキストは載せない)
+ * - 恒星のリムからエネルギーが無数の微細な粒子として漏れ出し、渦を巻いて中間へ流れる
+ * - 中間の不定形は粒子だけで構成される(発光体は置かない)。
+ *   Design ∩ Engineering から生まれる「かたち」の外枠。テキストは載せない
  */
 
 type StarConfig = {
   title: string;
   /** 恒星中心の位置クラス(モバイル: 縦積み / md+: 左右) */
   position: string;
-  /** 恒星本体のグラデーション(中心 → 外縁) */
-  surfaceStops: [string, string, string, string];
-  corona: string;
+  /** リムの発光色 */
+  ring: string;
+  /** ドップラー・ビーミング風の明るい弧の色 */
+  arc: string;
+  /** 外周ハローの色 */
+  halo: string;
   /** 輪郭のうねりの位相オフセット */
   phase: number;
   colors: string[];
@@ -31,8 +34,9 @@ const STARS: [StarConfig, StarConfig] = [
   {
     title: "DESIGN",
     position: "left-1/2 top-[12%] md:left-[22%] md:top-[42%]",
-    surfaceStops: ["#ffffff", "#ffd9ec", "#f2549e", "#7a1c52"],
-    corona: "rgba(242, 84, 158, 0.32)",
+    ring: "#ff8fc6",
+    arc: "#ffeaf4",
+    halo: "rgba(242, 84, 158, 0.25)",
     phase: 0,
     colors: ["#f2c4dc", "#f2549e", "#ffd9ec"],
     items: ["UIデザイン", "グラフィックデザイン", "モーションデザイン", "世界観の設計"],
@@ -46,8 +50,9 @@ const STARS: [StarConfig, StarConfig] = [
   {
     title: "ENGINEERING",
     position: "left-1/2 top-[84%] md:left-[78%] md:top-[58%]",
-    surfaceStops: ["#ffffff", "#dff1ff", "#a6d3ea", "#1d3e63"],
-    corona: "rgba(166, 211, 234, 0.3)",
+    ring: "#9fd4f2",
+    arc: "#eefaff",
+    halo: "rgba(166, 211, 234, 0.22)",
     phase: Math.PI,
     colors: ["#a6d3ea", "#c4a8f8", "#dff1ff"],
     items: ["Webフロントエンド", "WebGL / シェーダー", "アクセシビリティ", "Web標準"],
@@ -60,7 +65,10 @@ const STARS: [StarConfig, StarConfig] = [
   },
 ];
 
-const PARTICLES_PER_STAR = 320;
+/** 事象の地平面。背景よりわずかに暗い色で星々を飲み込む */
+const CORE_COLOR = "#070510";
+
+const PARTICLES_PER_STAR = 650;
 const TAU = Math.PI * 2;
 
 type Circle = { x: number; y: number; r: number };
@@ -98,13 +106,13 @@ const blobRadius = (base: number, theta: number, t: number) =>
     0.11 * Math.sin(3 * theta - t * 1.3 + 2.1) +
     0.06 * Math.sin(5 * theta + t * 1.9 + 4.2));
 
-/** 恒星表面の半径。blob よりゆっくり・控えめにうねるプラズマの輪郭 */
+/** 恒星リムの半径。円に近いが常に微かにうねる */
 const starRadius = (base: number, theta: number, t: number, phase: number) =>
   base *
   (1 +
-    0.04 * Math.sin(3 * theta + t * 0.7 + phase) +
-    0.028 * Math.sin(5 * theta - t * 1.1 + phase * 2) +
-    0.018 * Math.sin(7 * theta + t * 1.6 + phase));
+    0.028 * Math.sin(3 * theta + t * 0.7 + phase) +
+    0.02 * Math.sin(5 * theta - t * 1.1 + phase * 2) +
+    0.014 * Math.sin(7 * theta + t * 1.6 + phase));
 
 export const SkillStars = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -257,7 +265,7 @@ export const SkillStars = () => {
           lerp(star.r, blob.r, particle.s) + Math.sin(Math.PI * particle.s) * star.r * 0.45;
         particle.x = centerX + Math.cos(angle) * offset;
         particle.y = centerY + Math.sin(angle) * offset;
-        return Math.min(particle.s * 8, 1) * 0.75;
+        return Math.min(particle.s * 8, 1) * 0.55;
       }
       particle.thetaB += particle.dir * particle.drift * dt;
       particle.life -= dt;
@@ -267,34 +275,19 @@ export const SkillStars = () => {
         return 0;
       }
       const radius =
-        blobRadius(blob.r, particle.thetaB, t) + Math.sin(t * 2 + particle.jitterPhase) * 2.5;
+        blobRadius(blob.r, particle.thetaB, t) + Math.sin(t * 2 + particle.jitterPhase) * 3.5;
       particle.x = blob.x + Math.cos(particle.thetaB) * radius;
       particle.y = blob.y + Math.sin(particle.thetaB) * radius;
-      return Math.min(particle.life / (particle.maxLife * 0.25), 1) * 0.8;
+      return Math.min(particle.life / (particle.maxLife * 0.25), 1) * 0.65;
     };
 
-    /** 恒星: コロナ+輪郭がうねるプラズマの球 */
-    const drawStar = (star: Circle, config: StarConfig, t: number) => {
-      const corona = context.createRadialGradient(
-        star.x,
-        star.y,
-        star.r * 0.5,
-        star.x,
-        star.y,
-        star.r * 2.3,
-      );
-      corona.addColorStop(0, config.corona);
-      corona.addColorStop(1, "rgba(0, 0, 0, 0)");
-      context.fillStyle = corona;
+    /** うねるリムに沿ったパスを構築する(閉路または部分弧) */
+    const traceRim = (star: Circle, phase: number, t: number, from = 0, span = TAU) => {
       context.beginPath();
-      context.arc(star.x, star.y, star.r * 2.3, 0, TAU);
-      context.fill();
-
-      context.beginPath();
-      const segments = 72;
+      const segments = span >= TAU ? 84 : 28;
       for (let index = 0; index <= segments; index++) {
-        const theta = (index / segments) * TAU;
-        const radius = starRadius(star.r, theta, t, config.phase);
+        const theta = from + (index / segments) * span;
+        const radius = starRadius(star.r, theta, t, phase);
         const x = star.x + Math.cos(theta) * radius;
         const y = star.y + Math.sin(theta) * radius;
         if (index === 0) {
@@ -303,21 +296,61 @@ export const SkillStars = () => {
           context.lineTo(x, y);
         }
       }
-      context.closePath();
-      const surface = context.createRadialGradient(
-        star.x - star.r * 0.25,
-        star.y - star.r * 0.28,
-        star.r * 0.05,
+      if (span >= TAU) {
+        context.closePath();
+      }
+    };
+
+    /** 恒星: ブラックホール風(暗黒のコア+発光リム+回転する明るい弧) */
+    const drawStar = (star: Circle, config: StarConfig, t: number) => {
+      // 外周ハロー
+      const halo = context.createRadialGradient(
         star.x,
         star.y,
-        star.r * 1.06,
+        star.r * 0.85,
+        star.x,
+        star.y,
+        star.r * 2.4,
       );
-      surface.addColorStop(0, config.surfaceStops[0]);
-      surface.addColorStop(0.24, config.surfaceStops[1]);
-      surface.addColorStop(0.62, config.surfaceStops[2]);
-      surface.addColorStop(1, config.surfaceStops[3]);
-      context.fillStyle = surface;
+      halo.addColorStop(0, config.halo);
+      halo.addColorStop(1, "rgba(0, 0, 0, 0)");
+      context.fillStyle = halo;
+      context.beginPath();
+      context.arc(star.x, star.y, star.r * 2.4, 0, TAU);
       context.fill();
+
+      // 暗黒のコア(背景の星々を飲み込む)
+      traceRim(star, config.phase, t);
+      context.fillStyle = CORE_COLOR;
+      context.fill();
+
+      // 発光リム: 同じパスを太→細で重ねてグロー化
+      context.lineCap = "round";
+      context.strokeStyle = config.ring;
+      for (const [width, alpha] of [
+        [10, 0.14],
+        [4.5, 0.38],
+        [1.8, 0.95],
+      ] as const) {
+        context.globalAlpha = alpha;
+        context.lineWidth = width;
+        context.stroke();
+      }
+
+      // ドップラー・ビーミング風の明るい弧。リムに沿ってゆっくり周回する
+      const arcStart = config.phase + t * 0.4;
+      traceRim(star, config.phase, t, arcStart, 1.8);
+      context.strokeStyle = config.arc;
+      for (const [width, alpha] of [
+        [9, 0.12],
+        [4, 0.3],
+        [1.6, 0.85],
+      ] as const) {
+        context.globalAlpha = alpha;
+        context.lineWidth = width;
+        context.stroke();
+      }
+      context.globalAlpha = 1;
     };
 
     const render = (dt: number, t: number) => {
@@ -343,16 +376,8 @@ export const SkillStars = () => {
       context.stroke();
       context.setLineDash([]);
 
-      // 中間の淡い内殻グロー
-      const glow = context.createRadialGradient(blob.x, blob.y, 0, blob.x, blob.y, blob.r * 1.5);
-      glow.addColorStop(0, "rgba(196, 168, 248, 0.10)");
-      glow.addColorStop(1, "rgba(196, 168, 248, 0)");
-      context.fillStyle = glow;
-      context.beginPath();
-      context.arc(blob.x, blob.y, blob.r * 1.5, 0, TAU);
-      context.fill();
-
-      // 粒子(加算合成で発光する点。尾は描かない)
+      // 粒子(加算合成で発光する微細な点。尾は描かない)。
+      // 中間の不定形はこの粒子だけで構成する
       context.globalCompositeOperation = "lighter";
       for (const particle of particles) {
         const alpha = updateParticle(particle, dt, t);
@@ -361,9 +386,8 @@ export const SkillStars = () => {
         }
         context.globalAlpha = alpha;
         context.fillStyle = particle.color;
-        context.beginPath();
-        context.arc(particle.x, particle.y, particle.mode === "blob" ? 1.6 : 1.3, 0, TAU);
-        context.fill();
+        const size = particle.mode === "blob" ? 1.7 : 1.4;
+        context.fillRect(particle.x - size / 2, particle.y - size / 2, size, size);
       }
       context.globalAlpha = 1;
       context.globalCompositeOperation = "source-over";
