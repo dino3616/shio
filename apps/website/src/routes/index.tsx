@@ -1,5 +1,4 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { BootOverlay } from "~/components/boot-overlay";
 import { Eye } from "~/components/eye";
 import { FluidBackground } from "~/components/fluid-background";
 import { HeartMoon } from "~/components/heart-moon";
@@ -173,8 +172,6 @@ const Home = () => (
     </div>
     {/* 時々画面を横切っていく宇宙プランクトンの群れ */}
     <SpacePlankton />
-    {/* 流体背景の準備ができるまで画面全体を覆い、できたら一斉にフェードイン */}
-    <BootOverlay />
   </main>
 );
 

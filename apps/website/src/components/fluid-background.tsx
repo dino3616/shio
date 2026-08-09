@@ -1,5 +1,4 @@
 import { useEffect, useRef } from "react";
-import { markBootReady } from "~/lib/boot";
 import { type Frame, prefersReducedMotion, subscribeFrame } from "~/lib/ticker";
 import { whenInView } from "~/lib/visibility";
 import { createProgram, trackCanvasSize } from "~/lib/webgl";
@@ -18,11 +17,6 @@ import { createProgram, trackCanvasSize } from "~/lib/webgl";
  *   模様の「動き」がスナップショット周期でしか更新されずカクついて見えた)
  * - 質感の要のフィルムグレインは表示パスで従来どおりの解像度で合成する
  * - ビューポート外(Hero を過ぎたら)は描画を完全に止める
- *
- * 初回表示: シェーダーのコンパイル完了(KHR_parallel_shader_compile があれば
- * 非同期で待つ)→ 初回フレーム描画まで BootOverlay が画面全体を覆っている。
- * 描けたら markBootReady で幕を開ける。WebGL が使えない・Hero が画面外などの
- * 「描けない」ケースでも必ず markBootReady を呼んで幕を開けっぱなしにしない
  */
 
 const VERTEX_SHADER = `
@@ -152,61 +146,39 @@ export const FluidBackground = ({ className }: { className?: string }) => {
       stencil: false,
     });
     if (gl === null) {
-      // WebGL が使えなくても幕は開ける(背景は bg-void のまま)
-      markBootReady();
       return;
     }
 
     const marbleProgram = createProgram(gl, VERTEX_SHADER, MARBLE_FRAGMENT_SHADER);
     const displayProgram = createProgram(gl, DISPLAY_VERTEX_SHADER, DISPLAY_FRAGMENT_SHADER);
     if (marbleProgram === null || displayProgram === null) {
-      markBootReady();
       return;
     }
 
-    // 対応ブラウザではシェーダーをバックグラウンドでコンパイルさせ、リンク完了を
-    // 待ってから描き始める(待っている間は BootOverlay が画面を覆っている)。
-    // 拡張がなければ従来どおり初回描画時に同期コンパイルされる
-    const parallelExt = gl.getExtension("KHR_parallel_shader_compile");
-    const programsCompiled = () =>
-      parallelExt === null ||
-      (gl.getProgramParameter(marbleProgram, parallelExt.COMPLETION_STATUS_KHR) === true &&
-        gl.getProgramParameter(displayProgram, parallelExt.COMPLETION_STATUS_KHR) === true);
-
-    // フルスクリーントライアングル(両パスで共有)。バッファ作成はリンク完了を
-    // 待たずにできるが、ロケーション取得(getAttribLocation / getUniformLocation)
-    // はリンク完了までブロックするため initPipeline に遅延する
+    // フルスクリーントライアングル(両パスで共有)。
+    // 頂点属性の設定はプログラムではなくロケーションに紐づく状態なので、
+    // 両プログラムのロケーションに一度ずつ設定しておけば切り替え不要
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const positionLocations = new Set([
+      gl.getAttribLocation(marbleProgram, "a_position"),
+      gl.getAttribLocation(displayProgram, "a_position"),
+    ]);
+    for (const location of positionLocations) {
+      gl.enableVertexAttribArray(location);
+      gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
+    }
 
-    let resolutionLocation: WebGLUniformLocation | null = null;
-    let timeLocation: WebGLUniformLocation | null = null;
-    let pipelineReady = false;
-
-    const initPipeline = () => {
-      // 頂点属性の設定はプログラムではなくロケーションに紐づく状態なので、
-      // 両プログラムのロケーションに一度ずつ設定しておけば切り替え不要
-      const positionLocations = new Set([
-        gl.getAttribLocation(marbleProgram, "a_position"),
-        gl.getAttribLocation(displayProgram, "a_position"),
-      ]);
-      for (const location of positionLocations) {
-        gl.enableVertexAttribArray(location);
-        gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
-      }
-      resolutionLocation = gl.getUniformLocation(marbleProgram, "u_resolution");
-      timeLocation = gl.getUniformLocation(marbleProgram, "u_time");
-      gl.useProgram(displayProgram);
-      gl.uniform1i(gl.getUniformLocation(displayProgram, "u_marble"), 0);
-      pipelineReady = true;
-    };
+    const resolutionLocation = gl.getUniformLocation(marbleProgram, "u_resolution");
+    const timeLocation = gl.getUniformLocation(marbleProgram, "u_time");
+    gl.useProgram(displayProgram);
+    gl.uniform1i(gl.getUniformLocation(displayProgram, "u_marble"), 0);
 
     // マーブル用レンダーターゲット。バイリニア拡大するので LINEAR
     const marbleTexture = gl.createTexture();
     const marbleFramebuffer = gl.createFramebuffer();
     if (marbleTexture === null || marbleFramebuffer === null) {
-      markBootReady();
       return;
     }
     gl.bindTexture(gl.TEXTURE_2D, marbleTexture);
@@ -267,7 +239,7 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     // canvas はぼかし気味の絵なので従来どおり 0.5x 解像度
     const stopTracking = trackCanvasSize(canvas, 0.5, () => {
       resizeMarble();
-      if (reducedMotion && pipelineReady) {
+      if (reducedMotion) {
         render(0);
       }
     });
@@ -275,35 +247,15 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     resizeMarble();
 
     if (reducedMotion) {
-      // 静止画1枚。リンク完了を待ってから一度だけ描いて幕を開ける
-      let pollId = 0;
-      const renderOnceReady = () => {
-        if (!programsCompiled()) {
-          pollId = requestAnimationFrame(renderOnceReady);
-          return;
-        }
-        initPipeline();
-        render(0);
-        markBootReady();
-      };
-      renderOnceReady();
+      render(0);
       return () => {
-        cancelAnimationFrame(pollId);
         stopTracking();
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       };
     }
 
     const handleFrame = (frame: Frame) => {
-      if (!pipelineReady) {
-        // リンク完了までは描かない(そのあいだは BootOverlay が覆っている)
-        if (!programsCompiled()) {
-          return;
-        }
-        initPipeline();
-      }
       render((frame.now - startedAt) / 1000);
-      markBootReady();
     };
 
     // Hero がビューポート外に出たら描画を完全に止める
@@ -311,14 +263,9 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     const stopObserving = whenInView(canvas, (visible) => {
       if (visible && unsubscribe === null) {
         unsubscribe = subscribeFrame(handleFrame);
-      } else if (!visible) {
-        // スクロール位置の復元などで Hero が画面外のまま始まった場合、
-        // 流体は描かれないので幕をここで開ける
-        markBootReady();
-        if (unsubscribe !== null) {
-          unsubscribe();
-          unsubscribe = null;
-        }
+      } else if (!visible && unsubscribe !== null) {
+        unsubscribe();
+        unsubscribe = null;
       }
     });
 
