@@ -214,69 +214,99 @@ const Hero = () => {
   );
 };
 
-const Home = () => (
-  <main className="relative">
-    {/*
-     * Hero のマーブル: 100vh を越えて About 冒頭の背後まで揺らぎ続け、
-     * 下端はマスクの光の減衰で void に溶ける。境界線を持たない
-     */}
-    <div
-      className="pointer-events-none absolute inset-x-0 top-0 h-[135vh]"
-      style={{
-        // コサインイージングの多段ストップ。単純な2点グラデーションは減衰の
-        // 始点で傾きが不連続になり、マッハバンド(知覚上の線)が出てしまう
-        maskImage:
-          "linear-gradient(to bottom, black 55%, rgba(0, 0, 0, 0.94) 62%, rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 85%, rgba(0, 0, 0, 0.09) 92%, rgba(0, 0, 0, 0.02) 97%, transparent 100%)",
-        WebkitMaskImage:
-          "linear-gradient(to bottom, black 55%, rgba(0, 0, 0, 0.94) 62%, rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 85%, rgba(0, 0, 0, 0.09) 92%, rgba(0, 0, 0, 0.02) 97%, transparent 100%)",
-      }}
-    >
-      <FluidBackground />
-    </div>
-    {/*
-     * ページ全体で連続するひとつの星空。無限遠の空として視点に固定し、
-     * スクロール視差(深度別)で奥行きだけが流れる。Hero と以降のセクションで
-     * 星の世界が入れ替わらないので、フォールドに継ぎ目が生まれない
-     */}
-    <div className="pointer-events-none fixed inset-0">
-      <Starfield stars={380} crosses={3} />
-    </div>
-    <Hero />
-    {/* 以降のセクション: 宇宙の闇の中を降りていく */}
-    <div className="relative">
+const Home = () => {
+  const marbleRef = useRef<HTMLDivElement>(null);
+
+  // マーブルの中景視差: コンテンツ(1.0)と星(ほぼ0)の間の速度(0.5)で流れることで
+  // 「コンテンツ > 星雲 > 星」の単調な奥行きの階層を作る
+  useEffect(() => {
+    if (prefersReducedMotion()) {
+      return;
+    }
+    let settled = false;
+    return subscribeFrame((frame) => {
+      const element = marbleRef.current;
+      if (element === null) {
+        return;
+      }
+      // マーブルの裾が視界から完全に出たら(=270vh)書き込みを止める
+      if (frame.scrollY > window.innerHeight * 2.9) {
+        if (settled) {
+          return;
+        }
+        settled = true;
+      } else {
+        settled = false;
+      }
+      element.style.transform = `translateY(${frame.scrollY * 0.5}px)`;
+    });
+  }, []);
+
+  return (
+    <main className="relative">
       {/*
-       * フォールドをまたぐ残光: Hero の色を受け継ぐ楕円をフォールド中心に置き、
-       * 上下対称に減衰させる(箱の端で切れると新しい境界線になってしまう)
+       * Hero のマーブル: 100vh を越えて About 冒頭の背後まで揺らぎ続け、
+       * 下端はマスクの光の減衰で void に溶ける。境界線を持たない
        */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-[22vh] h-[44vh]"
+        ref={marbleRef}
+        className="pointer-events-none absolute inset-x-0 top-0 h-[135vh]"
         style={{
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(139, 92, 246, 0.08), transparent 70%), radial-gradient(ellipse 45% 40% at 30% 55%, rgba(242, 84, 158, 0.05), transparent 70%)",
+          // コサインイージングの多段ストップ。単純な2点グラデーションは減衰の
+          // 始点で傾きが不連続になり、マッハバンド(知覚上の線)が出てしまう
+          maskImage:
+            "linear-gradient(to bottom, black 55%, rgba(0, 0, 0, 0.94) 62%, rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 85%, rgba(0, 0, 0, 0.09) 92%, rgba(0, 0, 0, 0.02) 97%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 55%, rgba(0, 0, 0, 0.94) 62%, rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 85%, rgba(0, 0, 0, 0.09) 92%, rgba(0, 0, 0, 0.02) 97%, transparent 100%)",
         }}
-      />
+      >
+        <FluidBackground />
+      </div>
       {/*
-       * ネビュラの淡い残光。各楕円は箱の内側で必ず減衰しきるサイズ・位置にする
-       * (裾が箱の縁を越えると、グラデーションが値を持ったまま切断されて
-       * 水平線として知覚される)
+       * ページ全体で連続するひとつの星空。無限遠の空として視点に固定し、
+       * スクロール視差(深度別)で奥行きだけが流れる。Hero と以降のセクションで
+       * 星の世界が入れ替わらないので、フォールドに継ぎ目が生まれない
        */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 60% 26% at 80% 28%, rgba(139, 92, 246, 0.08), transparent), radial-gradient(ellipse 50% 25% at 15% 45%, rgba(242, 84, 158, 0.06), transparent), radial-gradient(ellipse 55% 22% at 75% 76%, rgba(166, 211, 234, 0.05), transparent)",
-        }}
-      />
-      <About />
-      <Works />
-      <Playground />
-      <Logs />
-      <Contact />
-    </div>
-    {/* 時々画面を横切っていく宇宙プランクトンの群れ */}
-    <SpacePlankton />
-  </main>
-);
+      <div className="pointer-events-none fixed inset-0">
+        <Starfield stars={380} crosses={3} />
+      </div>
+      <Hero />
+      {/* 以降のセクション: 宇宙の闇の中を降りていく */}
+      <div className="relative">
+        {/*
+         * フォールドをまたぐ残光: Hero の色を受け継ぐ楕円をフォールド中心に置き、
+         * 上下対称に減衰させる(箱の端で切れると新しい境界線になってしまう)
+         */}
+        <div
+          className="pointer-events-none absolute inset-x-0 -top-[22vh] h-[44vh]"
+          style={{
+            background:
+              "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(139, 92, 246, 0.08), transparent 70%), radial-gradient(ellipse 45% 40% at 30% 55%, rgba(242, 84, 158, 0.05), transparent 70%)",
+          }}
+        />
+        {/*
+         * ネビュラの淡い残光。各楕円は箱の内側で必ず減衰しきるサイズ・位置にする
+         * (裾が箱の縁を越えると、グラデーションが値を持ったまま切断されて
+         * 水平線として知覚される)
+         */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 60% 26% at 80% 28%, rgba(139, 92, 246, 0.08), transparent), radial-gradient(ellipse 50% 25% at 15% 45%, rgba(242, 84, 158, 0.06), transparent), radial-gradient(ellipse 55% 22% at 75% 76%, rgba(166, 211, 234, 0.05), transparent)",
+          }}
+        />
+        <About />
+        <Works />
+        <Playground />
+        <Logs />
+        <Contact />
+      </div>
+      {/* 時々画面を横切っていく宇宙プランクトンの群れ */}
+      <SpacePlankton />
+    </main>
+  );
+};
 
 export const Route = createFileRoute("/")({
   component: Home,

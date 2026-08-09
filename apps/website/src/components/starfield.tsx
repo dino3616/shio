@@ -8,7 +8,8 @@ import { createProgram, trackCanvasSize } from "~/lib/webgl";
  * WebGL 星空(design-direction: 数学的モーション+空間的な奥行き)。
  * - 加算ブレンドのポイントスプライトで発光を物理的に重ねる
  * - べき乗分布のサイズ(暗い星ほど多い)+色温度のばらつき+星団クラスタ
- * - 深度アトリビュートでマウス/スクロールに視差反応(近い星ほど動く)
+ * - スクロールで近い星ほど速く通り過ぎ、画面外に出た星は反対側から
+ *   再入場する(スクロール=宇宙の闇を降りていく降下の体験)
  * - リサージュ的ドリフトと非同期の瞬きは頂点シェーダーで計算
  * - 十字のキラキラはアクセントとしてごく稀に混ぜる(かわいさの記号)
  * 描画は共有 ticker が駆動し、ビューポート外に出たインスタンスは止まる
@@ -27,7 +28,7 @@ attribute vec4 a_drift;      // ampX, ampY, freqX, freqY
 uniform vec2 u_resolution;   // デバイスpx
 uniform float u_time;
 uniform float u_dpr;
-uniform vec2 u_parallax;     // CSS px(深度1のときの視差)
+uniform float u_scroll;      // CSS px
 
 varying float v_alpha;
 varying vec3 v_color;
@@ -38,7 +39,11 @@ void main() {
     a_drift.x * sin(a_drift.z * u_time + a_phase),
     a_drift.y * sin(a_drift.w * u_time + a_phase * 1.7)
   );
-  vec2 px = a_pos * u_resolution + (drift + u_parallax * a_depth) * u_dpr;
+  // 降下の視差: 近い星(深度1)ほど速く上へ流れ、mod でラップして
+  // 反対側から再入場する。遠い星はほとんど動かない
+  float scrollSpeed = 0.06 + 0.4 * a_depth;
+  vec2 px = a_pos * u_resolution + drift * u_dpr;
+  px.y = mod(px.y - u_scroll * scrollSpeed * u_dpr, u_resolution.y);
   vec2 clip = (px / u_resolution) * 2.0 - 1.0;
   gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);
 
@@ -236,7 +241,7 @@ export const Starfield = ({
     const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
     const timeLocation = gl.getUniformLocation(program, "u_time");
     const dprLocation = gl.getUniformLocation(program, "u_dpr");
-    const parallaxLocation = gl.getUniformLocation(program, "u_parallax");
+    const scrollLocation = gl.getUniformLocation(program, "u_scroll");
 
     const reducedMotion = prefersReducedMotion();
     const startedAt = performance.now();
@@ -247,8 +252,7 @@ export const Starfield = ({
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
       gl.uniform1f(timeLocation, t);
       gl.uniform1f(dprLocation, Math.min(window.devicePixelRatio, 2));
-      // 視差はスクロールのみ(深度1の星ほど大きくずれる)
-      gl.uniform2f(parallaxLocation, 0, -scrollY * 0.05);
+      gl.uniform1f(scrollLocation, scrollY);
       gl.drawArrays(gl.POINTS, 0, starCount);
     };
 
