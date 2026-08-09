@@ -109,8 +109,10 @@ export const SkillEyes = () => {
 
     const random = mulberry32(1103);
 
-    // 瞳孔の宇宙: Hero と同じマーブルシェーダーをオフスクリーンで描いて転写する
-    const marble = createMarbleRenderer(256);
+    // 瞳孔の宇宙: Hero と同じマーブルシェーダーをオフスクリーンで描いて転写する。
+    // 羽根状のアルファ減衰(輪郭は不定形にうねる)をシェーダー側で焼き込むので、
+    // 転写先ではクリップも境界処理も不要になり、外縁は原理的に知覚できない
+    const marble = createMarbleRenderer(256, true);
 
     // 毛細血管: 白目の外縁から瞳孔へ向かって這う細い糸(外側の白目が広い側に多め)
     const buildCapillaries = (side: 0 | 1) => {
@@ -327,21 +329,23 @@ export const SkillEyes = () => {
       const gazeOffset = gaze[side] ?? { x: 0, y: 0 };
       const px = (side === 0 ? PUPIL_BIAS : -PUPIL_BIAS) + gazeOffset.x;
       const py = 4 + gazeOffset.y;
-      context.beginPath();
-      context.arc(px, py, PUPIL_R, 0, TAU);
-      context.fillStyle = "#0b0714";
-      context.fill();
 
-      // 宇宙: Hero と同じマーブルシェーダーを転写する(瞳孔中心と一緒に動く)
-      context.save();
-      context.beginPath();
-      context.arc(px, py, PUPIL_R - 1, 0, TAU);
-      context.clip();
       if (marble !== null) {
         context.save();
         context.translate(px, py);
         // 左右で回転を変えて別の宇宙に見せる
         context.rotate(side === 0 ? 0.4 : Math.PI + 1.1);
+
+        // 白目への滲み出し: 同じ羽根付きスプライトを大きく薄く重ね、
+        // 「模様が終わる場所」そのものを無くす
+        context.globalCompositeOperation = "soft-light";
+        context.globalAlpha = 0.4;
+        const bleedSize = PUPIL_R * 4;
+        context.drawImage(marble.canvas, -bleedSize / 2, -bleedSize / 2, bleedSize, bleedSize);
+        context.globalCompositeOperation = "source-over";
+        context.globalAlpha = 1;
+
+        // 瞳孔本体: アルファはシェーダーで焼き込み済み(クリップ不要)
         const marbleSize = PUPIL_R * 2.5;
         context.drawImage(marble.canvas, -marbleSize / 2, -marbleSize / 2, marbleSize, marbleSize);
         // screen 合成で同じ絵を重ね、Hero 背景より明るく発光させる
@@ -352,26 +356,6 @@ export const SkillEyes = () => {
         context.globalCompositeOperation = "source-over";
         context.restore();
       }
-
-      // 縁が闇に落ちるビネット
-      const vignette = context.createRadialGradient(px, py, PUPIL_R * 0.55, px, py, PUPIL_R);
-      vignette.addColorStop(0, "rgba(2, 0, 6, 0)");
-      vignette.addColorStop(1, "rgba(2, 0, 6, 0.4)");
-      context.fillStyle = vignette;
-      context.beginPath();
-      context.arc(px, py, PUPIL_R, 0, TAU);
-      context.fill();
-      context.restore();
-
-      // 白目と黒目の境界をぼかす: 白目の色が瞳孔の縁へ滲み込むクロスフェード
-      const boundary = context.createRadialGradient(px, py, PUPIL_R * 0.76, px, py, PUPIL_R * 1.24);
-      boundary.addColorStop(0, withAlpha(alien.sclera, 0));
-      boundary.addColorStop(0.5, withAlpha(alien.sclera, 0.6));
-      boundary.addColorStop(1, withAlpha(alien.sclera, 0));
-      context.fillStyle = boundary;
-      context.beginPath();
-      context.arc(px, py, PUPIL_R * 1.24, 0, TAU);
-      context.fill();
 
       context.restore();
 

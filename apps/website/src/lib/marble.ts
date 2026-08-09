@@ -17,6 +17,9 @@ precision highp float;
 
 uniform vec2 u_resolution;
 uniform float u_time;
+// 0で不透明(全画面背景用)。1で縁が羽根状に透明へ落ちる(瞳孔用)。
+// 減衰の輪郭は円ではなく、ゆっくりうねる不定形にして境界を知覚させない
+uniform float u_falloff;
 
 // Ashima Arts simplex noise (MIT)
 vec3 permute(vec3 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
@@ -88,7 +91,17 @@ void main() {
   float vig = smoothstep(1.35, 0.3, length(p));
   col *= mix(0.45, 1.0, vig);
 
-  gl_FragColor = vec4(col, 1.0);
+  float alpha = 1.0;
+  if (u_falloff > 0.5) {
+    float ang = atan(p.y, p.x);
+    float wobble = 0.016 * sin(3.0 * ang + u_time * 0.25)
+      + 0.010 * sin(5.0 * ang - u_time * 0.18)
+      + 0.006 * sin(7.0 * ang + u_time * 0.33);
+    float radius = length(p) * 2.0;
+    alpha = 1.0 - smoothstep(0.58 + wobble, 1.04 + wobble * 1.5, radius);
+  }
+  // canvas は premultiplied alpha として合成するので色にもアルファを掛ける
+  gl_FragColor = vec4(col * alpha, alpha);
 }
 `;
 
@@ -99,8 +112,11 @@ export type MarbleRenderer = {
   destroy: () => void;
 };
 
-/** 小さなオフスクリーンでマーブルを描くレンダラ(瞳孔などへの転写用) */
-export const createMarbleRenderer = (size: number): MarbleRenderer | null => {
+/**
+ * 小さなオフスクリーンでマーブルを描くレンダラ(瞳孔などへの転写用)。
+ * feathered を有効にすると、縁がうねりながら羽根状に透明へ落ちる
+ */
+export const createMarbleRenderer = (size: number, feathered = false): MarbleRenderer | null => {
   const canvas = document.createElement("canvas");
   canvas.width = size;
   canvas.height = size;
@@ -124,6 +140,7 @@ export const createMarbleRenderer = (size: number): MarbleRenderer | null => {
   const timeLocation = gl.getUniformLocation(program, "u_time");
   gl.useProgram(program);
   gl.uniform2f(resolutionLocation, size, size);
+  gl.uniform1f(gl.getUniformLocation(program, "u_falloff"), feathered ? 1 : 0);
   gl.viewport(0, 0, size, size);
 
   return {
