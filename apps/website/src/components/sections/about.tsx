@@ -1,19 +1,33 @@
+import { ConstellationTimeline } from "~/components/constellation-timeline";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
 
 /**
- * About: Hero のガラス質感を引き継いだパネルに自己紹介を載せ、
- * 興味はステッカーを貼ったような傾きのあるチップで並べる。
- * 右側には本人の写真とブランドイラストをコラージュ風に重ねる
+ * About: 「自分は誰か」に集中するセクション(content-plan の確定構成)。
+ * アイデンティティ / ステートメント / スタンス / 興味 / できること / 経歴星座。
+ * now 系は Logs、作品の熱量は Playground の管轄なのでここには置かない
  */
 
-const INTERESTS: { label: string; tilt: number }[] = [
-  { label: "コード", tilt: -2 },
-  { label: "グラフィック", tilt: 1.5 },
-  { label: "音楽", tilt: -1 },
-  { label: "メイク", tilt: 2 },
-  { label: "服", tilt: -1.5 },
-  { label: "ことば", tilt: 1 },
+const INTERESTS: { label: string; comment: string; tilt: number }[] = [
+  { label: "コード", comment: "Web標準と数学が好き", tilt: -2 },
+  { label: "グラフィック", comment: "かわいさと不穏、矛盾の同居が好き", tilt: 1.5 },
+  { label: "音楽", comment: "歌唱音声合成とメタルを行き来してる", tilt: -1 },
+  { label: "メイク", comment: "ベースメイクには一家言あり", tilt: 2 },
+  { label: "服", comment: "リメイクして着るのが好き", tilt: -1.5 },
+  { label: "ことば", comment: "倫理学を愛でてる", tilt: 1 },
+];
+
+const SKILL_GROUPS: { title: string; accent: string; items: string[] }[] = [
+  {
+    title: "DESIGN",
+    accent: "#f2c4dc",
+    items: ["UIデザイン", "グラフィックデザイン", "モーションデザイン", "世界観の設計"],
+  },
+  {
+    title: "ENGINEERING",
+    accent: "#a6d3ea",
+    items: ["Webフロントエンド", "WebGL / シェーダー", "アクセシビリティ", "Web標準"],
+  },
 ];
 
 export const About = () => (
@@ -21,10 +35,19 @@ export const About = () => (
     <SectionHeader number="01" title="ABOUT" jp="こういう人間です" />
     <div className="mt-12 flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
       <div className="max-w-2xl flex-1">
+        {/* アイデンティティ: 名前3表記+肩書き */}
         <Reveal delay={0.08}>
-          {/* Hero の名前と同じ「透けるガラス」の言語をパネルとして継承 */}
+          <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+            <p className="font-name text-star text-2xl font-bold">塩畑 晴人</p>
+            <p className="font-mono text-star/60 text-sm">Haruto Shiohata / shio🧂</p>
+            <p className="font-mono text-pink text-xs tracking-[0.25em]">ENGINEER × DESIGNER</p>
+          </div>
+        </Reveal>
+
+        {/* ステートメント: Hero と同じ「透けるガラス」のパネル */}
+        <Reveal delay={0.14}>
           <div
-            className="rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-md"
+            className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-8 backdrop-blur-md"
             style={{ boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.08)" }}
           >
             <p className="text-pale text-lg leading-loose">
@@ -32,22 +55,55 @@ export const About = () => (
               デザイン、音楽、服、文章など手段は違っても、「その人らしさ」や
               「まだ名前のない感覚」を形にすることに惹かれます。
             </p>
+            <p className="text-pale mt-5 text-lg leading-loose">
+              好奇心は強いけれど、考えすぎるところもあります。それでも結局、
+              ずっと人に興味があります。自分の中の矛盾も含めて、面白がりながら、
+              かたちにしていきたい。
+            </p>
           </div>
         </Reveal>
-        <Reveal delay={0.16}>
-          <ul className="mt-10 flex flex-wrap gap-3">
+
+        {/* 仕事のスタンス: 観察 → 言語化 → 世界観 */}
+        <Reveal delay={0.2}>
+          <div className="mt-8">
+            <p className="font-mincho text-star text-base tracking-[0.2em]">
+              観察する<span className="text-pink mx-2">→</span>ことばにする
+              <span className="text-pink mx-2">→</span>世界観にする
+            </p>
+            <p className="text-star/50 mt-2 text-sm leading-relaxed">
+              違和感に気づいて、名前を付けて、ひとつの世界に組み上げる。仕事の進め方はいつもこの順番です。
+            </p>
+          </div>
+        </Reveal>
+
+        {/* 興味: ステッカー風チップ+ホバー/フォーカスで人柄コメント */}
+        <Reveal delay={0.26}>
+          <ul className="mt-10 flex max-w-2xl flex-wrap gap-3">
             {INTERESTS.map((interest) => (
               <li
                 key={interest.label}
-                className="border-star/25 text-pale hover:border-star/70 hover:text-star cursor-default rounded-full border bg-white/[0.03] px-5 py-2 text-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_6px_24px_rgba(247,242,250,0.18)]"
+                className="group relative"
                 style={{ rotate: `${interest.tilt}deg` }}
               >
-                {interest.label}
+                <button
+                  type="button"
+                  className="border-star/25 text-pale hover:border-star/70 hover:text-star focus-visible:border-star/70 cursor-default rounded-full border bg-white/[0.03] px-5 py-2 text-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_6px_24px_rgba(247,242,250,0.18)] focus:outline-none"
+                >
+                  {interest.label}
+                </button>
+                {/* 人柄コメントの吹き出し */}
+                <span
+                  role="tooltip"
+                  className="bg-navy/90 text-pale pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 rounded-lg border border-white/15 px-3 py-1.5 font-mono text-[11px] whitespace-nowrap opacity-0 backdrop-blur-sm transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
+                >
+                  {interest.comment}
+                </span>
               </li>
             ))}
           </ul>
         </Reveal>
-        <Reveal delay={0.24}>
+
+        <Reveal delay={0.32}>
           <p className="font-mono mt-12 text-xs text-[#666c96]">
             {"\u{1F47D}"} &gt; you found nothing. yet.
           </p>
@@ -73,6 +129,42 @@ export const About = () => (
             className="float-slower absolute -bottom-8 -left-10 w-28 -rotate-8 rounded-2xl border border-white/20 md:w-32"
             style={{ boxShadow: "0 10px 34px rgba(242, 84, 158, 0.35)" }}
           />
+        </div>
+      </Reveal>
+    </div>
+
+    {/* できること+経歴星座 */}
+    <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
+      <Reveal delay={0.1}>
+        <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">できること</h3>
+        <div className="mt-6 space-y-5">
+          {SKILL_GROUPS.map((group) => (
+            <div
+              key={group.title}
+              className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md"
+              style={{ boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.08)" }}
+            >
+              <p className="font-mono text-xs tracking-[0.25em]" style={{ color: group.accent }}>
+                {group.title}
+              </p>
+              <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
+                {group.items.map((item) => (
+                  <li key={item} className="text-pale text-sm">
+                    <span className="mr-1.5 text-xs" style={{ color: group.accent }}>
+                      ✦
+                    </span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </Reveal>
+      <Reveal delay={0.18}>
+        <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">これまでの軌道</h3>
+        <div className="mt-6">
+          <ConstellationTimeline />
         </div>
       </Reveal>
     </div>
