@@ -9,11 +9,13 @@ import { createProgram, trackCanvasSize } from "~/lib/webgl";
  * 「生きた背景」にする(design-direction: Hero の主演出)。
  * ノイズ由来なので二度と同じ絵にならない。
  *
- * ピクセルあたりのシェーダーコストが最も高い演出なので、時間方向に償却する:
- * - 0.5x 解像度で描く(ぼかし気味の絵なので見分けがつかない)
- * - 重い fbm パスは 10fps でテクスチャに描き、画面へは前後2枚のテクスチャを
- *   線形補間するだけの軽量パスを毎フレーム出す。動きが極端に遅い
- *   (u_time * 0.035 = 100ms で 0.0035)ので補間で滑らかさは保たれる
+ * ピクセルあたりのシェーダーコストが最も高い演出なので、空間方向に償却する:
+ * - 重い fbm パスはマーブルが低周波なことを利用して、canvas のさらに半分の
+ *   解像度のテクスチャへ毎フレーム描き、表示パスでバイリニア拡大する。
+ *   模様の動きは真の 60fps のまま、fbm の実行回数は面積比で 1/4 になる
+ *   (時間方向の償却=スナップショットのクロスフェードは、明るさは滑らかでも
+ *   模様の「動き」がスナップショット周期でしか更新されずカクついて見えた)
+ * - 質感の要のフィルムグレインは表示パスで従来どおりの解像度で合成する
  * - ビューポート外(Hero を過ぎたら)は描画を完全に止める
  */
 
@@ -24,7 +26,7 @@ void main() {
 }
 `;
 
-const FRAGMENT_SHADER = `
+const MARBLE_FRAGMENT_SHADER = `
 precision highp float;
 
 uniform vec2 u_resolution;
@@ -100,16 +102,13 @@ void main() {
   float vig = smoothstep(1.35, 0.3, length(p));
   col *= mix(0.45, 1.0, vig);
 
-  // フィルムグレイン
-  float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
-  col += (grain - 0.5) * 0.03;
-
   gl_FragColor = vec4(col, 1.0);
 }
 `;
 
-// 表示パス: 前後2枚のスナップショットを u_mix で線形補間するだけ
-const BLEND_VERTEX_SHADER = `
+// 表示パス: 低解像度のマーブルをバイリニア拡大し、
+// フィルムグレインだけを canvas 解像度(従来と同じ細かさ)で合成する
+const DISPLAY_VERTEX_SHADER = `
 attribute vec2 a_position;
 varying vec2 v_uv;
 void main() {
@@ -118,21 +117,20 @@ void main() {
 }
 `;
 
-const BLEND_FRAGMENT_SHADER = `
+const DISPLAY_FRAGMENT_SHADER = `
 precision mediump float;
-uniform sampler2D u_prev;
-uniform sampler2D u_next;
-uniform float u_mix;
+uniform sampler2D u_marble;
 varying vec2 v_uv;
 void main() {
-  gl_FragColor = mix(texture2D(u_prev, v_uv), texture2D(u_next, v_uv), u_mix);
+  vec3 col = texture2D(u_marble, v_uv).rgb;
+  float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+  col += (grain - 0.5) * 0.03;
+  gl_FragColor = vec4(col, 1.0);
 }
 `;
 
-/** 重い fbm パスをテクスチャへ再計算する周期。10fps でも補間で滑らかに見える */
-const HEAVY_INTERVAL_MS = 100;
-
-type RenderTarget = { texture: WebGLTexture; framebuffer: WebGLFramebuffer };
+/** マーブルを描くテクスチャの canvas(0.5x DPR)に対する解像度比。要調整の余地あり */
+const MARBLE_SCALE = 0.5;
 
 export const FluidBackground = ({ className }: { className?: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -151,9 +149,9 @@ export const FluidBackground = ({ className }: { className?: string }) => {
       return;
     }
 
-    const fluidProgram = createProgram(gl, VERTEX_SHADER, FRAGMENT_SHADER);
-    const blendProgram = createProgram(gl, BLEND_VERTEX_SHADER, BLEND_FRAGMENT_SHADER);
-    if (fluidProgram === null || blendProgram === null) {
+    const marbleProgram = createProgram(gl, VERTEX_SHADER, MARBLE_FRAGMENT_SHADER);
+    const displayProgram = createProgram(gl, DISPLAY_VERTEX_SHADER, DISPLAY_FRAGMENT_SHADER);
+    if (marbleProgram === null || displayProgram === null) {
       return;
     }
 
@@ -164,140 +162,100 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
     const positionLocations = new Set([
-      gl.getAttribLocation(fluidProgram, "a_position"),
-      gl.getAttribLocation(blendProgram, "a_position"),
+      gl.getAttribLocation(marbleProgram, "a_position"),
+      gl.getAttribLocation(displayProgram, "a_position"),
     ]);
     for (const location of positionLocations) {
       gl.enableVertexAttribArray(location);
       gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
     }
 
-    const resolutionLocation = gl.getUniformLocation(fluidProgram, "u_resolution");
-    const timeLocation = gl.getUniformLocation(fluidProgram, "u_time");
-    const mixLocation = gl.getUniformLocation(blendProgram, "u_mix");
-    gl.useProgram(blendProgram);
-    gl.uniform1i(gl.getUniformLocation(blendProgram, "u_prev"), 0);
-    gl.uniform1i(gl.getUniformLocation(blendProgram, "u_next"), 1);
+    const resolutionLocation = gl.getUniformLocation(marbleProgram, "u_resolution");
+    const timeLocation = gl.getUniformLocation(marbleProgram, "u_time");
+    gl.useProgram(displayProgram);
+    gl.uniform1i(gl.getUniformLocation(displayProgram, "u_marble"), 0);
+
+    // マーブル用レンダーターゲット。バイリニア拡大するので LINEAR
+    const marbleTexture = gl.createTexture();
+    const marbleFramebuffer = gl.createFramebuffer();
+    if (marbleTexture === null || marbleFramebuffer === null) {
+      return;
+    }
+    gl.bindTexture(gl.TEXTURE_2D, marbleTexture);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+
+    let marbleWidth = 0;
+    let marbleHeight = 0;
+    const resizeMarble = () => {
+      marbleWidth = Math.max(1, Math.floor(canvas.width * MARBLE_SCALE));
+      marbleHeight = Math.max(1, Math.floor(canvas.height * MARBLE_SCALE));
+      gl.bindTexture(gl.TEXTURE_2D, marbleTexture);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        marbleWidth,
+        marbleHeight,
+        0,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        null,
+      );
+      gl.bindFramebuffer(gl.FRAMEBUFFER, marbleFramebuffer);
+      gl.framebufferTexture2D(
+        gl.FRAMEBUFFER,
+        gl.COLOR_ATTACHMENT0,
+        gl.TEXTURE_2D,
+        marbleTexture,
+        0,
+      );
+    };
 
     const reducedMotion = prefersReducedMotion();
     const startedAt = performance.now();
-    const shaderTime = (wallMs: number) => (wallMs - startedAt) / 1000;
 
-    /** 重い fbm パスを target(null なら画面)へ描く */
-    const renderFluid = (target: RenderTarget | null, elapsedSeconds: number) => {
-      gl.bindFramebuffer(gl.FRAMEBUFFER, target === null ? null : target.framebuffer);
-      gl.useProgram(fluidProgram);
-      gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
-      gl.uniform1f(timeLocation, elapsedSeconds);
+    const render = (elapsedSeconds: number) => {
+      // パス1: 低解像度テクスチャへマーブル本体(重い fbm)を描く
+      gl.bindFramebuffer(gl.FRAMEBUFFER, marbleFramebuffer);
+      gl.viewport(0, 0, marbleWidth, marbleHeight);
+      gl.useProgram(marbleProgram);
+      gl.uniform2f(resolutionLocation, marbleWidth, marbleHeight);
+      // reduced motion 時は固定シード(それでも訪問ごとに違う絵にしたければ Date 起点にする)
+      gl.uniform1f(timeLocation, reducedMotion ? 42.0 : elapsedSeconds);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+
+      // パス2: canvas へ拡大しつつグレインを従来の細かさで合成する
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.useProgram(displayProgram);
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, marbleTexture);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
     };
 
+    // canvas はぼかし気味の絵なので従来どおり 0.5x 解像度
+    const stopTracking = trackCanvasSize(canvas, 0.5, () => {
+      resizeMarble();
+      if (reducedMotion) {
+        render(0);
+      }
+    });
+    // 初期サイズが既に一致していてコールバックが発火しなかった場合の保険
+    resizeMarble();
+
     if (reducedMotion) {
-      // 静止画1枚でよいので償却は不要。固定シードで画面へ直描き
-      // (それでも訪問ごとに違う絵にしたければ Date 起点にする)
-      const stopTracking = trackCanvasSize(canvas, 0.5, (width, height) => {
-        gl.viewport(0, 0, width, height);
-        renderFluid(null, 42.0);
-      });
-      renderFluid(null, 42.0);
+      render(0);
       return () => {
         stopTracking();
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       };
     }
 
-    // 補間の両端になる2枚のレンダーターゲット。
-    // canvas と同サイズ・NEAREST サンプリングなので解像度の劣化はない
-    const createTarget = (): RenderTarget | null => {
-      const texture = gl.createTexture();
-      const framebuffer = gl.createFramebuffer();
-      if (texture === null || framebuffer === null) {
-        return null;
-      }
-      gl.bindTexture(gl.TEXTURE_2D, texture);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-      return { texture, framebuffer };
-    };
-    let prevTarget = createTarget();
-    let nextTarget = createTarget();
-    if (prevTarget === null || nextTarget === null) {
-      return;
-    }
-
-    // 区間 [segmentStartedAt, segmentStartedAt + HEAVY_INTERVAL_MS] の
-    // 両端の状態が prev / next に描かれている、が不変条件
-    let segmentStartedAt = 0;
-    let synced = false;
-
-    const resizeTargets = (width: number, height: number) => {
-      for (const target of [prevTarget, nextTarget]) {
-        if (target === null) {
-          continue;
-        }
-        gl.bindTexture(gl.TEXTURE_2D, target.texture);
-        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, width, height, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
-        gl.bindFramebuffer(gl.FRAMEBUFFER, target.framebuffer);
-        gl.framebufferTexture2D(
-          gl.FRAMEBUFFER,
-          gl.COLOR_ATTACHMENT0,
-          gl.TEXTURE_2D,
-          target.texture,
-          0,
-        );
-      }
-      synced = false;
-    };
-
-    const renderBlend = (mixAmount: number, prev: RenderTarget, next: RenderTarget) => {
-      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
-      gl.useProgram(blendProgram);
-      gl.activeTexture(gl.TEXTURE0);
-      gl.bindTexture(gl.TEXTURE_2D, prev.texture);
-      gl.activeTexture(gl.TEXTURE1);
-      gl.bindTexture(gl.TEXTURE_2D, next.texture);
-      gl.uniform1f(mixLocation, mixAmount);
-      gl.drawArrays(gl.TRIANGLES, 0, 3);
-    };
-
-    // シェーダーはぼかし気味の絵なので 0.5x 解像度で十分(負荷を1/4に)
-    const stopTracking = trackCanvasSize(canvas, 0.5, (width, height) => {
-      gl.viewport(0, 0, width, height);
-      resizeTargets(width, height);
-    });
-    // 初期サイズが既に一致していてコールバックが発火しなかった場合でも
-    // テクスチャの実体を確実に確保する(再確保は無害)
-    resizeTargets(canvas.width, canvas.height);
-
-    // 表示(補間パス)は毎フレーム出す。テクスチャ2フェッチだけなのでほぼタダで、
-    // ここを間引くとグラデーションの動きが低フレームレートに見えてカクつく
     const handleFrame = (frame: Frame) => {
-      if (prevTarget === null || nextTarget === null) {
-        return;
-      }
-
-      if (!synced || frame.now - segmentStartedAt >= HEAVY_INTERVAL_MS * 2) {
-        // 初回・リサイズ後・可視性ゲート復帰後は両端を描き直して同期する
-        segmentStartedAt = frame.now;
-        renderFluid(prevTarget, shaderTime(frame.now));
-        renderFluid(nextTarget, shaderTime(frame.now + HEAVY_INTERVAL_MS));
-        synced = true;
-      } else if (frame.now - segmentStartedAt >= HEAVY_INTERVAL_MS) {
-        // 次の区間へ: 今の「次」が「前」になり、新しい「次」の1枚だけ描く
-        segmentStartedAt += HEAVY_INTERVAL_MS;
-        const recycled = prevTarget;
-        prevTarget = nextTarget;
-        nextTarget = recycled;
-        renderFluid(nextTarget, shaderTime(segmentStartedAt + HEAVY_INTERVAL_MS));
-      }
-
-      renderBlend(
-        Math.min((frame.now - segmentStartedAt) / HEAVY_INTERVAL_MS, 1),
-        prevTarget,
-        nextTarget,
-      );
+      render((frame.now - startedAt) / 1000);
     };
 
     // Hero がビューポート外に出たら描画を完全に止める
