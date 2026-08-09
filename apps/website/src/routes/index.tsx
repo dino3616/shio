@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import type { MouseEvent } from "react";
 import { Eye } from "~/components/eye";
 import { FluidBackground } from "~/components/fluid-background";
 import { HeartMoon } from "~/components/heart-moon";
@@ -11,6 +12,19 @@ import { SpacePlankton } from "~/components/space-plankton";
 import { Starfield } from "~/components/starfield";
 
 const NAV_ITEMS = ["ABOUT", "WORKS", "PLAYGROUND", "LOGS", "CONTACT"];
+
+// アンカーへのスムーズスクロール。CSS の scroll-smooth だとスクロール位置の
+// 復元まで滑らかになってしまうので、ナビクリックのときだけ JS で行う
+const handleNavClick = (event: MouseEvent<HTMLAnchorElement>, hash: string) => {
+  const target = document.querySelector(hash);
+  if (target === null) {
+    return;
+  }
+  event.preventDefault();
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  target.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth" });
+  history.pushState(null, "", hash);
+};
 
 const Hero = () => (
   <div className="relative flex min-h-screen flex-col overflow-hidden">
@@ -36,6 +50,9 @@ const Hero = () => (
           <li key={item}>
             <a
               href={`#${item.toLowerCase()}`}
+              onClick={(event) => {
+                handleNavClick(event, `#${item.toLowerCase()}`);
+              }}
               className="text-sm tracking-[0.2em] text-white/60 transition-colors hover:text-white"
             >
               {item}

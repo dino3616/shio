@@ -1,4 +1,8 @@
 import { useEffect, useRef } from "react";
+import { mulberry32 } from "~/lib/random";
+import { type Frame, prefersReducedMotion, subscribeFrame } from "~/lib/ticker";
+import { whenInView } from "~/lib/visibility";
+import { createProgram, trackCanvasSize } from "~/lib/webgl";
 
 /**
  * WebGL 星空(design-direction: 数学的モーション+空間的な奥行き)。
@@ -7,6 +11,7 @@ import { useEffect, useRef } from "react";
  * - 深度アトリビュートでマウス/スクロールに視差反応(近い星ほど動く)
  * - リサージュ的ドリフトと非同期の瞬きは頂点シェーダーで計算
  * - 十字のキラキラはアクセントとしてごく稀に混ぜる(かわいさの記号)
+ * 描画は共有 ticker が駆動し、ビューポート外に出たインスタンスは止まる
  */
 
 const VERTEX_SHADER = `
@@ -95,18 +100,6 @@ const CROSS_COLORS: [number, number, number][] = [
 // 焼き込まれた星配置のシード
 const DEFAULT_STAR_SEED = 119;
 
-// mulberry32: シード付き擬似乱数。Math.random と違い同じシードなら同じ星空を再現する
-const createRandom = (seed: number) => {
-  let state = seed >>> 0;
-  return () => {
-    state = (state + 0x6d2b79f5) >>> 0;
-    let t = state;
-    t = Math.imul(t ^ (t >>> 15), t | 1);
-    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-};
-
 type StarBuffers = {
   pos: number[];
   size: number[];
@@ -119,7 +112,7 @@ type StarBuffers = {
 };
 
 const buildStars = (stars: number, crosses: number, seed: number): StarBuffers => {
-  const random = createRandom(seed);
+  const random = mulberry32(seed);
   const b: StarBuffers = {
     pos: [],
     size: [],
@@ -183,20 +176,6 @@ const buildStars = (stars: number, crosses: number, seed: number): StarBuffers =
   return b;
 };
 
-const compileShader = (
-  gl: WebGLRenderingContext,
-  type: number,
-  source: string,
-): WebGLShader | null => {
-  const shader = gl.createShader(type);
-  if (shader === null) {
-    return null;
-  }
-  gl.shaderSource(shader, source);
-  gl.compileShader(shader);
-  return shader;
-};
-
 export const Starfield = ({
   stars = 240,
   crosses = 2,
@@ -224,16 +203,10 @@ export const Starfield = ({
       return;
     }
 
-    const vert = compileShader(gl, gl.VERTEX_SHADER, VERTEX_SHADER);
-    const frag = compileShader(gl, gl.FRAGMENT_SHADER, FRAGMENT_SHADER);
-    const program = gl.createProgram();
-    if (vert === null || frag === null || program === null) {
+    const program = createProgram(gl, VERTEX_SHADER, FRAGMENT_SHADER);
+    if (program === null) {
       return;
     }
-    gl.attachShader(program, vert);
-    gl.attachShader(program, frag);
-    gl.linkProgram(program);
-    gl.useProgram(program);
 
     // 加算ブレンド: 光は重なると明るくなる
     gl.enable(gl.BLEND);
@@ -265,53 +238,55 @@ export const Starfield = ({
     const dprLocation = gl.getUniformLocation(program, "u_dpr");
     const parallaxLocation = gl.getUniformLocation(program, "u_parallax");
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio, 2);
-      const width = Math.floor(canvas.clientWidth * dpr);
-      const height = Math.floor(canvas.clientHeight * dpr);
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-        gl.viewport(0, 0, width, height);
-      }
-      return dpr;
-    };
-
-    let rafId = 0;
+    const reducedMotion = prefersReducedMotion();
     const startedAt = performance.now();
-    const render = () => {
-      const dpr = resize();
-      const t = reducedMotion ? 0 : (performance.now() - startedAt) / 1000;
-      // 視差はスクロールのみ(深度1の星ほど大きくずれる)
-      const parallaxX = 0;
-      const parallaxY = -window.scrollY * 0.05;
 
+    const render = (t: number, scrollY: number) => {
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);
       gl.uniform2f(resolutionLocation, canvas.width, canvas.height);
       gl.uniform1f(timeLocation, t);
-      gl.uniform1f(dprLocation, dpr);
-      gl.uniform2f(parallaxLocation, parallaxX, parallaxY);
+      gl.uniform1f(dprLocation, Math.min(window.devicePixelRatio, 2));
+      // 視差はスクロールのみ(深度1の星ほど大きくずれる)
+      gl.uniform2f(parallaxLocation, 0, -scrollY * 0.05);
       gl.drawArrays(gl.POINTS, 0, starCount);
-
-      if (!reducedMotion) {
-        rafId = requestAnimationFrame(render);
-      }
     };
-    rafId = requestAnimationFrame(render);
 
-    const handleResize = () => {
+    const stopTracking = trackCanvasSize(canvas, 1, (width, height) => {
+      gl.viewport(0, 0, width, height);
       if (reducedMotion) {
-        render();
+        render(0, window.scrollY);
       }
+    });
+
+    if (reducedMotion) {
+      render(0, window.scrollY);
+      return () => {
+        stopTracking();
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+      };
+    }
+
+    const handleFrame = (frame: Frame) => {
+      render((frame.now - startedAt) / 1000, frame.scrollY);
     };
-    window.addEventListener("resize", handleResize);
+
+    // ビューポート外の星空は描かない(Hero 用と下層用の2インスタンスが
+    // 同時に全画面を占めることはないので、常にどちらかが止まる)
+    let unsubscribe: (() => void) | null = null;
+    const stopObserving = whenInView(canvas, (visible) => {
+      if (visible && unsubscribe === null) {
+        unsubscribe = subscribeFrame(handleFrame);
+      } else if (!visible && unsubscribe !== null) {
+        unsubscribe();
+        unsubscribe = null;
+      }
+    });
 
     return () => {
-      cancelAnimationFrame(rafId);
-      window.removeEventListener("resize", handleResize);
+      stopObserving();
+      unsubscribe?.();
+      stopTracking();
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
   }, [stars, crosses, seed]);
