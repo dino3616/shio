@@ -40,8 +40,14 @@ const Hero = () => {
         settled = false;
       }
       const fade = String(Math.max(0, 1 - y / (viewportHeight * 0.72)));
+      // 名前は transform/opacity を使わない: 祖先にどちらかが付くと
+      // backdrop-filter の参照範囲が切られ、ガラス文字のブラーが消えてしまう。
+      // backdrop root を作らない relative + top でずらす
+      const name = nameRef.current;
+      if (name !== null) {
+        name.style.top = `${y * 0.32}px`;
+      }
       const layers: [HTMLDivElement | null, number][] = [
-        [nameRef.current, 0.32],
         [eyeRef.current, 0.24],
         [moonRef.current, 0.16],
       ];
