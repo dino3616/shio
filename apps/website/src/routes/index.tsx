@@ -217,8 +217,12 @@ const Home = () => (
     <div
       className="pointer-events-none absolute inset-x-0 top-0 h-[135vh]"
       style={{
-        maskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(to bottom, black 70%, transparent 100%)",
+        // コサインイージングの多段ストップ。単純な2点グラデーションは減衰の
+        // 始点で傾きが不連続になり、マッハバンド(知覚上の線)が出てしまう
+        maskImage:
+          "linear-gradient(to bottom, black 55%, rgba(0, 0, 0, 0.94) 62%, rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 85%, rgba(0, 0, 0, 0.09) 92%, rgba(0, 0, 0, 0.02) 97%, transparent 100%)",
+        WebkitMaskImage:
+          "linear-gradient(to bottom, black 55%, rgba(0, 0, 0, 0.94) 62%, rgba(0, 0, 0, 0.75) 70%, rgba(0, 0, 0, 0.55) 78%, rgba(0, 0, 0, 0.3) 85%, rgba(0, 0, 0, 0.09) 92%, rgba(0, 0, 0, 0.02) 97%, transparent 100%)",
       }}
     >
       <FluidBackground />
