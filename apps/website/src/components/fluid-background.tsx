@@ -17,6 +17,10 @@ import { createProgram, trackCanvasSize } from "~/lib/webgl";
  *   模様の「動き」がスナップショット周期でしか更新されずカクついて見えた)
  * - 質感の要のフィルムグレインは表示パスで従来どおりの解像度で合成する
  * - ビューポート外(Hero を過ぎたら)は描画を完全に止める
+ *
+ * 初回表示: JS ロード〜シェーダーコンパイルが終わるまでは同パレットの
+ * 静的グラデーション(SSR の CSS)を出し、初回フレームからクロスフェードする。
+ * コンパイルは KHR_parallel_shader_compile があれば非同期で待つ
  */
 
 const VERTEX_SHADER = `
@@ -132,6 +136,18 @@ void main() {
 /** マーブルを描くテクスチャの canvas(0.5x DPR)に対する解像度比。要調整の余地あり */
 const MARBLE_SCALE = 0.5;
 
+/**
+ * シェーダー準備完了までの静的プレースホルダー(マーブルと同じパレット)。
+ * SSR の CSS として即座に描かれるので、JS ロード〜シェーダーコンパイルの間も
+ * Hero が真っ暗にならない。WebGL が使えない環境ではそのまま残る
+ */
+const PLACEHOLDER_BACKGROUND = [
+  "radial-gradient(ellipse 75% 60% at 68% 28%, rgba(139, 92, 246, 0.30), transparent 65%)",
+  "radial-gradient(ellipse 65% 55% at 22% 68%, rgba(242, 84, 158, 0.22), transparent 65%)",
+  "radial-gradient(ellipse 90% 70% at 45% 45%, #181c3f, transparent 75%)",
+  "#0e0a14",
+].join(", ");
+
 export const FluidBackground = ({ className }: { className?: string }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -155,25 +171,52 @@ export const FluidBackground = ({ className }: { className?: string }) => {
       return;
     }
 
-    // フルスクリーントライアングル(両パスで共有)。
-    // 頂点属性の設定はプログラムではなくロケーションに紐づく状態なので、
-    // 両プログラムのロケーションに一度ずつ設定しておけば切り替え不要
+    // 対応ブラウザではシェーダーをバックグラウンドでコンパイルさせ、
+    // リンク完了を待ってから描き始める(待っている間はプレースホルダーが出る)。
+    // 拡張がなければ従来どおり初回描画時に同期コンパイルされる
+    const parallelExt = gl.getExtension("KHR_parallel_shader_compile");
+    const programsCompiled = () =>
+      parallelExt === null ||
+      (gl.getProgramParameter(marbleProgram, parallelExt.COMPLETION_STATUS_KHR) === true &&
+        gl.getProgramParameter(displayProgram, parallelExt.COMPLETION_STATUS_KHR) === true);
+
+    // フルスクリーントライアングル(両パスで共有)。バッファ作成はリンク完了を
+    // 待たずにできるが、ロケーション取得(getAttribLocation / getUniformLocation)
+    // はリンク待ちで同期ブロックするため initPipeline に遅延する
     const buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
-    const positionLocations = new Set([
-      gl.getAttribLocation(marbleProgram, "a_position"),
-      gl.getAttribLocation(displayProgram, "a_position"),
-    ]);
-    for (const location of positionLocations) {
-      gl.enableVertexAttribArray(location);
-      gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
-    }
 
-    const resolutionLocation = gl.getUniformLocation(marbleProgram, "u_resolution");
-    const timeLocation = gl.getUniformLocation(marbleProgram, "u_time");
-    gl.useProgram(displayProgram);
-    gl.uniform1i(gl.getUniformLocation(displayProgram, "u_marble"), 0);
+    let resolutionLocation: WebGLUniformLocation | null = null;
+    let timeLocation: WebGLUniformLocation | null = null;
+    let pipelineReady = false;
+
+    const initPipeline = () => {
+      // 頂点属性の設定はプログラムではなくロケーションに紐づく状態なので、
+      // 両プログラムのロケーションに一度ずつ設定しておけば切り替え不要
+      const positionLocations = new Set([
+        gl.getAttribLocation(marbleProgram, "a_position"),
+        gl.getAttribLocation(displayProgram, "a_position"),
+      ]);
+      for (const location of positionLocations) {
+        gl.enableVertexAttribArray(location);
+        gl.vertexAttribPointer(location, 2, gl.FLOAT, false, 0, 0);
+      }
+      resolutionLocation = gl.getUniformLocation(marbleProgram, "u_resolution");
+      timeLocation = gl.getUniformLocation(marbleProgram, "u_time");
+      gl.useProgram(displayProgram);
+      gl.uniform1i(gl.getUniformLocation(displayProgram, "u_marble"), 0);
+      pipelineReady = true;
+    };
+
+    // 初回フレームを描けたらプレースホルダーからクロスフェードで引き継ぐ
+    let revealed = false;
+    const reveal = () => {
+      if (!revealed) {
+        revealed = true;
+        canvas.style.opacity = "1";
+      }
+    };
 
     // マーブル用レンダーターゲット。バイリニア拡大するので LINEAR
     const marbleTexture = gl.createTexture();
@@ -239,7 +282,7 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     // canvas はぼかし気味の絵なので従来どおり 0.5x 解像度
     const stopTracking = trackCanvasSize(canvas, 0.5, () => {
       resizeMarble();
-      if (reducedMotion) {
+      if (reducedMotion && pipelineReady) {
         render(0);
       }
     });
@@ -247,15 +290,35 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     resizeMarble();
 
     if (reducedMotion) {
-      render(0);
+      // 静止画1枚。リンク完了を待ってから一度だけ描いてフェードインする
+      let pollId = 0;
+      const renderOnceReady = () => {
+        if (!programsCompiled()) {
+          pollId = requestAnimationFrame(renderOnceReady);
+          return;
+        }
+        initPipeline();
+        render(0);
+        reveal();
+      };
+      renderOnceReady();
       return () => {
+        cancelAnimationFrame(pollId);
         stopTracking();
         gl.getExtension("WEBGL_lose_context")?.loseContext();
       };
     }
 
     const handleFrame = (frame: Frame) => {
+      if (!pipelineReady) {
+        // リンク完了までは描かずにプレースホルダーを出し続ける
+        if (!programsCompiled()) {
+          return;
+        }
+        initPipeline();
+      }
       render((frame.now - startedAt) / 1000);
+      reveal();
     };
 
     // Hero がビューポート外に出たら描画を完全に止める
@@ -278,10 +341,13 @@ export const FluidBackground = ({ className }: { className?: string }) => {
   }, []);
 
   return (
-    <canvas
-      ref={canvasRef}
-      className={className ?? "absolute inset-0 h-full w-full"}
-      aria-hidden="true"
-    />
+    <div className={className ?? "absolute inset-0 h-full w-full"} aria-hidden="true">
+      {/* シェーダー準備完了までのプレースホルダー(WebGL 不可ならそのまま残る) */}
+      <div className="absolute inset-0" style={{ background: PLACEHOLDER_BACKGROUND }} />
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 h-full w-full opacity-0 transition-opacity duration-700"
+      />
+    </div>
   );
 };
