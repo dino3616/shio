@@ -249,12 +249,16 @@ const Home = () => (
             "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(139, 92, 246, 0.08), transparent 70%), radial-gradient(ellipse 45% 40% at 30% 55%, rgba(242, 84, 158, 0.05), transparent 70%)",
         }}
       />
-      {/* ネビュラの淡い残光 */}
+      {/*
+       * ネビュラの淡い残光。各楕円は箱の内側で必ず減衰しきるサイズ・位置にする
+       * (裾が箱の縁を越えると、グラデーションが値を持ったまま切断されて
+       * 水平線として知覚される)
+       */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse 60% 30% at 80% 12%, rgba(139, 92, 246, 0.08), transparent), radial-gradient(ellipse 50% 25% at 15% 45%, rgba(242, 84, 158, 0.06), transparent), radial-gradient(ellipse 55% 28% at 75% 80%, rgba(166, 211, 234, 0.05), transparent)",
+            "radial-gradient(ellipse 60% 26% at 80% 28%, rgba(139, 92, 246, 0.08), transparent), radial-gradient(ellipse 50% 25% at 15% 45%, rgba(242, 84, 158, 0.06), transparent), radial-gradient(ellipse 55% 22% at 75% 76%, rgba(166, 211, 234, 0.05), transparent)",
         }}
       />
       <About />
