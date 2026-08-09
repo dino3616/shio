@@ -98,6 +98,7 @@ const creatureRadius = (base: number, theta: number, t: number, phase: number) =
 export const SkillEyes = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const chipRefs = useRef<(HTMLLIElement | null)[]>([]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -139,6 +140,9 @@ export const SkillEyes = () => {
     let scale = 1;
     let originX = 0;
     let originY = 0;
+    /** 矢印の始点になる、md+ のスキルチップの矩形(canvas CSS px 座標) */
+    let chipRects: { x: number; y: number; w: number; h: number; side: 0 | 1; order: number }[] =
+      [];
 
     const toCanvas = (vx: number, vy: number) => ({
       x: originX + vx * scale,
@@ -157,6 +161,25 @@ export const SkillEyes = () => {
       scale = Math.min(rect.width / SCENE_W, rect.height / (SCENE_H + 30));
       originX = (rect.width - SCENE_W * scale) / 2;
       originY = (rect.height - SCENE_H * scale) / 2;
+
+      chipRects = [];
+      for (const [index, element] of chipRefs.current.entries()) {
+        if (element === null) {
+          continue;
+        }
+        const chipRect = element.getBoundingClientRect();
+        if (chipRect.width === 0) {
+          continue;
+        }
+        chipRects.push({
+          x: chipRect.left - rect.left,
+          y: chipRect.top - rect.top,
+          w: chipRect.width,
+          h: chipRect.height,
+          side: index < ALIENS[0].items.length ? 0 : 1,
+          order: index % ALIENS[0].items.length,
+        });
+      }
     };
 
     // 視線と視差の状態
@@ -545,6 +568,49 @@ export const SkillEyes = () => {
         marble.render(t === 0 ? 42 : t);
       }
 
+      // スキルチップからプランクトンへ、ゆるく弧をかく点線矢印
+      // (ボディの浮遊と視差に追従させるため毎フレーム描く)
+      for (const chip of chipRects) {
+        const alien = ALIENS[chip.side];
+        const bob = Math.sin(t * 0.5 + chip.side * 2.1) * 9;
+        const target = toCanvas(alien.cx + parallax.x * 3, alien.cy + bob + parallax.y * 1.8);
+        const startX = chip.side === 0 ? chip.x + chip.w + 6 : chip.x - 6;
+        const startY = chip.y + chip.h / 2;
+        const dx = target.x - startX;
+        const dy = target.y - startY;
+        const length = Math.hypot(dx, dy);
+        if (length < 1) {
+          continue;
+        }
+        // 終点はボディの縁の少し外。チップごとに角度をずらして扇状に散らす
+        const spread = (chip.order - (ALIENS[0].items.length - 1) / 2) * 0.24;
+        const baseAngle = Math.atan2(-dy, -dx) + spread;
+        const endX = target.x + Math.cos(baseAngle) * BODY_R * 0.78 * scale;
+        const endY = target.y + Math.sin(baseAngle) * BODY_R * 0.78 * scale;
+        // ゆるい弧: 中点を上下に押し出す(上のチップは上へ、下のチップは下へ膨らむ)
+        const controlX = (startX + endX) / 2;
+        const controlY = (startY + endY) / 2 + (startY - endY) * 0.4;
+        const color = chip.side === 0 ? "#f2c4dc" : "#a6d3ea";
+        context.strokeStyle = withAlpha(color, 0.5);
+        context.lineWidth = 1.2;
+        context.lineCap = "round";
+        context.setLineDash([1.5, 5]);
+        context.beginPath();
+        context.moveTo(startX, startY);
+        context.quadraticCurveTo(controlX, controlY, endX, endY);
+        context.stroke();
+        context.setLineDash([]);
+        // 矢印の先端(終端の接線方向に開く)
+        const tipAngle = Math.atan2(endY - controlY, endX - controlX);
+        context.strokeStyle = withAlpha(color, 0.75);
+        context.beginPath();
+        context.moveTo(endX, endY);
+        context.lineTo(endX - Math.cos(tipAngle - 0.45) * 8, endY - Math.sin(tipAngle - 0.45) * 8);
+        context.moveTo(endX, endY);
+        context.lineTo(endX - Math.cos(tipAngle + 0.45) * 8, endY - Math.sin(tipAngle + 0.45) * 8);
+        context.stroke();
+      }
+
       // 仮想シーン座標へ
       context.setTransform(dpr * scale, 0, 0, dpr * scale, dpr * originX, dpr * originY);
 
@@ -613,7 +679,12 @@ export const SkillEyes = () => {
           {alien.items.map((item, itemIndex) => (
             <li
               key={item}
-              className="text-pale bg-void/50 rounded-full border border-white/15 px-3.5 py-1.5 text-xs whitespace-nowrap backdrop-blur-sm"
+              ref={(node) => {
+                chipRefs.current[alienIndex * ALIENS[0].items.length + itemIndex] = node;
+              }}
+              className={`bg-void/50 rounded-full border px-3.5 py-1.5 text-xs whitespace-nowrap backdrop-blur-sm ${
+                alienIndex === 0 ? "border-pink/25 text-pale" : "border-ice/40 text-ice"
+              }`}
               style={{
                 marginLeft: alienIndex === 0 ? itemIndex * 6 : 0,
                 marginRight: alienIndex === 1 ? itemIndex * 6 : 0,
@@ -629,7 +700,7 @@ export const SkillEyes = () => {
         {ALIENS[0].items.map((item) => (
           <li
             key={item}
-            className="text-pale bg-void/50 rounded-full border border-white/15 px-3 py-1 text-xs backdrop-blur-sm"
+            className="border-pink/25 text-pale bg-void/50 rounded-full border px-3 py-1 text-xs backdrop-blur-sm"
           >
             {item}
           </li>
@@ -639,7 +710,7 @@ export const SkillEyes = () => {
         {ALIENS[1].items.map((item) => (
           <li
             key={item}
-            className="text-pale bg-void/50 rounded-full border border-white/15 px-3 py-1 text-xs backdrop-blur-sm"
+            className="border-ice/40 text-ice bg-void/50 rounded-full border px-3 py-1 text-xs backdrop-blur-sm"
           >
             {item}
           </li>
