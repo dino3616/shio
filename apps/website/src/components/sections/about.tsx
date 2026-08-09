@@ -1,7 +1,7 @@
 import { ConstellationTimeline } from "~/components/constellation-timeline";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
-import { SkillResonance } from "~/components/skill-resonance";
+import { SkillPlanets } from "~/components/skill-planets";
 
 /**
  * About: 「自分は誰か」に集中するセクション(content-plan の確定構成)。
@@ -121,11 +121,11 @@ export const About = () => (
       </Reveal>
     </div>
 
-    {/* できること: DESIGN × ENGINEERING の共鳴 */}
+    {/* できること: ふたつの惑星の粒子が中間で「かたち」の輪郭になる */}
     <Reveal delay={0.1} className="mt-20">
       <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">できること</h3>
       <div className="mt-8">
-        <SkillResonance />
+        <SkillPlanets />
       </div>
     </Reveal>
 

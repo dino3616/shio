@@ -186,28 +186,3 @@ body {
     animation: none;
   }
 }
-
-/* できることの共鳴波: 1周期(300px)ぶん平行移動してシームレスにループ */
-@keyframes wave-drift {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-300px);
-  }
-}
-
-.wave-drift {
-  animation: wave-drift 8s linear infinite;
-}
-
-.wave-drift-reverse {
-  animation: wave-drift 12s linear infinite reverse;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .wave-drift,
-  .wave-drift-reverse {
-    animation: none;
-  }
-}
