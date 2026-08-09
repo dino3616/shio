@@ -5,11 +5,12 @@ export const getRouter = () => {
   const router = createRouter({
     routeTree,
     defaultPreload: "intent",
-    // ルートは1つだけ(セクションはハッシュアンカー)なので、スクロール位置の
-    // 復元はブラウザ標準に任せる。TanStack の復元(scrollRestoration: true)は
-    // history.scrollRestoration を manual にした上でハイドレーション後に
-    // scrollTo() するため、html の scroll-smooth が適用されて「リロード後に
-    // ゆっくり元の位置へスクロールしていく」奇妙な復元になっていた
+    // リロード後のスクロール位置復元。behavior を instant にしないと
+    // CSS の scroll-behavior に引きずられて「ゆっくり元の位置へ
+    // スクロールしていく」復元になる(スムーズはナビクリック時だけ
+    // JS の scrollIntoView で行い、グローバル CSS には持たせない)
+    scrollRestoration: true,
+    scrollRestorationBehavior: "instant",
   });
 
   return router;

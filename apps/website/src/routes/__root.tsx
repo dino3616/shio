@@ -4,8 +4,11 @@ import type * as React from "react";
 import { NoiseOverlay } from "~/components/noise-overlay";
 import appCss from "~/styles/app.css?url";
 
+// scroll-smooth を html に付けないこと: CSS の scroll-behavior はスクロール位置の
+// 復元(TanStack のインラインスクリプト)にも適用されてしまう。
+// アンカーへのスムーズスクロールはナビの onClick(scrollIntoView)で行う
 const RootDocument = ({ children }: { children: React.ReactNode }) => (
-  <html lang="ja" className="scroll-smooth">
+  <html lang="ja">
     <head>
       <HeadContent />
     </head>
