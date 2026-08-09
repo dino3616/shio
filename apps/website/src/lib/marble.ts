@@ -1,0 +1,139 @@
+import { createProgram } from "~/lib/webgl";
+
+/**
+ * Hero の流体マーブルシェーダー(共有モジュール)。
+ * FluidBackground が全画面背景として使い、SkillEyes が瞳孔の宇宙として転写する
+ */
+
+export const MARBLE_VERTEX_SHADER = `
+attribute vec2 a_position;
+void main() {
+  gl_Position = vec4(a_position, 0.0, 1.0);
+}
+`;
+
+export const MARBLE_FRAGMENT_SHADER = `
+precision highp float;
+
+uniform vec2 u_resolution;
+uniform float u_time;
+
+// Ashima Arts simplex noise (MIT)
+vec3 permute(vec3 x) { return mod(((x * 34.0) + 1.0) * x, 289.0); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187, 0.366025403784439, -0.577350269189626, 0.024390243902439);
+  vec2 i = floor(v + dot(v, C.yy));
+  vec2 x0 = v - i + dot(i, C.xx);
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  i = mod(i, 289.0);
+  vec3 p = permute(permute(i.y + vec3(0.0, i1.y, 1.0)) + i.x + vec3(0.0, i1.x, 1.0));
+  vec3 m = max(0.5 - vec3(dot(x0, x0), dot(x12.xy, x12.xy), dot(x12.zw, x12.zw)), 0.0);
+  m = m * m;
+  m = m * m;
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 ox = floor(x + 0.5);
+  vec3 a0 = x - ox;
+  m *= 1.79284291400159 - 0.85373472095314 * (a0 * a0 + h * h);
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+float fbm(vec2 p) {
+  float v = 0.0;
+  float a = 0.5;
+  for (int i = 0; i < 4; i++) {
+    v += a * snoise(p);
+    p = p * 2.0 + 13.7;
+    a *= 0.5;
+  }
+  return v;
+}
+
+void main() {
+  vec2 p = (gl_FragCoord.xy - 0.5 * u_resolution) / min(u_resolution.x, u_resolution.y);
+  float t = u_time * 0.035;
+
+  // ドメインワープ2段: q で歪ませた座標を r でさらに歪ませる
+  // 低周波にして img 30 の「大きくゆったりした流動」に寄せる
+  vec2 q = vec2(
+    fbm(p * 0.6 + vec2(t, -t * 0.7)),
+    fbm(p * 0.6 + vec2(-t * 0.6, t * 0.9) + 4.2)
+  );
+  vec2 r = vec2(
+    fbm(p * 0.8 + 2.0 * q + vec2(1.7 - t * 0.3, 9.2)),
+    fbm(p * 0.8 + 2.2 * q + vec2(8.3, 2.8 + t * 0.4))
+  );
+  float f = fbm(p * 0.7 + 1.9 * r);
+
+  // パレット(design-direction: ダーク6:ネオン2:パステル1:アクセント1)
+  vec3 voidBlack = vec3(0.055, 0.039, 0.078);
+  vec3 navy = vec3(0.094, 0.110, 0.247);
+  vec3 purple = vec3(0.545, 0.361, 0.965);
+  vec3 pink = vec3(0.949, 0.329, 0.620);
+  vec3 ice = vec3(0.651, 0.827, 0.918);
+
+  // 暗部を広めに: ダーク6割の比率を守る
+  vec3 col = mix(voidBlack, navy, smoothstep(-0.35, 0.9, f));
+  col = mix(col, purple, smoothstep(0.32, 1.0, q.x) * 0.5);
+  col = mix(col, pink, smoothstep(0.42, 1.0, r.y) * 0.62);
+  col = mix(col, ice, smoothstep(0.65, 1.15, q.y * r.x) * 0.2);
+
+  // ビネット: 端を宇宙の闇に沈める
+  float vig = smoothstep(1.35, 0.3, length(p));
+  col *= mix(0.45, 1.0, vig);
+
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+export type MarbleRenderer = {
+  /** WebGL で描かれるオフスクリーン canvas。drawImage で転写する */
+  canvas: HTMLCanvasElement;
+  render: (elapsedSeconds: number) => void;
+  destroy: () => void;
+};
+
+/** 小さなオフスクリーンでマーブルを描くレンダラ(瞳孔などへの転写用) */
+export const createMarbleRenderer = (size: number): MarbleRenderer | null => {
+  const canvas = document.createElement("canvas");
+  canvas.width = size;
+  canvas.height = size;
+  const gl = canvas.getContext("webgl", { antialias: false, depth: false, stencil: false });
+  if (gl === null) {
+    return null;
+  }
+  const program = createProgram(gl, MARBLE_VERTEX_SHADER, MARBLE_FRAGMENT_SHADER);
+  if (program === null) {
+    return null;
+  }
+
+  const buffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+  const positionLocation = gl.getAttribLocation(program, "a_position");
+  gl.enableVertexAttribArray(positionLocation);
+  gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+  const resolutionLocation = gl.getUniformLocation(program, "u_resolution");
+  const timeLocation = gl.getUniformLocation(program, "u_time");
+  gl.useProgram(program);
+  gl.uniform2f(resolutionLocation, size, size);
+  gl.viewport(0, 0, size, size);
+
+  return {
+    canvas,
+    render: (elapsedSeconds: number) => {
+      gl.uniform1f(timeLocation, elapsedSeconds);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+    },
+    destroy: () => {
+      gl.getExtension("WEBGL_lose_context")?.loseContext();
+    },
+  };
+};
