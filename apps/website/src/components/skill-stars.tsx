@@ -4,69 +4,66 @@ import { prefersReducedMotion, subscribeFrame } from "~/lib/ticker";
 import { whenInView } from "~/lib/visibility";
 
 /**
- * できること: DESIGN と ENGINEERING のふたつの惑星。
- * - 各惑星の周りにスキルの吹き出し(DOM。canvas がリード線を描いて惑星とつなぐ)
- * - 惑星の外縁から粒子が渦を巻きながら剥がれ、ふたつの惑星の中間へ流れていく
+ * できること: DESIGN と ENGINEERING のふたつの恒星。
+ * - 各恒星の周りにスキルの吹き出し(DOM。canvas がリード線を描いて恒星とつなぐ)
+ * - 恒星の外縁からエネルギーが無数の粒子として漏れ出し、渦を巻きながら中間へ流れる
  * - 中間で粒子が不定形にうねる輪郭に合流し、「かたち」の外枠を作る
  *   (Design ∩ Engineering から生まれるもの。テキストは載せない)
  */
 
-type PlanetConfig = {
+type StarConfig = {
   title: string;
-  /** 惑星中心の位置クラス(モバイル: 縦積み / md+: 左右) */
+  /** 恒星中心の位置クラス(モバイル: 縦積み / md+: 左右) */
   position: string;
-  sphere: string;
-  ring: string;
+  surface: string;
   glow: string;
   colors: string[];
   items: string[];
-  /** md+ での吹き出しオフセット(惑星中心からの px)。左惑星は右端、右惑星は左端が基準 */
+  /** md+ での吹き出しオフセット(恒星中心からの px)。左恒星は右端、右恒星は左端が基準 */
   chipOffsets: { dx: number; dy: number }[];
 };
 
-const PLANETS: [PlanetConfig, PlanetConfig] = [
+const STARS: [StarConfig, StarConfig] = [
   {
     title: "DESIGN",
-    position: "left-1/2 top-[13%] md:left-[22%] md:top-[42%]",
-    sphere: "radial-gradient(circle at 32% 28%, #ffe3f1, #f2549e 58%, #47163a 100%)",
-    ring: "border-pink/40",
-    glow: "0 0 44px rgba(242, 84, 158, 0.4)",
+    position: "left-1/2 top-[12%] md:left-[22%] md:top-[42%]",
+    surface: "radial-gradient(circle at 40% 38%, #ffffff, #ffd9ec 22%, #f2549e 62%, #7a1c52 100%)",
+    glow: "0 0 60px 10px rgba(242, 84, 158, 0.45), 0 0 160px 50px rgba(242, 84, 158, 0.18)",
     colors: ["#f2c4dc", "#f2549e", "#ffd9ec"],
     items: ["UIデザイン", "グラフィックデザイン", "モーションデザイン", "世界観の設計"],
     chipOffsets: [
-      { dx: -64, dy: -78 },
-      { dx: -80, dy: -18 },
-      { dx: -64, dy: 42 },
-      { dx: -36, dy: 96 },
+      { dx: -86, dy: -102 },
+      { dx: -102, dy: -30 },
+      { dx: -86, dy: 46 },
+      { dx: -50, dy: 118 },
     ],
   },
   {
     title: "ENGINEERING",
-    position: "left-1/2 top-[87%] md:left-[78%] md:top-[58%]",
-    sphere: "radial-gradient(circle at 32% 28%, #eef9ff, #a6d3ea 58%, #16304d 100%)",
-    ring: "border-ice/40",
-    glow: "0 0 44px rgba(166, 211, 234, 0.4)",
+    position: "left-1/2 top-[84%] md:left-[78%] md:top-[58%]",
+    surface: "radial-gradient(circle at 40% 38%, #ffffff, #dff1ff 22%, #a6d3ea 62%, #1d3e63 100%)",
+    glow: "0 0 60px 10px rgba(166, 211, 234, 0.45), 0 0 160px 50px rgba(166, 211, 234, 0.18)",
     colors: ["#a6d3ea", "#c4a8f8", "#dff1ff"],
     items: ["Webフロントエンド", "WebGL / シェーダー", "アクセシビリティ", "Web標準"],
     chipOffsets: [
-      { dx: 64, dy: -78 },
-      { dx: 80, dy: -18 },
-      { dx: 64, dy: 42 },
-      { dx: 36, dy: 96 },
+      { dx: 86, dy: -102 },
+      { dx: 102, dy: -30 },
+      { dx: 86, dy: 46 },
+      { dx: 50, dy: 118 },
     ],
   },
 ];
 
-const PARTICLES_PER_PLANET = 110;
+const PARTICLES_PER_STAR = 320;
 const TAU = Math.PI * 2;
 
 type Circle = { x: number; y: number; r: number };
 type LeaderLine = { x1: number; y1: number; x2: number; y2: number };
 
 type Particle = {
-  planet: 0 | 1;
+  star: 0 | 1;
   mode: "travel" | "blob";
-  /** travel: 惑星から中間までの進行度 0..1 */
+  /** travel: 恒星から中間までの進行度 0..1 */
   s: number;
   speed: number;
   theta0: number;
@@ -98,10 +95,10 @@ const blobRadius = (base: number, theta: number, t: number) =>
     0.11 * Math.sin(3 * theta - t * 1.3 + 2.1) +
     0.06 * Math.sin(5 * theta + t * 1.9 + 4.2));
 
-export const SkillPlanets = () => {
+export const SkillStars = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const planetRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const starRefs = useRef<(HTMLDivElement | null)[]>([]);
   const chipRefs = useRef<(HTMLLIElement | null)[]>([]);
 
   useEffect(() => {
@@ -113,11 +110,11 @@ export const SkillPlanets = () => {
     }
 
     let dpr = 1;
-    let planets: [Circle, Circle] = [
-      { x: 0, y: 0, r: 40 },
-      { x: 0, y: 0, r: 40 },
+    let stars: [Circle, Circle] = [
+      { x: 0, y: 0, r: 56 },
+      { x: 0, y: 0, r: 56 },
     ];
-    let blob: Circle = { x: 0, y: 0, r: 56 };
+    let blob: Circle = { x: 0, y: 0, r: 72 };
     let leaderLines: LeaderLine[] = [];
 
     const measure = () => {
@@ -131,7 +128,7 @@ export const SkillPlanets = () => {
       }
 
       const measured: Circle[] = [];
-      for (const element of planetRefs.current) {
+      for (const element of starRefs.current) {
         if (element === null) {
           continue;
         }
@@ -146,15 +143,15 @@ export const SkillPlanets = () => {
       if (first === undefined || second === undefined) {
         return;
       }
-      planets = [first, second];
+      stars = [first, second];
       const distance = Math.hypot(second.x - first.x, second.y - first.y);
       blob = {
         x: (first.x + second.x) / 2,
         y: (first.y + second.y) / 2,
-        r: Math.min(Math.max(distance * 0.13, 44), 72),
+        r: Math.min(Math.max(distance * 0.15, 52), 92),
       };
 
-      // 吹き出しから惑星へのリード線(吹き出しの縁 → 惑星の縁の少し手前)
+      // 吹き出しから恒星へのリード線(吹き出しの縁 → 恒星の縁の少し手前)
       leaderLines = [];
       for (const [index, element] of chipRefs.current.entries()) {
         if (element === null) {
@@ -164,13 +161,13 @@ export const SkillPlanets = () => {
         if (rect.width === 0) {
           continue;
         }
-        const planet = planets[index < PLANETS[0].items.length ? 0 : 1];
+        const star = stars[index < STARS[0].items.length ? 0 : 1];
         const cx = rect.left + rect.width / 2 - canvasRect.left;
         const cy = rect.top + rect.height / 2 - canvasRect.top;
-        const dx = planet.x - cx;
-        const dy = planet.y - cy;
+        const dx = star.x - cx;
+        const dy = star.y - cy;
         const length = Math.hypot(dx, dy);
-        if (length < planet.r + 12) {
+        if (length < star.r + 12) {
           continue;
         }
         const exit = Math.min(
@@ -180,8 +177,8 @@ export const SkillPlanets = () => {
         leaderLines.push({
           x1: cx + (dx / length) * exit,
           y1: cy + (dy / length) * exit,
-          x2: planet.x - (dx / length) * (planet.r + 5),
-          y2: planet.y - (dy / length) * (planet.r + 5),
+          x2: star.x - (dx / length) * (star.r + 5),
+          y2: star.y - (dy / length) * (star.r + 5),
         });
       }
     };
@@ -195,21 +192,21 @@ export const SkillPlanets = () => {
       particle.theta0 = random() * TAU;
       particle.spins = 0.8 + random() * 0.9;
       particle.jitterPhase = random() * TAU;
-      const palette = PLANETS[particle.planet].colors;
+      const palette = STARS[particle.star].colors;
       particle.color = palette[Math.floor(random() * palette.length)] ?? "#f7f2fa";
     };
 
     const particles: Particle[] = [];
-    for (let index = 0; index < PARTICLES_PER_PLANET * 2; index++) {
+    for (let index = 0; index < PARTICLES_PER_STAR * 2; index++) {
       const particle: Particle = {
-        planet: index < PARTICLES_PER_PLANET ? 0 : 1,
+        star: index < PARTICLES_PER_STAR ? 0 : 1,
         mode: "travel",
         s: 0,
         speed: 0,
         theta0: 0,
         spins: 0,
-        // 渦の向きは惑星ごとに統一する。中央の輪郭上では互いに逆行して交わる
-        dir: index < PARTICLES_PER_PLANET ? 1 : -1,
+        // 渦の向きは恒星ごとに統一する。中央の輪郭上では互いに逆行して交わる
+        dir: index < PARTICLES_PER_STAR ? 1 : -1,
         thetaB: random() * TAU,
         drift: 0.5 + random() * 0.55,
         life: 0,
@@ -233,7 +230,7 @@ export const SkillPlanets = () => {
     }
 
     const updateParticle = (particle: Particle, dt: number, t: number) => {
-      const planet = planets[particle.planet];
+      const star = stars[particle.star];
       if (particle.mode === "travel") {
         particle.s += dt * particle.speed;
         if (particle.s >= 1) {
@@ -242,15 +239,15 @@ export const SkillPlanets = () => {
           particle.life = particle.maxLife;
         }
         const eased = smoothstep(Math.min(particle.s, 1));
-        const centerX = lerp(planet.x, blob.x, eased);
-        const centerY = lerp(planet.y, blob.y, eased);
+        const centerX = lerp(star.x, blob.x, eased);
+        const centerY = lerp(star.y, blob.y, eased);
         const angle = particle.theta0 + particle.dir * particle.spins * TAU * particle.s;
-        // 外縁から出発し、いったん膨らんでから輪郭の半径に収束する渦
+        // 外縁から漏れ出し、いったん膨らんでから輪郭の半径に収束する渦
         const offset =
-          lerp(planet.r, blob.r, particle.s) + Math.sin(Math.PI * particle.s) * planet.r * 0.45;
+          lerp(star.r, blob.r, particle.s) + Math.sin(Math.PI * particle.s) * star.r * 0.45;
         particle.x = centerX + Math.cos(angle) * offset;
         particle.y = centerY + Math.sin(angle) * offset;
-        return Math.min(particle.s * 8, 1);
+        return Math.min(particle.s * 8, 1) * 0.75;
       }
       particle.thetaB += particle.dir * particle.drift * dt;
       particle.life -= dt;
@@ -264,7 +261,7 @@ export const SkillPlanets = () => {
         blobRadius(blob.r, particle.thetaB, t) + Math.sin(t * 2 + particle.jitterPhase) * 2.5;
       particle.x = blob.x + Math.cos(particle.thetaB) * radius;
       particle.y = blob.y + Math.sin(particle.thetaB) * radius;
-      return Math.min(particle.life / (particle.maxLife * 0.25), 1);
+      return Math.min(particle.life / (particle.maxLife * 0.25), 1) * 0.8;
     };
 
     const render = (dt: number, t: number) => {
@@ -314,7 +311,7 @@ export const SkillPlanets = () => {
           const trailX = particle.x - particle.tx;
           const trailY = particle.y - particle.ty;
           const trailLength = Math.hypot(trailX, trailY);
-          const maxTrail = 14;
+          const maxTrail = 16;
           if (trailLength > maxTrail) {
             particle.tx = particle.x - (trailX / trailLength) * maxTrail;
             particle.ty = particle.y - (trailY / trailLength) * maxTrail;
@@ -323,13 +320,13 @@ export const SkillPlanets = () => {
         context.globalAlpha = alpha;
         context.strokeStyle = particle.color;
         context.fillStyle = particle.color;
-        context.lineWidth = particle.mode === "blob" ? 2.2 : 1.6;
+        context.lineWidth = particle.mode === "blob" ? 1.8 : 1.2;
         context.beginPath();
         context.moveTo(particle.tx, particle.ty);
         context.lineTo(particle.x, particle.y);
         context.stroke();
         context.beginPath();
-        context.arc(particle.x, particle.y, particle.mode === "blob" ? 1.8 : 1.4, 0, TAU);
+        context.arc(particle.x, particle.y, particle.mode === "blob" ? 1.4 : 1.1, 0, TAU);
         context.fill();
       }
       context.globalAlpha = 1;
@@ -371,47 +368,41 @@ export const SkillPlanets = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative h-[34rem] md:h-[27rem]">
+    <div ref={containerRef} className="relative h-[40rem] md:h-[32rem]">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"
         aria-hidden="true"
         role="presentation"
       />
-      {PLANETS.map((planet, planetIndex) => (
-        <div key={planet.title} className={`absolute h-0 w-0 ${planet.position}`}>
-          {/* 環(惑星の背面) */}
-          <div
-            className={`absolute top-1/2 left-1/2 h-12 w-40 -translate-x-1/2 -translate-y-1/2 rounded-[50%] border md:h-14 md:w-48 ${planet.ring}`}
-            style={{ rotate: planetIndex === 0 ? "-16deg" : "14deg" }}
-            aria-hidden="true"
-          />
-          {/* 惑星本体 */}
+      {STARS.map((star, starIndex) => (
+        <div key={star.title} className={`absolute h-0 w-0 ${star.position}`}>
+          {/* 恒星本体 */}
           <div
             ref={(node) => {
-              planetRefs.current[planetIndex] = node;
+              starRefs.current[starIndex] = node;
             }}
-            className="absolute top-1/2 left-1/2 h-20 w-20 -translate-x-1/2 -translate-y-1/2 rounded-full md:h-24 md:w-24"
-            style={{ background: planet.sphere, boxShadow: planet.glow }}
+            className="absolute top-1/2 left-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full md:h-36 md:w-36"
+            style={{ background: star.surface, boxShadow: star.glow }}
           />
-          <p className="font-mono text-star/70 absolute top-14 left-1/2 -translate-x-1/2 text-xs tracking-[0.3em] whitespace-nowrap md:top-16">
-            {planet.title}
+          <p className="font-mono text-star/70 absolute top-[68px] left-1/2 -translate-x-1/2 text-xs tracking-[0.3em] whitespace-nowrap md:top-[88px]">
+            {star.title}
           </p>
-          {/* md+: 惑星の周りに散らす吹き出し */}
+          {/* md+: 恒星の周りに散らす吹き出し */}
           <ul className="hidden md:block">
-            {planet.items.map((item, itemIndex) => {
-              const offset = planet.chipOffsets[itemIndex] ?? { dx: 0, dy: 0 };
+            {star.items.map((item, itemIndex) => {
+              const offset = star.chipOffsets[itemIndex] ?? { dx: 0, dy: 0 };
               return (
                 <li
                   key={item}
                   ref={(node) => {
-                    chipRefs.current[planetIndex * PLANETS[0].items.length + itemIndex] = node;
+                    chipRefs.current[starIndex * STARS[0].items.length + itemIndex] = node;
                   }}
                   className="text-pale bg-void/50 absolute rounded-full border border-white/15 px-3.5 py-1.5 text-xs whitespace-nowrap backdrop-blur-sm"
                   style={{
                     left: offset.dx,
                     top: offset.dy,
-                    transform: planetIndex === 0 ? "translate(-100%, -50%)" : "translate(0, -50%)",
+                    transform: starIndex === 0 ? "translate(-100%, -50%)" : "translate(0, -50%)",
                   }}
                 >
                   {item}
@@ -421,9 +412,9 @@ export const SkillPlanets = () => {
           </ul>
         </div>
       ))}
-      {/* モバイル: 吹き出しは惑星の近くに折り返して並べる */}
-      <ul className="absolute inset-x-4 top-[13%] mt-24 flex flex-wrap justify-center gap-2 md:hidden">
-        {PLANETS[0].items.map((item) => (
+      {/* モバイル: 吹き出しは恒星の近くに折り返して並べる */}
+      <ul className="absolute inset-x-4 top-[12%] mt-28 flex flex-wrap justify-center gap-2 md:hidden">
+        {STARS[0].items.map((item) => (
           <li
             key={item}
             className="text-pale bg-void/50 rounded-full border border-white/15 px-3.5 py-1.5 text-xs backdrop-blur-sm"
@@ -432,8 +423,8 @@ export const SkillPlanets = () => {
           </li>
         ))}
       </ul>
-      <ul className="absolute inset-x-4 bottom-[13%] mb-14 flex flex-wrap justify-center gap-2 md:hidden">
-        {PLANETS[1].items.map((item) => (
+      <ul className="absolute inset-x-4 bottom-[16%] mb-16 flex flex-wrap justify-center gap-2 md:hidden">
+        {STARS[1].items.map((item) => (
           <li
             key={item}
             className="text-pale bg-void/50 rounded-full border border-white/15 px-3.5 py-1.5 text-xs backdrop-blur-sm"
