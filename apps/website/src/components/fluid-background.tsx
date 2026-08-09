@@ -12,7 +12,7 @@ import { createProgram, trackCanvasSize } from "~/lib/webgl";
  * ピクセルあたりのシェーダーコストが最も高い演出なので、時間方向に償却する:
  * - 0.5x 解像度で描く(ぼかし気味の絵なので見分けがつかない)
  * - 重い fbm パスは 10fps でテクスチャに描き、画面へは前後2枚のテクスチャを
- *   線形補間するだけの軽量パスを 30fps で出す。動きが極端に遅い
+ *   線形補間するだけの軽量パスを毎フレーム出す。動きが極端に遅い
  *   (u_time * 0.035 = 100ms で 0.0035)ので補間で滑らかさは保たれる
  * - ビューポート外(Hero を過ぎたら)は描画を完全に止める
  */
@@ -271,18 +271,12 @@ export const FluidBackground = ({ className }: { className?: string }) => {
     // テクスチャの実体を確実に確保する(再確保は無害)
     resizeTargets(canvas.width, canvas.height);
 
-    // 表示は 30fps に間引く(動きが非常にゆっくりなので視覚差なし)
-    const displayIntervalMs = 1000 / 30;
-    let lastDisplayedAt = Number.NEGATIVE_INFINITY;
+    // 表示(補間パス)は毎フレーム出す。テクスチャ2フェッチだけなのでほぼタダで、
+    // ここを間引くとグラデーションの動きが低フレームレートに見えてカクつく
     const handleFrame = (frame: Frame) => {
       if (prevTarget === null || nextTarget === null) {
         return;
       }
-      // rAF の刻み(60Hz なら約16.7ms)のゆらぎを吸収する 1ms のマージン
-      if (frame.now - lastDisplayedAt < displayIntervalMs - 1) {
-        return;
-      }
-      lastDisplayedAt = frame.now;
 
       if (!synced || frame.now - segmentStartedAt >= HEAVY_INTERVAL_MS * 2) {
         // 初回・リサイズ後・可視性ゲート復帰後は両端を描き直して同期する
