@@ -8,10 +8,10 @@ import { whenInView } from "~/lib/visibility";
 /**
  * できること: img11(ムードボード)の構図を再解釈した、二体の巨大プランクトンエイリアン。
  * - 左= DESIGN(ピンク)、右= ENGINEERING(ブルー)。不定形の半透明ボディがうねり続ける
- * - それぞれの単眼の瞳孔は宇宙(星が瞬き、視線と一緒に動く)
+ * - それぞれの単眼の瞳孔は宇宙。Hero と同じマーブルシェーダーが流れ続ける
  * - ふたつの瞳の狭間で、ピンクとブルーの小さなふたりが寄り添う=「かたち」
- * - 目はカーソルを追い、不定期にまばたきする
- * - 全部 Canvas 2D の手続き描画。イラスト素材は使わない
+ * - 瞳はカーソルにほんの少しだけ反応する
+ * - イラスト素材は使わず、Canvas 2D +オフスクリーン WebGL の手続き描画
  */
 
 type AlienConfig = {
@@ -65,24 +65,11 @@ const PUPIL_BIAS = 17;
 
 const TAU = Math.PI * 2;
 
-// Hero での出現頻度に合わせ、黄色はごく稀にしか使わない
+// Hero での出現頻度に合わせた、ふたりの周りのきらめきの色
 const SPARKLE_COLORS = ["#f2c4dc", "#a6d3ea", "#c4a8f8"];
-const SPARKLE_RARE = "#f2e85c";
 
 /** 毛細血管の色(Hero の目玉と同じ「かわいくて、不穏」の言語) */
 const CAPILLARY_COLOR = "rgba(216, 79, 116, 0.34)";
-
-type PupilStar = { x: number; y: number; r: number; speed: number; phase: number };
-type PupilSparkle = { x: number; y: number; size: number; color: string; phase: number };
-
-type Blink = {
-  next: number;
-  start: number;
-  depth: number;
-  duration: number;
-  /** まばたき直後にもう一度まばたきするか(生理的な二連まばたき) */
-  doublePending: boolean;
-};
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 
@@ -121,39 +108,6 @@ export const SkillEyes = () => {
     }
 
     const random = mulberry32(1103);
-
-    // 瞳孔の宇宙(瞳孔中心からの相対座標。視線と一緒に動く)
-    const buildUniverse = () => {
-      const stars: PupilStar[] = [];
-      for (let index = 0; index < 40; index++) {
-        const angle = random() * TAU;
-        const distance = Math.sqrt(random()) * 0.92;
-        stars.push({
-          x: Math.cos(angle) * distance * PUPIL_R,
-          y: Math.sin(angle) * distance * PUPIL_R,
-          r: 0.6 + random() * 1.1,
-          speed: 0.6 + random() * 1.8,
-          phase: random() * TAU,
-        });
-      }
-      const sparkles: PupilSparkle[] = [];
-      for (let index = 0; index < 2; index++) {
-        const angle = random() * TAU;
-        const distance = (0.3 + random() * 0.6) * PUPIL_R;
-        sparkles.push({
-          x: Math.cos(angle) * distance,
-          y: Math.sin(angle) * distance,
-          size: 4 + random() * 3.5,
-          color:
-            random() < 0.12
-              ? SPARKLE_RARE
-              : (SPARKLE_COLORS[Math.floor(random() * SPARKLE_COLORS.length)] ?? "#c4a8f8"),
-          phase: random() * TAU,
-        });
-      }
-      return { stars, sparkles };
-    };
-    const universes = [buildUniverse(), buildUniverse()] as const;
 
     // 瞳孔の宇宙: Hero と同じマーブルシェーダーをオフスクリーンで描いて転写する
     const marble = createMarbleRenderer(256);
@@ -203,68 +157,12 @@ export const SkillEyes = () => {
       originY = (rect.height - SCENE_H * scale) / 2;
     };
 
-    // 視線・まばたき・視差の状態
+    // 視線と視差の状態
     const gaze: { x: number; y: number }[] = [
       { x: 0, y: 0 },
       { x: 0, y: 0 },
     ];
-    const blinks: Blink[] = [
-      {
-        next: 2.2,
-        start: Number.NEGATIVE_INFINITY,
-        depth: 0.96,
-        duration: 0.32,
-        doublePending: false,
-      },
-      {
-        next: 4.1,
-        start: Number.NEGATIVE_INFINITY,
-        depth: 0.96,
-        duration: 0.32,
-        doublePending: false,
-      },
-    ];
     const parallax = { x: 0, y: 0 };
-
-    /**
-     * 生理的なまばたきカーブ。実際の瞬目は
-     * 「速い閉眼(~100ms) → 短い完全閉鎖 → 遅い開眼(~200ms)」の非対称波形で、
-     * 対称な sin 波だと機械的に見える。progress 0..1 → 閉じ具合 0..1
-     */
-    const blinkCurve = (progress: number) => {
-      if (progress < 0.3) {
-        const p = progress / 0.3;
-        return p * p; // 閉眼: 加速しながら一気に
-      }
-      if (progress < 0.42) {
-        return 1; // 完全閉鎖の保持
-      }
-      const p = (progress - 0.42) / 0.58;
-      return (1 - p) ** 3; // 開眼: 減速しながらゆっくり
-    };
-
-    const blinkScale = (blink: Blink, t: number) => {
-      if (t >= blink.next) {
-        blink.start = t;
-        // たまに半目(ゆっくり細める)。二体は非同期
-        const half = random() < 0.22;
-        blink.depth = half ? 0.55 : 0.96;
-        blink.duration = half ? 0.55 : 0.32;
-        // 完全なまばたきの後は、たまに二連続になる(実際の瞬目の癖)
-        blink.doublePending = !half && random() < 0.18;
-        blink.next = t + 2.6 + random() * 4.6;
-      }
-      let progress = (t - blink.start) / blink.duration;
-      if (progress > 1 && blink.doublePending) {
-        blink.start = t;
-        blink.doublePending = false;
-        progress = 0;
-      }
-      if (progress < 0 || progress > 1) {
-        return 1;
-      }
-      return 1 - blinkCurve(progress) * blink.depth;
-    };
 
     const drawSparkle = (x: number, y: number, size: number, color: string, alpha: number) => {
       context.globalAlpha = alpha;
@@ -388,15 +286,6 @@ export const SkillEyes = () => {
       context.save();
       applyAlienTransform(side, t, 6);
 
-      // まばたき: 中心への対称な圧縮ではなく、下端を固定して
-      // 「上瞼が下りてくる」動きにする(瞬目は上瞼が9割を担う)
-      const blink = blinkScale(
-        blinks[side] ?? { next: 0, start: 0, depth: 0.96, duration: 0.32, doublePending: false },
-        t,
-      );
-      context.translate(0, SCLERA_R * 1.1 * (1 - blink));
-      context.scale(1, blink);
-
       // 白目: ベタ塗りではなく、縁が光の減衰で消えていく発光体
       const scleraGlow = context.createRadialGradient(0, 0, PUPIL_R * 0.6, 0, 0, SCLERA_R * 1.22);
       scleraGlow.addColorStop(0, withAlpha(alien.sclera, 0.92));
@@ -442,18 +331,12 @@ export const SkillEyes = () => {
       context.arc(px, py, PUPIL_R, 0, TAU);
       context.fillStyle = "#0b0714";
       context.fill();
-      context.strokeStyle = alien.soft;
-      context.globalAlpha = 0.4;
-      context.lineWidth = 1.5;
-      context.stroke();
-      context.globalAlpha = 1;
 
       // 宇宙: Hero と同じマーブルシェーダーを転写する(瞳孔中心と一緒に動く)
       context.save();
       context.beginPath();
       context.arc(px, py, PUPIL_R - 1, 0, TAU);
       context.clip();
-      const universe = universes[side];
       if (marble !== null) {
         context.save();
         context.translate(px, py);
@@ -461,64 +344,34 @@ export const SkillEyes = () => {
         context.rotate(side === 0 ? 0.4 : Math.PI + 1.1);
         const marbleSize = PUPIL_R * 2.5;
         context.drawImage(marble.canvas, -marbleSize / 2, -marbleSize / 2, marbleSize, marbleSize);
+        // screen 合成で同じ絵を重ね、Hero 背景より明るく発光させる
+        context.globalCompositeOperation = "screen";
+        context.globalAlpha = 0.55;
+        context.drawImage(marble.canvas, -marbleSize / 2, -marbleSize / 2, marbleSize, marbleSize);
+        context.globalAlpha = 1;
+        context.globalCompositeOperation = "source-over";
         context.restore();
-        // Hero 背景よりさらに一段闇に沈める
-        context.fillStyle = "rgba(4, 2, 8, 0.22)";
-        context.beginPath();
-        context.arc(px, py, PUPIL_R, 0, TAU);
-        context.fill();
       }
 
-      // 星: 白いコア+冷えた紫のかすかなブルーム
-      context.globalCompositeOperation = "lighter";
-      for (const star of universe.stars) {
-        const twinkle = 0.3 + 0.6 * (0.5 + 0.5 * Math.sin(t * star.speed + star.phase));
-        context.globalAlpha = twinkle * 0.14;
-        context.fillStyle = "#5f3fa8";
-        context.beginPath();
-        context.arc(px + star.x, py + star.y, star.r * 3, 0, TAU);
-        context.fill();
-        context.globalAlpha = twinkle;
-        context.fillStyle = "#f7f2fa";
-        context.beginPath();
-        context.arc(px + star.x, py + star.y, star.r, 0, TAU);
-        context.fill();
-      }
-      context.globalAlpha = 1;
-      for (const sparkle of universe.sparkles) {
-        const pulse = 0.55 + 0.45 * Math.sin(t * 0.9 + sparkle.phase);
-        drawSparkle(
-          px + sparkle.x,
-          py + sparkle.y,
-          sparkle.size * (0.8 + 0.2 * pulse),
-          sparkle.color,
-          pulse * 0.7,
-        );
-      }
-      context.globalCompositeOperation = "source-over";
-
-      // 縁が闇に落ちるビネット+うっすら血の色のリム
-      const vignette = context.createRadialGradient(px, py, PUPIL_R * 0.45, px, py, PUPIL_R);
+      // 縁が闇に落ちるビネット
+      const vignette = context.createRadialGradient(px, py, PUPIL_R * 0.55, px, py, PUPIL_R);
       vignette.addColorStop(0, "rgba(2, 0, 6, 0)");
-      vignette.addColorStop(1, "rgba(2, 0, 6, 0.5)");
+      vignette.addColorStop(1, "rgba(2, 0, 6, 0.4)");
       context.fillStyle = vignette;
       context.beginPath();
       context.arc(px, py, PUPIL_R, 0, TAU);
       context.fill();
-      context.beginPath();
-      context.arc(px, py, PUPIL_R - 3, 0, TAU);
-      context.strokeStyle = "rgba(150, 40, 60, 0.18)";
-      context.lineWidth = 4;
-      context.stroke();
       context.restore();
 
-      // 上側のハイライト弧
+      // 白目と黒目の境界をぼかす: 白目の色が瞳孔の縁へ滲み込むクロスフェード
+      const boundary = context.createRadialGradient(px, py, PUPIL_R * 0.76, px, py, PUPIL_R * 1.24);
+      boundary.addColorStop(0, withAlpha(alien.sclera, 0));
+      boundary.addColorStop(0.5, withAlpha(alien.sclera, 0.6));
+      boundary.addColorStop(1, withAlpha(alien.sclera, 0));
+      context.fillStyle = boundary;
       context.beginPath();
-      context.arc(px, py, PUPIL_R - 7, -2.4, -1.2);
-      context.strokeStyle = "rgba(255, 255, 255, 0.7)";
-      context.lineWidth = 3;
-      context.lineCap = "round";
-      context.stroke();
+      context.arc(px, py, PUPIL_R * 1.24, 0, TAU);
+      context.fill();
 
       context.restore();
 
