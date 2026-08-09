@@ -5,18 +5,22 @@ import { whenInView } from "~/lib/visibility";
 
 /**
  * できること: DESIGN と ENGINEERING のふたつの恒星。
+ * - 恒星は canvas に描く流体(輪郭が常にうねるプラズマの球)
  * - 各恒星の周りにスキルの吹き出し(DOM。canvas がリード線を描いて恒星とつなぐ)
  * - 恒星の外縁からエネルギーが無数の粒子として漏れ出し、渦を巻きながら中間へ流れる
- * - 中間で粒子が不定形にうねる輪郭に合流し、「かたち」の外枠を作る
- *   (Design ∩ Engineering から生まれるもの。テキストは載せない)
+ * - 中間で粒子が不定形にうねる輪郭(恒星の約半分の大きさ)に合流し、
+ *   「かたち」の外枠を作る(Design ∩ Engineering から生まれるもの。テキストは載せない)
  */
 
 type StarConfig = {
   title: string;
   /** 恒星中心の位置クラス(モバイル: 縦積み / md+: 左右) */
   position: string;
-  surface: string;
-  glow: string;
+  /** 恒星本体のグラデーション(中心 → 外縁) */
+  surfaceStops: [string, string, string, string];
+  corona: string;
+  /** 輪郭のうねりの位相オフセット */
+  phase: number;
   colors: string[];
   items: string[];
   /** md+ での吹き出しオフセット(恒星中心からの px)。左恒星は右端、右恒星は左端が基準 */
@@ -27,29 +31,31 @@ const STARS: [StarConfig, StarConfig] = [
   {
     title: "DESIGN",
     position: "left-1/2 top-[12%] md:left-[22%] md:top-[42%]",
-    surface: "radial-gradient(circle at 40% 38%, #ffffff, #ffd9ec 22%, #f2549e 62%, #7a1c52 100%)",
-    glow: "0 0 60px 10px rgba(242, 84, 158, 0.45), 0 0 160px 50px rgba(242, 84, 158, 0.18)",
+    surfaceStops: ["#ffffff", "#ffd9ec", "#f2549e", "#7a1c52"],
+    corona: "rgba(242, 84, 158, 0.32)",
+    phase: 0,
     colors: ["#f2c4dc", "#f2549e", "#ffd9ec"],
     items: ["UIデザイン", "グラフィックデザイン", "モーションデザイン", "世界観の設計"],
     chipOffsets: [
-      { dx: -86, dy: -102 },
-      { dx: -102, dy: -30 },
-      { dx: -86, dy: 46 },
-      { dx: -50, dy: 118 },
+      { dx: -100, dy: -118 },
+      { dx: -118, dy: -36 },
+      { dx: -100, dy: 54 },
+      { dx: -58, dy: 136 },
     ],
   },
   {
     title: "ENGINEERING",
     position: "left-1/2 top-[84%] md:left-[78%] md:top-[58%]",
-    surface: "radial-gradient(circle at 40% 38%, #ffffff, #dff1ff 22%, #a6d3ea 62%, #1d3e63 100%)",
-    glow: "0 0 60px 10px rgba(166, 211, 234, 0.45), 0 0 160px 50px rgba(166, 211, 234, 0.18)",
+    surfaceStops: ["#ffffff", "#dff1ff", "#a6d3ea", "#1d3e63"],
+    corona: "rgba(166, 211, 234, 0.3)",
+    phase: Math.PI,
     colors: ["#a6d3ea", "#c4a8f8", "#dff1ff"],
     items: ["Webフロントエンド", "WebGL / シェーダー", "アクセシビリティ", "Web標準"],
     chipOffsets: [
-      { dx: 86, dy: -102 },
-      { dx: 102, dy: -30 },
-      { dx: 86, dy: 46 },
-      { dx: 50, dy: 118 },
+      { dx: 100, dy: -118 },
+      { dx: 118, dy: -36 },
+      { dx: 100, dy: 54 },
+      { dx: 58, dy: 136 },
     ],
   },
 ];
@@ -78,9 +84,6 @@ type Particle = {
   color: string;
   x: number;
   y: number;
-  /** トレイル(残像)の座標。頭より遅れて追従し、速度に応じた流線を作る */
-  tx: number;
-  ty: number;
 };
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
@@ -94,6 +97,14 @@ const blobRadius = (base: number, theta: number, t: number) =>
     0.17 * Math.sin(2 * theta + t * 0.8) +
     0.11 * Math.sin(3 * theta - t * 1.3 + 2.1) +
     0.06 * Math.sin(5 * theta + t * 1.9 + 4.2));
+
+/** 恒星表面の半径。blob よりゆっくり・控えめにうねるプラズマの輪郭 */
+const starRadius = (base: number, theta: number, t: number, phase: number) =>
+  base *
+  (1 +
+    0.04 * Math.sin(3 * theta + t * 0.7 + phase) +
+    0.028 * Math.sin(5 * theta - t * 1.1 + phase * 2) +
+    0.018 * Math.sin(7 * theta + t * 1.6 + phase));
 
 export const SkillStars = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -111,10 +122,10 @@ export const SkillStars = () => {
 
     let dpr = 1;
     let stars: [Circle, Circle] = [
-      { x: 0, y: 0, r: 56 },
-      { x: 0, y: 0, r: 56 },
+      { x: 0, y: 0, r: 64 },
+      { x: 0, y: 0, r: 64 },
     ];
-    let blob: Circle = { x: 0, y: 0, r: 72 };
+    let blob: Circle = { x: 0, y: 0, r: 40 };
     let leaderLines: LeaderLine[] = [];
 
     const measure = () => {
@@ -144,11 +155,11 @@ export const SkillStars = () => {
         return;
       }
       stars = [first, second];
-      const distance = Math.hypot(second.x - first.x, second.y - first.y);
+      // 不定形は恒星の約半分の大きさに保つ
       blob = {
         x: (first.x + second.x) / 2,
         y: (first.y + second.y) / 2,
-        r: Math.min(Math.max(distance * 0.15, 52), 92),
+        r: (first.r + second.r) / 2 / 2,
       };
 
       // 吹き出しから恒星へのリード線(吹き出しの縁 → 恒星の縁の少し手前)
@@ -167,7 +178,7 @@ export const SkillStars = () => {
         const dx = star.x - cx;
         const dy = star.y - cy;
         const length = Math.hypot(dx, dy);
-        if (length < star.r + 12) {
+        if (length < star.r + 16) {
           continue;
         }
         const exit = Math.min(
@@ -177,8 +188,9 @@ export const SkillStars = () => {
         leaderLines.push({
           x1: cx + (dx / length) * exit,
           y1: cy + (dy / length) * exit,
-          x2: star.x - (dx / length) * (star.r + 5),
-          y2: star.y - (dy / length) * (star.r + 5),
+          // うねりの最大振幅ぶん外側で止める
+          x2: star.x - (dx / length) * (star.r * 1.09 + 4),
+          y2: star.y - (dy / length) * (star.r * 1.09 + 4),
         });
       }
     };
@@ -215,8 +227,6 @@ export const SkillStars = () => {
         color: "#f7f2fa",
         x: Number.NaN,
         y: Number.NaN,
-        tx: Number.NaN,
-        ty: Number.NaN,
       };
       spawnTravel(particle);
       // 初期状態から絵が成立するよう、半分は輪郭に、残りは道中にばらまく
@@ -254,7 +264,6 @@ export const SkillStars = () => {
       if (particle.life <= 0) {
         spawnTravel(particle);
         particle.x = Number.NaN;
-        particle.tx = Number.NaN;
         return 0;
       }
       const radius =
@@ -264,14 +273,65 @@ export const SkillStars = () => {
       return Math.min(particle.life / (particle.maxLife * 0.25), 1) * 0.8;
     };
 
+    /** 恒星: コロナ+輪郭がうねるプラズマの球 */
+    const drawStar = (star: Circle, config: StarConfig, t: number) => {
+      const corona = context.createRadialGradient(
+        star.x,
+        star.y,
+        star.r * 0.5,
+        star.x,
+        star.y,
+        star.r * 2.3,
+      );
+      corona.addColorStop(0, config.corona);
+      corona.addColorStop(1, "rgba(0, 0, 0, 0)");
+      context.fillStyle = corona;
+      context.beginPath();
+      context.arc(star.x, star.y, star.r * 2.3, 0, TAU);
+      context.fill();
+
+      context.beginPath();
+      const segments = 72;
+      for (let index = 0; index <= segments; index++) {
+        const theta = (index / segments) * TAU;
+        const radius = starRadius(star.r, theta, t, config.phase);
+        const x = star.x + Math.cos(theta) * radius;
+        const y = star.y + Math.sin(theta) * radius;
+        if (index === 0) {
+          context.moveTo(x, y);
+        } else {
+          context.lineTo(x, y);
+        }
+      }
+      context.closePath();
+      const surface = context.createRadialGradient(
+        star.x - star.r * 0.25,
+        star.y - star.r * 0.28,
+        star.r * 0.05,
+        star.x,
+        star.y,
+        star.r * 1.06,
+      );
+      surface.addColorStop(0, config.surfaceStops[0]);
+      surface.addColorStop(0.24, config.surfaceStops[1]);
+      surface.addColorStop(0.62, config.surfaceStops[2]);
+      surface.addColorStop(1, config.surfaceStops[3]);
+      context.fillStyle = surface;
+      context.fill();
+    };
+
     const render = (dt: number, t: number) => {
       const width = canvas.width / dpr;
       const height = canvas.height / dpr;
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, width, height);
 
-      // 吹き出しのリード線
+      // 恒星本体
       context.globalCompositeOperation = "source-over";
+      drawStar(stars[0], STARS[0], t);
+      drawStar(stars[1], STARS[1], t);
+
+      // 吹き出しのリード線
       context.strokeStyle = "rgba(247, 242, 250, 0.16)";
       context.lineWidth = 1;
       context.setLineDash([2, 4]);
@@ -292,41 +352,17 @@ export const SkillStars = () => {
       context.arc(blob.x, blob.y, blob.r * 1.5, 0, TAU);
       context.fill();
 
-      // 粒子(加算合成で発光)。頭の点+遅れて追従するトレイルで流線を描く
+      // 粒子(加算合成で発光する点。尾は描かない)
       context.globalCompositeOperation = "lighter";
-      context.lineCap = "round";
       for (const particle of particles) {
         const alpha = updateParticle(particle, dt, t);
         if (alpha <= 0 || !Number.isFinite(particle.x)) {
           continue;
         }
-        if (!Number.isFinite(particle.tx)) {
-          particle.tx = particle.x;
-          particle.ty = particle.y;
-        } else {
-          const follow = Math.min(1, dt * 4.5);
-          particle.tx += (particle.x - particle.tx) * follow;
-          particle.ty += (particle.y - particle.ty) * follow;
-          // 低FPS時にトレイルが伸びすぎて棘状にならないよう上限を設ける
-          const trailX = particle.x - particle.tx;
-          const trailY = particle.y - particle.ty;
-          const trailLength = Math.hypot(trailX, trailY);
-          const maxTrail = 16;
-          if (trailLength > maxTrail) {
-            particle.tx = particle.x - (trailX / trailLength) * maxTrail;
-            particle.ty = particle.y - (trailY / trailLength) * maxTrail;
-          }
-        }
         context.globalAlpha = alpha;
-        context.strokeStyle = particle.color;
         context.fillStyle = particle.color;
-        context.lineWidth = particle.mode === "blob" ? 1.8 : 1.2;
         context.beginPath();
-        context.moveTo(particle.tx, particle.ty);
-        context.lineTo(particle.x, particle.y);
-        context.stroke();
-        context.beginPath();
-        context.arc(particle.x, particle.y, particle.mode === "blob" ? 1.4 : 1.1, 0, TAU);
+        context.arc(particle.x, particle.y, particle.mode === "blob" ? 1.6 : 1.3, 0, TAU);
         context.fill();
       }
       context.globalAlpha = 1;
@@ -377,15 +413,14 @@ export const SkillStars = () => {
       />
       {STARS.map((star, starIndex) => (
         <div key={star.title} className={`absolute h-0 w-0 ${star.position}`}>
-          {/* 恒星本体 */}
+          {/* 恒星の計測用アンカー(描画は canvas 側。サイズと位置だけここで決める) */}
           <div
             ref={(node) => {
               starRefs.current[starIndex] = node;
             }}
-            className="absolute top-1/2 left-1/2 h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full md:h-36 md:w-36"
-            style={{ background: star.surface, boxShadow: star.glow }}
+            className="invisible absolute top-1/2 left-1/2 h-32 w-32 -translate-x-1/2 -translate-y-1/2 md:h-44 md:w-44"
           />
-          <p className="font-mono text-star/70 absolute top-[68px] left-1/2 -translate-x-1/2 text-xs tracking-[0.3em] whitespace-nowrap md:top-[88px]">
+          <p className="font-mono text-star/70 absolute top-[78px] left-1/2 -translate-x-1/2 text-xs tracking-[0.3em] whitespace-nowrap md:top-[104px]">
             {star.title}
           </p>
           {/* md+: 恒星の周りに散らす吹き出し */}
@@ -423,7 +458,7 @@ export const SkillStars = () => {
           </li>
         ))}
       </ul>
-      <ul className="absolute inset-x-4 bottom-[16%] mb-16 flex flex-wrap justify-center gap-2 md:hidden">
+      <ul className="absolute inset-x-4 bottom-[16%] mb-20 flex flex-wrap justify-center gap-2 md:hidden">
         {STARS[1].items.map((item) => (
           <li
             key={item}
