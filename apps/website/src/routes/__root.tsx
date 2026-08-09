@@ -10,6 +10,13 @@ import appCss from "~/styles/app.css?url";
 const RootDocument = ({ children }: { children: React.ReactNode }) => (
   <html lang="ja">
     <head>
+      {/*
+       * スクロール位置の復元はブラウザネイティブ(描画前に完了=チラつかない)。
+       * 過去に TanStack の復元が history.scrollRestoration を "manual" にした値は
+       * 履歴エントリに永続化されて残るので、最初に明示的に "auto" へ戻す
+       */}
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: 静的な1行スクリプト */}
+      <script dangerouslySetInnerHTML={{ __html: 'history.scrollRestoration = "auto"' }} />
       <HeadContent />
     </head>
     <body className="bg-void text-star min-h-screen antialiased">
