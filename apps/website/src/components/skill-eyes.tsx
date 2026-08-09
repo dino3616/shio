@@ -58,6 +58,8 @@ const SCENE_H = 520;
 const BODY_R = 195;
 const SCLERA_R = 110;
 const PUPIL_R = 86;
+/** 寄り目: 瞳孔を相手側へ寄せる量 */
+const PUPIL_BIAS = 17;
 
 const TAU = Math.PI * 2;
 
@@ -234,13 +236,25 @@ export const SkillEyes = () => {
       context.globalAlpha = 1;
     };
 
-    const traceWobbly = (radius: number, t: number, phase: number, fn = wobblyRadius) => {
+    /**
+     * うねる輪郭のパス。elongation > 0 で outward 方向に膨らむ卵形になり、
+     * offsetX で中心そのものも外側へずらす(=目が内側に寄って中央を向く姿勢)
+     */
+    const traceWobbly = (
+      radius: number,
+      t: number,
+      phase: number,
+      outward: -1 | 1,
+      offsetX: number,
+      elongation: number,
+    ) => {
       context.beginPath();
       const segments = 64;
       for (let index = 0; index <= segments; index++) {
         const theta = (index / segments) * TAU;
-        const r = fn(radius, theta, t, phase);
-        const x = Math.cos(theta) * r;
+        const r =
+          wobblyRadius(radius, theta, t, phase) * (1 + elongation * outward * Math.cos(theta));
+        const x = outward * offsetX + Math.cos(theta) * r;
         const y = Math.sin(theta) * r;
         if (index === 0) {
           context.moveTo(x, y);
@@ -259,18 +273,40 @@ export const SkillEyes = () => {
       context.rotate(alien.rotation + Math.sin(t * 0.3 + side * 1.4) * 0.02);
     };
 
-    /** ボディ: 外側ほど淡い多層の不定形。層ごとに位相をずらしてうねらせる */
+    /** ボディ: 外側ほど淡い多層の不定形。外側に重心を寄せて中央を向く姿勢にする */
     const drawAlienBody = (side: 0 | 1, t: number) => {
       const alien = ALIENS[side];
+      const outward: -1 | 1 = side === 0 ? -1 : 1;
       context.save();
       applyAlienTransform(side, t);
       const layers = [
-        { radius: BODY_R, color: alien.soft, alpha: 0.12, phase: 0.4 + side * 3 },
-        { radius: BODY_R * 0.82, color: alien.tint, alpha: 0.13, phase: 1.9 + side * 3 },
-        { radius: BODY_R * 0.66, color: alien.soft, alpha: 0.2, phase: 3.6 + side * 3 },
+        {
+          radius: BODY_R,
+          offset: 60,
+          elongation: 0.16,
+          color: alien.soft,
+          alpha: 0.12,
+          phase: 0.4 + side * 3,
+        },
+        {
+          radius: BODY_R * 0.82,
+          offset: 40,
+          elongation: 0.13,
+          color: alien.tint,
+          alpha: 0.13,
+          phase: 1.9 + side * 3,
+        },
+        {
+          radius: BODY_R * 0.66,
+          offset: 22,
+          elongation: 0.1,
+          color: alien.soft,
+          alpha: 0.2,
+          phase: 3.6 + side * 3,
+        },
       ];
       for (const layer of layers) {
-        traceWobbly(layer.radius, t * 0.8, layer.phase);
+        traceWobbly(layer.radius, t * 0.8, layer.phase, outward, layer.offset, layer.elongation);
         context.globalAlpha = layer.alpha;
         context.fillStyle = layer.color;
         context.fill();
@@ -299,10 +335,10 @@ export const SkillEyes = () => {
       context.stroke();
       context.globalAlpha = 1;
 
-      // 瞳孔=宇宙(視線ぶんだけ動く)
+      // 瞳孔=宇宙。寄り目がデフォルトで、視線ぶんだけ微動する
       const gazeOffset = gaze[side] ?? { x: 0, y: 0 };
-      const px = gazeOffset.x;
-      const py = gazeOffset.y;
+      const px = (side === 0 ? PUPIL_BIAS : -PUPIL_BIAS) + gazeOffset.x;
+      const py = 4 + gazeOffset.y;
       context.beginPath();
       context.arc(px, py, PUPIL_R, 0, TAU);
       context.fillStyle = "#0a0714";
@@ -484,7 +520,7 @@ export const SkillEyes = () => {
       context.setTransform(dpr, 0, 0, dpr, 0, 0);
       context.clearRect(0, 0, rect.width, rect.height);
 
-      // 視線を更新(カーソル方向へ最大14px、なめらかに追従)
+      // 視線を更新(カーソル方向へ最大4px、なめらかに追従)
       const pointer = getPointer();
       const canvasRect = canvas.getBoundingClientRect();
       for (const side of [0, 1] as const) {
@@ -496,7 +532,8 @@ export const SkillEyes = () => {
           const dy = pointer.y - canvasRect.top - center.y;
           const length = Math.hypot(dx, dy);
           if (length > 1) {
-            const reach = Math.min(length / 22, 14);
+            // ほんのちょっとだけ動く
+            const reach = Math.min(length / 60, 4);
             target.x = (dx / length) * reach;
             target.y = (dy / length) * reach;
           }
