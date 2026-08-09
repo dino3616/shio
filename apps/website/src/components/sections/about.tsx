@@ -1,6 +1,7 @@
 import { ConstellationTimeline } from "~/components/constellation-timeline";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
+import { SkillResonance } from "~/components/skill-resonance";
 
 /**
  * About: 「自分は誰か」に集中するセクション(content-plan の確定構成)。
@@ -15,19 +16,6 @@ const INTERESTS: { label: string; comment: string; tilt: number }[] = [
   { label: "メイク", comment: "ベースメイクには一家言あり", tilt: 2 },
   { label: "服", comment: "リメイクして着るのが好き", tilt: -1.5 },
   { label: "ことば", comment: "倫理学を愛でてる", tilt: 1 },
-];
-
-const SKILL_GROUPS: { title: string; accent: string; items: string[] }[] = [
-  {
-    title: "DESIGN",
-    accent: "#f2c4dc",
-    items: ["UIデザイン", "グラフィックデザイン", "モーションデザイン", "世界観の設計"],
-  },
-  {
-    title: "ENGINEERING",
-    accent: "#a6d3ea",
-    items: ["Webフロントエンド", "WebGL / シェーダー", "アクセシビリティ", "Web標準"],
-  },
 ];
 
 export const About = () => (
@@ -133,40 +121,18 @@ export const About = () => (
       </Reveal>
     </div>
 
-    {/* できること+経歴星座 */}
-    <div className="mt-16 grid gap-12 lg:grid-cols-[1fr_1.2fr] lg:gap-16">
-      <Reveal delay={0.1}>
-        <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">できること</h3>
-        <div className="mt-6 space-y-5">
-          {SKILL_GROUPS.map((group) => (
-            <div
-              key={group.title}
-              className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md"
-              style={{ boxShadow: "inset 0 1px 0 rgba(255, 255, 255, 0.08)" }}
-            >
-              <p className="font-mono text-xs tracking-[0.25em]" style={{ color: group.accent }}>
-                {group.title}
-              </p>
-              <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-2">
-                {group.items.map((item) => (
-                  <li key={item} className="text-pale text-sm">
-                    <span className="mr-1.5 text-xs" style={{ color: group.accent }}>
-                      ✦
-                    </span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </Reveal>
-      <Reveal delay={0.18}>
-        <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">これまでの軌道</h3>
-        <div className="mt-6">
-          <ConstellationTimeline />
-        </div>
-      </Reveal>
-    </div>
+    {/* できること: DESIGN × ENGINEERING の共鳴 */}
+    <Reveal delay={0.1} className="mt-20">
+      <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">できること</h3>
+      <div className="mt-8">
+        <SkillResonance />
+      </div>
+    </Reveal>
+
+    {/* これまでの軌跡: 夜空の星座 */}
+    <Reveal delay={0.1} className="mt-20">
+      <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">これまでの軌跡</h3>
+      <ConstellationTimeline />
+    </Reveal>
   </section>
 );
