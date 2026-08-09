@@ -73,6 +73,13 @@ const CAPILLARY_COLOR = "rgba(216, 79, 116, 0.34)";
 
 type PupilStar = { x: number; y: number; r: number; speed: number; phase: number };
 type PupilSparkle = { x: number; y: number; size: number; color: string; phase: number };
+/** 瞳孔の中で蠢く星雲の塊 */
+type PupilMurk = { x: number; y: number; r: number; color: string; phase: number; drift: number };
+/** 瞳孔の中を漂う霧の筋 */
+type PupilWisp = { a0: number; a1: number; r0: number; r1: number; color: string; phase: number };
+
+/** 深淵の星雲パレット(暗赤・深紫・暗菫) */
+const MURK_COLORS = ["#5e1f38", "#2a1445", "#3d1030"];
 
 type Blink = { next: number; start: number; depth: number; duration: number };
 
@@ -130,21 +137,48 @@ export const SkillEyes = () => {
         });
       }
       const sparkles: PupilSparkle[] = [];
-      for (let index = 0; index < 5; index++) {
+      for (let index = 0; index < 2; index++) {
         const angle = random() * TAU;
         const distance = (0.3 + random() * 0.6) * PUPIL_R;
         sparkles.push({
           x: Math.cos(angle) * distance,
           y: Math.sin(angle) * distance,
-          size: 5 + random() * 5,
+          size: 4 + random() * 3.5,
           color:
             random() < 0.12
               ? SPARKLE_RARE
-              : (SPARKLE_COLORS[Math.floor(random() * SPARKLE_COLORS.length)] ?? "#f2c4dc"),
+              : (SPARKLE_COLORS[Math.floor(random() * SPARKLE_COLORS.length)] ?? "#c4a8f8"),
           phase: random() * TAU,
         });
       }
-      return { stars, sparkles };
+      // 蠢く星雲の塊
+      const murk: PupilMurk[] = [];
+      for (let index = 0; index < 3; index++) {
+        const angle = random() * TAU;
+        const distance = (0.15 + random() * 0.5) * PUPIL_R;
+        murk.push({
+          x: Math.cos(angle) * distance,
+          y: Math.sin(angle) * distance,
+          r: (0.34 + random() * 0.3) * PUPIL_R,
+          color: MURK_COLORS[index % MURK_COLORS.length] ?? "#2a1445",
+          phase: random() * TAU,
+          drift: 0.5 + random(),
+        });
+      }
+      // 血色と菫色の霧の筋
+      const wisps: PupilWisp[] = [];
+      for (let index = 0; index < 3; index++) {
+        const a0 = random() * TAU;
+        wisps.push({
+          a0,
+          a1: a0 + 1.6 + random() * 1.6,
+          r0: (0.25 + random() * 0.5) * PUPIL_R,
+          r1: (0.25 + random() * 0.5) * PUPIL_R,
+          color: index === 0 ? "rgba(216, 79, 116, 0.16)" : "rgba(139, 92, 246, 0.13)",
+          phase: random() * TAU,
+        });
+      }
+      return { stars, sparkles, murk, wisps };
     };
     const universes = [buildUniverse(), buildUniverse()] as const;
 
@@ -439,45 +473,85 @@ export const SkillEyes = () => {
       context.stroke();
       context.globalAlpha = 1;
 
-      // 宇宙: ネビュラの深み+加算合成でブルームする星(瞳孔中心と一緒に動く)
+      // 宇宙: 蠢く深淵(瞳孔中心と一緒に動く)
       context.save();
       context.beginPath();
       context.arc(px, py, PUPIL_R - 1, 0, TAU);
       context.clip();
-      const driftX = Math.sin(t * 0.11 + side * 2) * 8;
-      const driftY = Math.cos(t * 0.09 + side) * 6;
-      const nebulaA = context.createRadialGradient(
-        px - PUPIL_R * 0.32 + driftX,
-        py - PUPIL_R * 0.2 + driftY,
-        0,
-        px - PUPIL_R * 0.32 + driftX,
-        py - PUPIL_R * 0.2 + driftY,
-        PUPIL_R * 1.05,
-      );
-      nebulaA.addColorStop(0, "rgba(139, 92, 246, 0.16)");
-      nebulaA.addColorStop(1, "rgba(139, 92, 246, 0)");
-      context.fillStyle = nebulaA;
-      context.fillRect(px - PUPIL_R, py - PUPIL_R, PUPIL_R * 2, PUPIL_R * 2);
-      const nebulaB = context.createRadialGradient(
-        px + PUPIL_R * 0.36 - driftX,
-        py + PUPIL_R * 0.3 - driftY,
-        0,
-        px + PUPIL_R * 0.36 - driftX,
-        py + PUPIL_R * 0.3 - driftY,
-        PUPIL_R * 0.9,
-      );
-      nebulaB.addColorStop(0, withAlpha(alien.tint, 0.1));
-      nebulaB.addColorStop(1, withAlpha(alien.tint, 0));
-      context.fillStyle = nebulaB;
-      context.fillRect(px - PUPIL_R, py - PUPIL_R, PUPIL_R * 2, PUPIL_R * 2);
-
-      context.globalCompositeOperation = "lighter";
       const universe = universes[side];
+
+      // 蠢く星雲の塊: 輪郭が常にうねる暗赤・深紫の霧
+      for (const blob of universe.murk) {
+        const bx = px + blob.x + Math.sin(t * 0.07 * blob.drift + blob.phase) * 11;
+        const by = py + blob.y + Math.cos(t * 0.06 * blob.drift + blob.phase * 2) * 9;
+        context.beginPath();
+        const segments = 36;
+        for (let index = 0; index <= segments; index++) {
+          const theta = (index / segments) * TAU;
+          const radius =
+            blob.r *
+            (1 +
+              0.24 * Math.sin(3 * theta + t * 0.3 * blob.drift + blob.phase) +
+              0.15 * Math.sin(5 * theta - t * 0.22 * blob.drift + blob.phase * 2));
+          const x = bx + Math.cos(theta) * radius;
+          const y = by + Math.sin(theta) * radius;
+          if (index === 0) {
+            context.moveTo(x, y);
+          } else {
+            context.lineTo(x, y);
+          }
+        }
+        context.closePath();
+        const murkGradient = context.createRadialGradient(
+          bx,
+          by,
+          blob.r * 0.1,
+          bx,
+          by,
+          blob.r * 1.2,
+        );
+        murkGradient.addColorStop(0, withAlpha(blob.color, 0.34));
+        murkGradient.addColorStop(1, withAlpha(blob.color, 0));
+        context.fillStyle = murkGradient;
+        context.fill();
+      }
+
+      // 霧の筋: 血色と菫色の細いうねり
+      context.lineCap = "round";
+      for (const wisp of universe.wisps) {
+        const wave = Math.sin(t * 0.18 + wisp.phase);
+        const x0 = px + Math.cos(wisp.a0) * wisp.r0;
+        const y0 = py + Math.sin(wisp.a0) * wisp.r0;
+        const x1 = px + Math.cos(wisp.a1) * wisp.r1;
+        const y1 = py + Math.sin(wisp.a1) * wisp.r1;
+        const am = (wisp.a0 + wisp.a1) / 2;
+        const rm = ((wisp.r0 + wisp.r1) / 2) * (0.5 + 0.35 * wave);
+        context.beginPath();
+        context.moveTo(x0, y0);
+        context.quadraticCurveTo(px + Math.cos(am) * rm, py + Math.sin(am) * rm, x1, y1);
+        context.strokeStyle = wisp.color;
+        context.lineWidth = 1.6 + wave * 0.5;
+        context.stroke();
+      }
+
+      // 脈打つ赤い残光(死にかけの星)
+      const heartbeat = 0.5 + 0.5 * Math.sin(t * 0.8 + side * 2.4);
+      const emberX = px + PUPIL_R * (side === 0 ? 0.4 : -0.42);
+      const emberY = py - PUPIL_R * 0.24;
+      const ember = context.createRadialGradient(emberX, emberY, 0, emberX, emberY, 20);
+      ember.addColorStop(0, `rgba(214, 58, 78, ${0.1 + heartbeat * 0.16})`);
+      ember.addColorStop(1, "rgba(214, 58, 78, 0)");
+      context.fillStyle = ember;
+      context.beginPath();
+      context.arc(emberX, emberY, 20, 0, TAU);
+      context.fill();
+
+      // 星: 白いコア+冷えた紫のかすかなブルーム
+      context.globalCompositeOperation = "lighter";
       for (const star of universe.stars) {
         const twinkle = 0.3 + 0.6 * (0.5 + 0.5 * Math.sin(t * star.speed + star.phase));
-        // ブルーム(淡いハロー)+コア
-        context.globalAlpha = twinkle * 0.22;
-        context.fillStyle = "#c4a8f8";
+        context.globalAlpha = twinkle * 0.14;
+        context.fillStyle = "#5f3fa8";
         context.beginPath();
         context.arc(px + star.x, py + star.y, star.r * 3, 0, TAU);
         context.fill();
@@ -495,10 +569,24 @@ export const SkillEyes = () => {
           py + sparkle.y,
           sparkle.size * (0.8 + 0.2 * pulse),
           sparkle.color,
-          pulse * 0.85,
+          pulse * 0.7,
         );
       }
       context.globalCompositeOperation = "source-over";
+
+      // 縁が闇に落ちるビネット+うっすら血の色のリム
+      const vignette = context.createRadialGradient(px, py, PUPIL_R * 0.45, px, py, PUPIL_R);
+      vignette.addColorStop(0, "rgba(2, 0, 6, 0)");
+      vignette.addColorStop(1, "rgba(2, 0, 6, 0.5)");
+      context.fillStyle = vignette;
+      context.beginPath();
+      context.arc(px, py, PUPIL_R, 0, TAU);
+      context.fill();
+      context.beginPath();
+      context.arc(px, py, PUPIL_R - 3, 0, TAU);
+      context.strokeStyle = "rgba(150, 40, 60, 0.18)";
+      context.lineWidth = 4;
+      context.stroke();
       context.restore();
 
       // 上側のハイライト弧
