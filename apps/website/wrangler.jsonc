@@ -6,4 +6,9 @@
   "main": "@tanstack/react-start/server-entry",
   // ISR 相当: Worker の前段キャッシュ(docs/architecture.md「配信キャッシュ」参照)
   "cache": { "enabled": true },
+  "routes": [
+    { "pattern": "shio.studio", "custom_domain": true },
+    { "pattern": "www.shio.studio", "custom_domain": true },
+    { "pattern": "v3.shio.studio", "custom_domain": true },
+  ],
 }
