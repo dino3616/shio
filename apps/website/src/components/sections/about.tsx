@@ -290,12 +290,12 @@ export const About = () => (
         {/* アイデンティティ: 名前(主役) → ローマ字+ハンドルの階層 */}
         <Reveal delay={0.08}>
           <div className="relative">
-            {/* 名前の背後の光だまり */}
+            {/* 名前の背後の光だまり。楕円×最終ストップの範囲が要素内に収まらないと縁が直線に見えるので注意 */}
             <div
               className="pointer-events-none absolute -inset-x-10 -inset-y-8"
               style={{
                 background:
-                  "radial-gradient(ellipse 55% 90% at 18% 45%, rgba(242, 84, 158, 0.1), transparent 70%), radial-gradient(ellipse 45% 80% at 52% 55%, rgba(139, 92, 246, 0.08), transparent 70%)",
+                  "radial-gradient(ellipse 42% 60% at 30% 45%, rgba(242, 84, 158, 0.1), transparent 68%), radial-gradient(ellipse 38% 55% at 55% 52%, rgba(139, 92, 246, 0.08), transparent 68%)",
               }}
             />
             <p className="font-name text-star relative text-4xl font-bold md:text-5xl">塩畑 晴人</p>
@@ -315,7 +315,7 @@ export const About = () => (
               className="pointer-events-none absolute -inset-x-12 -inset-y-10"
               style={{
                 background:
-                  "radial-gradient(ellipse 72% 65% at 42% 50%, rgba(196, 168, 248, 0.08), transparent 72%)",
+                  "radial-gradient(ellipse 52% 60% at 45% 50%, rgba(196, 168, 248, 0.08), transparent 68%)",
               }}
             />
             <p className="font-mincho relative text-2xl">
