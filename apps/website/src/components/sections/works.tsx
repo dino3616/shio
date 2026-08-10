@@ -1,4 +1,3 @@
-import { motion, useMotionValue, useSpring } from "motion/react";
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
@@ -6,9 +5,12 @@ import { SectionHeader } from "~/components/section-header";
 /**
  * ブラウン管を額縁にした Works(design-direction: ブラウン管=画面の中に別世界)。
  * - チャンネル=作品。ツマミや番組表で切り替えると砂嵐が一瞬走って次の番組へ
+ *   (ツマミは目的チャンネルまでの最短経路で回る)
  * - ホバーで静電ノイズが晴れる(説明はしない。触れば分かる)
- * - 筐体はカーソルで3Dチルト+無重力でゆっくり浮遊し、
- *   アンテナは遠くの星から点線の信号を受信、下からは電源ケーブルが虚空へ漂う
+ * - 画面は全チャンネルを同じグリッドセルに重ねて高さを固定し、
+ *   ガラスの井戸+四隅の減光で分厚い曲面ガラスに見せる
+ * - 筐体は無重力でゆっくり浮遊し、アンテナは遠くの星から点線の信号を受信、
+ *   下からは電源ケーブルが虚空へ漂う
  */
 
 type Channel = {
@@ -141,13 +143,13 @@ const PowerCable = () => (
 );
 
 const CrtTv = ({
-  channel,
+  current,
   burst,
   osd,
   knobTurns,
   onNext,
 }: {
-  channel: Channel;
+  current: number;
   burst: boolean;
   osd: boolean;
   knobTurns: number;
@@ -155,142 +157,150 @@ const CrtTv = ({
 }) => {
   const [isHovered, setIsHovered] = useState(false);
 
-  const targetRotateX = useMotionValue(0);
-  const targetRotateY = useMotionValue(0);
-  const rotateX = useSpring(targetRotateX, { stiffness: 120, damping: 14, mass: 0.6 });
-  const rotateY = useSpring(targetRotateY, { stiffness: 120, damping: 14, mass: 0.6 });
-
+  const channel = CHANNELS[current] ?? CHANNELS[0];
   const noiseOpacity = burst ? 0.95 : isHovered ? 0 : 0.28;
 
   return (
-    <motion.div
-      className="relative w-full max-w-2xl rounded-4xl p-7"
+    <div
+      className="relative w-full max-w-2xl -rotate-2 rounded-4xl p-7"
       style={{
-        rotateX,
-        rotateY,
-        rotateZ: -2,
-        transformPerspective: 900,
         background: "linear-gradient(160deg, #f7d3e4 0%, #f2c4dc 55%, #d8a7c4 100%)",
         boxShadow:
           "0 14px 60px rgba(139, 92, 246, 0.3), inset 0 2px 3px rgba(255, 255, 255, 0.6), inset 0 -3px 6px rgba(120, 70, 100, 0.35)",
-      }}
-      onPointerMove={(event) => {
-        const rect = event.currentTarget.getBoundingClientRect();
-        const px = (event.clientX - rect.left) / rect.width - 0.5;
-        const py = (event.clientY - rect.top) / rect.height - 0.5;
-        targetRotateX.set(-py * 9);
-        targetRotateY.set(px * 11);
       }}
       onPointerEnter={() => {
         setIsHovered(true);
       }}
       onPointerLeave={() => {
         setIsHovered(false);
-        targetRotateX.set(0);
-        targetRotateY.set(0);
       }}
     >
       <Antenna />
       <PowerCable />
       <div className="flex items-stretch gap-5">
         {/* 画面 */}
+        {/* ガラスの井戸: ひと回り暗い縁に画面を沈めて、分厚いガラスの奥行きを出す */}
         <div
-          className="crt-flicker relative min-h-72 flex-1 overflow-hidden rounded-2xl"
+          className="min-w-0 flex-1 rounded-[1.7rem] p-2"
           style={{
-            background: "radial-gradient(ellipse at 40% 35%, #222850 0%, #0e0a14 90%)",
-            boxShadow: "inset 0 0 40px rgba(0, 0, 0, 0.8)",
+            background: "linear-gradient(180deg, #c793b3, #ab7a99)",
+            boxShadow:
+              "inset 0 3px 8px rgba(60, 30, 50, 0.55), inset 0 -1px 2px rgba(255, 255, 255, 0.35)",
           }}
         >
-          {channel.soon ? (
-            /* 準備中: 砂嵐だけが流れている */
-            <div className="absolute inset-0">
-              <div
-                className="noise-dance absolute inset-0"
-                style={{
-                  backgroundImage: NOISE_URL,
-                  backgroundSize: "120px 120px",
-                  opacity: 0.5,
-                }}
-              />
-              <div className="absolute inset-0 grid place-items-center">
-                <p
-                  className="font-crt text-star/80 text-2xl tracking-widest"
-                  style={{ textShadow: "0 0 12px rgba(247, 242, 250, 0.5)" }}
-                >
-                  COMING SOON
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="relative z-0 p-9">
-              <p
-                className="font-crt text-prism text-lg tracking-wider"
-                style={{ textShadow: "0 0 10px rgba(242, 232, 92, 0.55)" }}
-              >
-                CH {channel.id} ▸ {channel.callSign}
-                <span className="crt-blink ml-1.5">▮</span>
-              </p>
-              <h3
-                className="glitch-hover font-crt text-star mt-3 cursor-default text-5xl md:text-6xl"
-                style={{ textShadow: "0 0 14px rgba(247, 242, 250, 0.4)" }}
-              >
-                {channel.title}
-              </h3>
-              <p className="text-pale mt-4 leading-relaxed">
-                {channel.lines[0]}
-                <br />
-                {channel.lines[1]}
-              </p>
-              <p className="font-mono text-ice mt-5 text-xs tracking-wider">{channel.tags}</p>
-              <a
-                href={channel.href}
-                target="_blank"
-                rel="noreferrer"
-                className="font-mono text-pink mt-6 inline-block text-sm underline-offset-4 hover:underline"
-              >
-                view project →
-              </a>
-            </div>
-          )}
-          {/* 垂直同期のロールライン */}
           <div
-            className="crt-roll pointer-events-none absolute inset-x-0 z-10 h-10"
+            className="crt-flicker relative grid overflow-hidden rounded-3xl"
             style={{
-              background:
-                "linear-gradient(to bottom, transparent, rgba(247, 242, 250, 0.05), transparent)",
+              background: "radial-gradient(ellipse at 40% 35%, #222850 0%, #0e0a14 90%)",
+              boxShadow: "inset 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 4px rgba(0, 0, 0, 0.9)",
             }}
-          />
-          {/* 走査線 */}
-          <div className="scanlines pointer-events-none absolute inset-0 z-10" />
-          {/* ガラスの映り込み(上のハイライトと下端の淡い反射でガラスの膨らみを出す) */}
-          <div
-            className="pointer-events-none absolute inset-0 z-20"
-            style={{
-              background:
-                "radial-gradient(ellipse 60% 35% at 28% 12%, rgba(255, 255, 255, 0.14), transparent 70%), radial-gradient(ellipse 70% 22% at 55% 102%, rgba(255, 255, 255, 0.05), transparent 70%)",
-            }}
-          />
-          {/* OSD: チャンネル切り替え直後に浮かぶ */}
-          <p
-            className={`font-crt pointer-events-none absolute top-3 right-5 z-30 text-2xl text-[#9df2a8] transition-opacity duration-500 ${
-              osd ? "opacity-100" : "opacity-0"
-            }`}
-            style={{ textShadow: "0 0 10px rgba(157, 242, 168, 0.7)" }}
           >
-            CH {channel.id}
-          </p>
-          {/* 静電ノイズ: ホバーで晴れ、チャンネル切り替えで一瞬吹き荒れる */}
-          <div
-            className={`pointer-events-none absolute inset-0 z-30 ${burst ? "noise-dance" : ""}`}
-            style={{
-              backgroundImage: NOISE_URL,
-              backgroundSize: "120px 120px",
-              opacity: noiseOpacity,
-              mixBlendMode: "screen",
-              transitionProperty: "opacity",
-              transitionDuration: burst ? "80ms" : "500ms",
-            }}
-          />
+            {/* 全チャンネルを同じセルに重ねて、いちばん背の高い番組で画面の高さを固定する */}
+            {CHANNELS.map((item, index) =>
+              item.soon ? (
+                <div
+                  key={item.id}
+                  className={`relative col-start-1 row-start-1 ${index === current ? "" : "invisible"}`}
+                >
+                  <div
+                    className="noise-dance absolute inset-0"
+                    style={{
+                      backgroundImage: NOISE_URL,
+                      backgroundSize: "120px 120px",
+                      opacity: 0.5,
+                    }}
+                  />
+                  <div className="absolute inset-0 grid place-items-center">
+                    <p
+                      className="font-crt text-star/80 text-2xl tracking-widest"
+                      style={{ textShadow: "0 0 12px rgba(247, 242, 250, 0.5)" }}
+                    >
+                      COMING SOON
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <div
+                  key={item.id}
+                  className={`relative z-0 col-start-1 row-start-1 p-9 ${index === current ? "" : "invisible"}`}
+                >
+                  <p
+                    className="font-crt text-prism text-lg tracking-wider"
+                    style={{ textShadow: "0 0 10px rgba(242, 232, 92, 0.55)" }}
+                  >
+                    CH {item.id} ▸ {item.callSign}
+                    <span className="crt-blink ml-1.5">▮</span>
+                  </p>
+                  <h3
+                    className="glitch-hover font-crt text-star mt-3 cursor-default text-5xl md:text-6xl"
+                    style={{ textShadow: "0 0 14px rgba(247, 242, 250, 0.4)" }}
+                  >
+                    {item.title}
+                  </h3>
+                  <p className="text-pale mt-4 leading-relaxed">
+                    {item.lines[0]}
+                    <br />
+                    {item.lines[1]}
+                  </p>
+                  <p className="font-mono text-ice mt-5 text-xs tracking-wider">{item.tags}</p>
+                  <a
+                    href={item.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="font-mono text-pink mt-6 inline-block text-sm underline-offset-4 hover:underline"
+                  >
+                    view project →
+                  </a>
+                </div>
+              ),
+            )}
+            {/* 垂直同期のロールライン */}
+            <div
+              className="crt-roll pointer-events-none absolute inset-x-0 z-10 h-10"
+              style={{
+                background:
+                  "linear-gradient(to bottom, transparent, rgba(247, 242, 250, 0.05), transparent)",
+              }}
+            />
+            {/* 走査線 */}
+            <div className="scanlines pointer-events-none absolute inset-0 z-10" />
+            {/* ガラスの膨らみ: 中央の大きなハイライト+下端の反射+四隅の暗いフォールオフ */}
+            <div
+              className="pointer-events-none absolute inset-0 z-20"
+              style={{
+                background:
+                  "radial-gradient(ellipse 60% 35% at 28% 12%, rgba(255, 255, 255, 0.16), transparent 70%), radial-gradient(ellipse 90% 70% at 50% 42%, rgba(255, 255, 255, 0.05), transparent 65%), radial-gradient(ellipse 70% 22% at 55% 102%, rgba(255, 255, 255, 0.06), transparent 70%)",
+              }}
+            />
+            <div
+              className="pointer-events-none absolute inset-0 z-20"
+              style={{
+                background:
+                  "radial-gradient(ellipse 130% 105% at 50% 50%, transparent 62%, rgba(0, 0, 0, 0.55) 98%)",
+              }}
+            />
+            {/* OSD: チャンネル切り替え直後に浮かぶ */}
+            <p
+              className={`font-crt pointer-events-none absolute top-3 right-5 z-30 text-2xl text-[#9df2a8] transition-opacity duration-500 ${
+                osd ? "opacity-100" : "opacity-0"
+              }`}
+              style={{ textShadow: "0 0 10px rgba(157, 242, 168, 0.7)" }}
+            >
+              CH {channel?.id}
+            </p>
+            {/* 静電ノイズ: ホバーで晴れ、チャンネル切り替えで一瞬吹き荒れる */}
+            <div
+              className={`pointer-events-none absolute inset-0 z-30 ${burst ? "noise-dance" : ""}`}
+              style={{
+                backgroundImage: NOISE_URL,
+                backgroundSize: "120px 120px",
+                opacity: noiseOpacity,
+                mixBlendMode: "screen",
+                transitionProperty: "opacity",
+                transitionDuration: burst ? "80ms" : "500ms",
+              }}
+            />
+          </div>
         </div>
 
         {/* 操作部: ツマミ+スピーカースリット */}
@@ -328,15 +338,18 @@ const CrtTv = ({
       {/* 脚 */}
       <div className="absolute -bottom-3.5 left-14 h-4 w-7 -skew-x-6 rounded-b bg-[#d8a7c4]" />
       <div className="absolute right-14 -bottom-3.5 h-4 w-7 skew-x-6 rounded-b bg-[#d8a7c4]" />
-    </motion.div>
+    </div>
   );
 };
 
 /** 番組表: 作品のインデックス。行をクリックするとそのチャンネルへ */
 const TvGuide = ({ current, onSelect }: { current: number; onSelect: (index: number) => void }) => (
-  <div className="font-mono text-sm">
-    <p className="text-star/60 text-xs tracking-[0.25em]">番組表 / TV GUIDE</p>
-    <ul className="mt-5 space-y-2.5">
+  <div className="bg-void/45 w-full max-w-sm rounded-2xl border border-white/10 p-6 backdrop-blur-sm lg:min-w-72">
+    <div className="flex items-baseline gap-3">
+      <p className="font-mincho text-star text-base tracking-[0.25em]">番組表</p>
+      <p className="font-mono text-star/50 text-xs tracking-[0.2em]">TV GUIDE</p>
+    </div>
+    <ul className="font-mono mt-5 space-y-1 text-sm">
       {CHANNELS.map((channel, index) => (
         <li key={channel.id}>
           <button
@@ -344,14 +357,20 @@ const TvGuide = ({ current, onSelect }: { current: number; onSelect: (index: num
             onClick={() => {
               onSelect(index);
             }}
-            className={`grid w-full cursor-pointer grid-cols-[1.1rem_3.4rem_1fr_auto] items-baseline gap-x-2 text-left transition-colors ${
-              index === current ? "text-pink" : "text-star/45 hover:text-star/80"
+            className={`grid w-full cursor-pointer grid-cols-[1rem_3.4rem_1fr_auto] items-baseline gap-x-2.5 rounded-lg px-3 py-2 text-left transition-colors ${
+              index === current
+                ? "bg-pink/15 text-pink"
+                : "text-star/55 hover:bg-white/5 hover:text-star/90"
             }`}
           >
             <span>{index === current ? "▸" : ""}</span>
             <span>CH {channel.id}</span>
             <span className="truncate">{channel.soon ? "???" : channel.title}</span>
-            <span className={`text-[11px] ${channel.soon ? "text-star/35" : "text-ice/80"}`}>
+            <span
+              className={`text-[11px] ${
+                channel.soon ? "text-star/35" : index === current ? "text-pink/80" : "text-ice/80"
+              }`}
+            >
               {channel.soon ? "準備中" : "放送中"}
             </span>
           </button>
@@ -381,7 +400,14 @@ export const Works = () => {
     if (index === current || burst) {
       return;
     }
-    setKnobTurns((turns) => turns + 1);
+    // ツマミは目的チャンネルまでの最短経路で回す(戻るときは反時計回り)
+    let delta = index - current;
+    if (delta > CHANNELS.length / 2) {
+      delta -= CHANNELS.length;
+    } else if (delta < -CHANNELS.length / 2) {
+      delta += CHANNELS.length;
+    }
+    setKnobTurns((turns) => turns + delta);
     setBurst(true);
     timeoutsRef.current.push(
       setTimeout(() => {
@@ -397,11 +423,6 @@ export const Works = () => {
     );
   };
 
-  const channel = CHANNELS[current] ?? CHANNELS[0];
-  if (channel === undefined) {
-    return null;
-  }
-
   return (
     <section id="works" className="relative z-10 px-8 pt-28 pb-44 md:px-28">
       <SectionHeader number="02" title="WORKS" jp="ブラウン管に映してます" />
@@ -412,7 +433,7 @@ export const Works = () => {
       >
         <div className="float-slower relative w-full max-w-2xl">
           <CrtTv
-            channel={channel}
+            current={current}
             burst={burst}
             osd={osd}
             knobTurns={knobTurns}
