@@ -1,4 +1,4 @@
-import { ConstellationTimeline } from "~/components/constellation-timeline";
+import { TrajectoryTimeline } from "~/components/trajectory-timeline";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
 import { SkillEyes } from "~/components/skill-eyes";
@@ -393,10 +393,10 @@ export const About = () => (
       </div>
     </Reveal>
 
-    {/* これまでの軌跡: 夜空の星座 */}
+    {/* これまでの軌跡: スクロールと同じ「降下」の向きに流れる航行軌跡 */}
     <Reveal delay={0.1} className="mt-20">
       <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">これまでの軌跡</h3>
-      <ConstellationTimeline />
+      <TrajectoryTimeline />
     </Reveal>
   </section>
 );
