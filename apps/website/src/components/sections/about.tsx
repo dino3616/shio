@@ -322,17 +322,15 @@ export const About = () => (
                   "radial-gradient(ellipse 72% 65% at 42% 50%, rgba(196, 168, 248, 0.08), transparent 72%)",
               }}
             />
-            <p className="text-pale relative text-lg leading-loose">
-              人や物事の中にある違和感や矛盾を拾って、言葉や表現にするのが好きです。
-              デザイン、音楽、服、文章など手段は違っても、
-              <em className="font-mincho text-star not-italic">「その人らしさ」</em>や
-              <em className="font-mincho text-star not-italic">「まだ名前のない感覚」</em>
-              を形にすることに惹かれます。
+            <p className="font-mincho text-pale relative text-xl tracking-[0.3em]">人間個人間</p>
+            <p className="text-pale relative mt-6 text-lg leading-loose">
+              人間と、そのあいだにあるものに興味があります。
+              ものをつくったり、言葉を考えたり、音楽を聴いたり、服を選んだり。
+              気になったものを観察して、考えて、自分なりの形にすることが好きです。
             </p>
             <p className="text-pale relative mt-5 text-lg leading-loose">
-              好奇心は強いけれど、考えすぎるところもあります。それでも結局、
-              ずっと人に興味があります。自分の中の矛盾も含めて、面白がりながら、
-              <em className="font-mincho text-pink not-italic">かたちにしていきたい</em>。
+              人との関わりは得意なことばかりではないけれど、結局ずっと人に興味があります。
+              ものごとを完成させず、矛盾を内包したまま、おもしろがれる人でいたいと思っています。
             </p>
           </div>
         </Reveal>
