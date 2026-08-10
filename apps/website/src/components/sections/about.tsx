@@ -2,6 +2,7 @@ import { ConstellationTimeline } from "~/components/constellation-timeline";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
 import { SkillEyes } from "~/components/skill-eyes";
+import { mulberry32 } from "~/lib/random";
 
 /**
  * About: 「自分は誰か」に集中するセクション(content-plan の確定構成)。
@@ -87,6 +88,136 @@ const StanceFlow = () => (
       );
     })}
   </svg>
+);
+
+/** 角丸四角形の中心から角度 angle 方向の輪郭までの距離 */
+const roundedRectRadius = (angle: number, half: number, corner: number): number => {
+  const c = Math.abs(Math.cos(angle));
+  const s = Math.abs(Math.sin(angle));
+  const m = Math.max(c, s);
+  const straight = half / m;
+  const other = (Math.min(c, s) / m) * half;
+  if (other <= half - corner) {
+    return straight;
+  }
+  const b = (half - corner) * (c + s);
+  const cc = 2 * (half - corner) ** 2 - corner ** 2;
+  return b + Math.sqrt(Math.max(b * b - cc, 0));
+};
+
+/**
+ * 細胞壁の輪郭。角丸四角形(写真の形)を margin だけ外側に膨らませ、
+ * 漂うプランクトンと同じ調和級数のうねりを乗せた5変種を返す(SMIL の d モーフ用)。
+ * 座標系は viewBox 320×320、写真は中央の 288×288(half=144)
+ */
+const createMembraneVariants = (
+  rand: () => number,
+  margin: number,
+  wobble: number,
+  corner: number,
+): string[] => {
+  const harmonics = Array.from({ length: 5 }, (_, i) => ({
+    k: i + 2,
+    amp: (wobble * (0.5 + rand() * 0.9)) / (i * 0.6 + 1),
+    phase: rand() * Math.PI * 2,
+  }));
+  const variant = (shift: number): string => {
+    const segments = 128;
+    const points: string[] = [];
+    for (let i = 0; i <= segments; i++) {
+      const angle = (i / segments) * Math.PI * 2;
+      let r = roundedRectRadius(angle, 144, corner) + margin;
+      for (const h of harmonics) {
+        r += h.amp * Math.sin(h.k * angle + h.phase + shift * (h.k % 2 === 0 ? 1 : -1));
+      }
+      points.push(
+        `${i === 0 ? "M" : "L"} ${(160 + Math.cos(angle) * r).toFixed(1)} ${(160 + Math.sin(angle) * r).toFixed(1)}`,
+      );
+    }
+    return `${points.join(" ")} Z`;
+  };
+  return [variant(0), variant(1.3), variant(2.6), variant(3.9), variant(5.2)];
+};
+
+const photoMembraneRand = mulberry32(2025);
+const PHOTO_MEMBRANE = {
+  outer: createMembraneVariants(photoMembraneRand, 22, 8, 18),
+  mid: createMembraneVariants(photoMembraneRand, 10, 6, 18),
+};
+
+const illustMembraneRand = mulberry32(613);
+const ILLUST_MEMBRANE = {
+  outer: createMembraneVariants(illustMembraneRand, 34, 15, 42),
+  mid: createMembraneVariants(illustMembraneRand, 16, 11, 42),
+};
+
+/**
+ * 写真を包む細胞壁。漂うプランクトンと同じ視覚言語
+ * (中腹が明るいリング状グラデーション+薄いストローク+絶えず蠕動する輪郭)
+ */
+const CellMembrane = ({
+  variants,
+  idPrefix,
+  dur,
+  className,
+}: {
+  variants: { outer: string[]; mid: string[] };
+  idPrefix: string;
+  dur: number;
+  className: string;
+}) => (
+  <div
+    className={`pointer-events-none absolute ${className}`}
+    aria-hidden="true"
+    style={{ filter: "drop-shadow(0 0 14px rgba(242, 132, 190, 0.25))" }}
+  >
+    <svg
+      viewBox="0 0 320 320"
+      width="100%"
+      height="100%"
+      className="overflow-visible"
+      role="presentation"
+    >
+      <defs>
+        <radialGradient id={`${idPrefix}-outer`} cx="50%" cy="50%" r="50%">
+          <stop offset="55%" stopColor="rgba(242, 178, 214, 0.05)" />
+          <stop offset="86%" stopColor="rgba(242, 178, 214, 0.34)" />
+          <stop offset="100%" stopColor="rgba(242, 178, 214, 0.14)" />
+        </radialGradient>
+        <radialGradient id={`${idPrefix}-mid`} cx="50%" cy="50%" r="50%">
+          <stop offset="55%" stopColor="rgba(166, 211, 234, 0.07)" />
+          <stop offset="86%" stopColor="rgba(166, 211, 234, 0.4)" />
+          <stop offset="100%" stopColor="rgba(166, 211, 234, 0.16)" />
+        </radialGradient>
+      </defs>
+      <path
+        fill={`url(#${idPrefix}-outer)`}
+        stroke="rgba(255, 220, 240, 0.35)"
+        strokeWidth="1"
+        vectorEffect="non-scaling-stroke"
+      >
+        <animate
+          attributeName="d"
+          values={`${variants.outer.join(";")};${variants.outer[0]}`}
+          dur={`${dur}s`}
+          repeatCount="indefinite"
+        />
+      </path>
+      <path
+        fill={`url(#${idPrefix}-mid)`}
+        stroke="rgba(214, 240, 255, 0.4)"
+        strokeWidth="1"
+        vectorEffect="non-scaling-stroke"
+      >
+        <animate
+          attributeName="d"
+          values={`${variants.mid.join(";")};${variants.mid[0]}`}
+          dur={`${dur * 0.85}s`}
+          repeatCount="indefinite"
+        />
+      </path>
+    </svg>
+  </div>
 );
 
 /**
@@ -262,24 +393,38 @@ export const About = () => (
         <div className="relative h-64 w-64 md:h-72 md:w-72">
           {/* 写真とプランクトンを同じ回転に入れて、角に沿わせる */}
           <div className="relative h-full w-full rotate-3">
+            <CellMembrane
+              variants={PHOTO_MEMBRANE}
+              idPrefix="membrane-photo"
+              dur={8.5}
+              className="-inset-4"
+            />
             <img
               src="/about-photo.jpg"
               alt="shio のポートレート"
               width={720}
               height={720}
-              className="h-full w-full rounded-2xl border border-white/15 object-cover"
+              className="relative h-full w-full rounded-2xl border border-white/15 object-cover"
               style={{ boxShadow: "0 14px 50px rgba(139, 92, 246, 0.35)" }}
             />
             <PerchedPlankton />
           </div>
-          <img
-            src="/about-illust.png"
-            alt="shio のブランドイラスト"
-            width={480}
-            height={480}
-            className="float-slower absolute -bottom-8 -left-10 w-28 -rotate-8 rounded-2xl border border-white/20 md:w-32"
-            style={{ boxShadow: "0 10px 34px rgba(242, 84, 158, 0.35)" }}
-          />
+          <div className="float-slower absolute -bottom-8 -left-10 w-28 -rotate-8 md:w-32">
+            <CellMembrane
+              variants={ILLUST_MEMBRANE}
+              idPrefix="membrane-illust"
+              dur={7}
+              className="-inset-3"
+            />
+            <img
+              src="/about-illust.png"
+              alt="shio のブランドイラスト"
+              width={480}
+              height={480}
+              className="relative w-full rounded-2xl border border-white/20"
+              style={{ boxShadow: "0 10px 34px rgba(242, 84, 158, 0.35)" }}
+            />
+          </div>
         </div>
       </Reveal>
     </div>
