@@ -89,52 +89,56 @@ const StanceFlow = () => (
   </svg>
 );
 
-/** 写真の右上角にちょこんと乗っているプランクトン */
+/**
+ * 写真の右上角にへばりつくプランクトン。
+ * 上辺と右辺の2辺に沿う三角形で、内側の斜辺だけがゆっくり不定形にうねる。
+ * 写真と同じ回転ラッパーの中に置く前提(角に正確に沿わせるため)
+ */
 const PerchedPlankton = () => (
-  <div className="absolute -top-9 -right-3 z-10 rotate-6">
+  <div className="absolute -top-2 -right-2 z-10">
     <svg
-      width="76"
-      height="68"
-      viewBox="0 0 72 64"
+      width="80"
+      height="80"
+      viewBox="0 0 80 80"
       className="overflow-visible"
       aria-hidden="true"
       role="presentation"
     >
-      {/* 外殻のにじみ */}
+      {/* 外殻のにじみ: 本体よりひとまわり大きい同形 */}
       <path
         fill="#c4a8f8"
         opacity="0.3"
-        d="M36 2 C54 0 66 12 64 28 C62 46 50 60 34 60 C18 60 4 48 6 30 C8 14 20 4 36 2 Z"
+        d="M 12 6 C 36 1 60 0 76 5 C 79 26 78 48 72 67 C 56 60 38 42 27 29 C 20 21 14 12 12 6 Z"
       >
         <animate
           attributeName="d"
-          values="M36 2 C54 0 66 12 64 28 C62 46 50 60 34 60 C18 60 4 48 6 30 C8 14 20 4 36 2 Z;M36 4 C56 2 64 16 62 30 C60 46 48 62 32 60 C16 58 6 46 8 28 C10 12 20 6 36 4 Z;M36 2 C54 0 66 12 64 28 C62 46 50 60 34 60 C18 60 4 48 6 30 C8 14 20 4 36 2 Z"
-          dur="7s"
+          values="M 12 6 C 36 1 60 0 76 5 C 79 26 78 48 72 67 C 56 60 38 42 27 29 C 20 21 14 12 12 6 Z;M 11 7 C 36 2 60 2 76 5 C 78 26 77 46 70 67 C 52 56 40 46 29 32 C 21 23 13 13 11 7 Z;M 12 6 C 36 1 60 0 76 5 C 79 26 78 48 72 67 C 56 60 38 42 27 29 C 20 21 14 12 12 6 Z"
+          dur="9s"
           repeatCount="indefinite"
         />
       </path>
-      {/* 本体 */}
+      {/* 本体: 上辺(y≈8)と右辺(x≈72)が写真の縁に沿う */}
       <path
         fill="#d8c2f5"
         opacity="0.9"
-        d="M36 8 C50 6 60 16 58 28 C56 42 46 54 34 54 C22 54 12 44 14 30 C16 18 24 10 36 8 Z"
+        d="M 16 9 C 36 5 58 4 72 8 C 75 24 74 46 70 62 C 58 56 40 40 30 28 C 24 20 19 14 16 9 Z"
       >
         <animate
           attributeName="d"
-          values="M36 8 C50 6 60 16 58 28 C56 42 46 54 34 54 C22 54 12 44 14 30 C16 18 24 10 36 8 Z;M36 10 C52 8 58 18 56 30 C54 42 44 56 32 54 C20 52 14 42 16 28 C18 16 24 12 36 10 Z;M36 8 C50 6 60 16 58 28 C56 42 46 54 34 54 C22 54 12 44 14 30 C16 18 24 10 36 8 Z"
-          dur="7s"
+          values="M 16 9 C 36 5 58 4 72 8 C 75 24 74 46 70 62 C 58 56 40 40 30 28 C 24 20 19 14 16 9 Z;M 15 10 C 36 6 58 6 72 8 C 74 26 73 44 69 62 C 54 54 42 46 32 32 C 25 23 18 15 15 10 Z;M 16 9 C 36 5 58 4 72 8 C 75 24 74 46 70 62 C 58 56 40 40 30 28 C 24 20 19 14 16 9 Z"
+          dur="9s"
           repeatCount="indefinite"
         />
       </path>
-      {/* 単眼: ゆっくりあたりを見回す */}
-      <circle cx="37" cy="30" r="9.5" fill="#ffffff" />
-      <circle cy="31" r="4.6" fill="#201a2e">
-        <animate attributeName="cx" values="35;40;35;34;35" dur="9s" repeatCount="indefinite" />
+      {/* 単眼: 角の近くの厚みのあるところ。ゆっくりあたりを見回す */}
+      <circle cx="56" cy="22" r="8.5" fill="#ffffff" />
+      <circle cy="23" r="4.2" fill="#201a2e">
+        <animate attributeName="cx" values="54;59;54;53;54" dur="9s" repeatCount="indefinite" />
       </circle>
-      <circle cx="39.5" cy="28.5" r="1.6" fill="#ffffff" />
+      <circle cx="58.5" cy="20" r="1.4" fill="#ffffff" />
       {/* ほっぺ */}
-      <circle cx="25" cy="36" r="3.2" fill="#f2549e" opacity="0.4" />
-      <circle cx="49" cy="36" r="3.2" fill="#f2549e" opacity="0.4" />
+      <circle cx="40" cy="17" r="2.8" fill="#f2549e" opacity="0.4" />
+      <circle cx="64" cy="40" r="2.8" fill="#f2549e" opacity="0.4" />
     </svg>
   </div>
 );
@@ -240,14 +244,18 @@ export const About = () => (
       {/* 写真+イラストのコラージュ: モチーフと同じく傾けて貼る */}
       <Reveal delay={0.2} className="relative self-center lg:self-start">
         <div className="relative h-64 w-64 md:h-72 md:w-72">
-          <img
-            src="/about-photo.jpg"
-            alt="shio のポートレート"
-            width={720}
-            height={720}
-            className="h-full w-full rotate-3 rounded-2xl border border-white/15 object-cover"
-            style={{ boxShadow: "0 14px 50px rgba(139, 92, 246, 0.35)" }}
-          />
+          {/* 写真とプランクトンを同じ回転に入れて、角に沿わせる */}
+          <div className="relative h-full w-full rotate-3">
+            <img
+              src="/about-photo.jpg"
+              alt="shio のポートレート"
+              width={720}
+              height={720}
+              className="h-full w-full rounded-2xl border border-white/15 object-cover"
+              style={{ boxShadow: "0 14px 50px rgba(139, 92, 246, 0.35)" }}
+            />
+            <PerchedPlankton />
+          </div>
           <img
             src="/about-illust.png"
             alt="shio のブランドイラスト"
@@ -256,7 +264,6 @@ export const About = () => (
             className="float-slower absolute -bottom-8 -left-10 w-28 -rotate-8 rounded-2xl border border-white/20 md:w-32"
             style={{ boxShadow: "0 10px 34px rgba(242, 84, 158, 0.35)" }}
           />
-          <PerchedPlankton />
         </div>
       </Reveal>
     </div>
