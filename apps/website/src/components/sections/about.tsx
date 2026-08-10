@@ -2,6 +2,7 @@ import { ConstellationTimeline } from "~/components/constellation-timeline";
 import { Reveal } from "~/components/reveal";
 import { SectionHeader } from "~/components/section-header";
 import { SkillEyes } from "~/components/skill-eyes";
+import { SwirlText } from "~/components/swirl-text";
 import { mulberry32 } from "~/lib/random";
 
 /**
@@ -322,7 +323,9 @@ export const About = () => (
                   "radial-gradient(ellipse 72% 65% at 42% 50%, rgba(196, 168, 248, 0.08), transparent 72%)",
               }}
             />
-            <p className="font-mincho text-pale relative text-xl tracking-[0.3em]">人間個人間</p>
+            <p className="font-mincho relative text-2xl">
+              <SwirlText text="人間個人間" seed={2.7} />
+            </p>
             <p className="text-pale relative mt-6 text-lg leading-loose">
               人間と、そのあいだにあるものに興味があります。
               ものをつくったり、言葉を考えたり、音楽を聴いたり、服を選んだり。
