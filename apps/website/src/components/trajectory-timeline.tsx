@@ -188,7 +188,7 @@ export const TrajectoryTimeline = () => {
     progressPath.style.strokeDashoffset = String(total);
     let progress = 0;
     const headDot = comet.querySelector<HTMLElement>('[data-comet="head"]');
-    const tailDots = [...comet.querySelectorAll<HTMLElement>('[data-comet="tail"]')];
+    const tailDots = Array.from(comet.querySelectorAll<HTMLElement>('[data-comet="tail"]'));
     const place = (element: HTMLElement, point: { x: number; y: number }) => {
       element.style.left = `${((point.x / VIEW_W) * 100).toFixed(2)}%`;
       element.style.top = `${((point.y / VIEW_H) * 100).toFixed(2)}%`;
