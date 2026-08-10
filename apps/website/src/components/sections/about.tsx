@@ -287,7 +287,7 @@ export const About = () => (
     <SectionHeader number="01" title="ABOUT" jp="こういう人間です" />
     <div className="mt-12 flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-20">
       <div className="max-w-3xl flex-1">
-        {/* アイデンティティ: 肩書き → 名前(主役) → ローマ字+ハンドルの階層 */}
+        {/* アイデンティティ: 名前(主役) → ローマ字+ハンドルの階層 */}
         <Reveal delay={0.08}>
           <div className="relative">
             {/* 名前の背後の光だまり */}
@@ -298,12 +298,7 @@ export const About = () => (
                   "radial-gradient(ellipse 55% 90% at 18% 45%, rgba(242, 84, 158, 0.1), transparent 70%), radial-gradient(ellipse 45% 80% at 52% 55%, rgba(139, 92, 246, 0.08), transparent 70%)",
               }}
             />
-            <p className="font-mono text-pink relative text-xs tracking-[0.3em]">
-              ENGINEER × DESIGNER
-            </p>
-            <p className="font-name text-star relative mt-3 text-4xl font-bold md:text-5xl">
-              塩畑 晴人
-            </p>
+            <p className="font-name text-star relative text-4xl font-bold md:text-5xl">塩畑 晴人</p>
             <div className="relative mt-4 flex flex-wrap items-center gap-3">
               <p className="font-mono text-star/60 text-sm tracking-[0.08em]">Haruto Shiohata</p>
               <span className="font-mono text-pale bg-void/50 rounded-full border border-white/15 px-3 py-1 text-xs">
@@ -324,7 +319,7 @@ export const About = () => (
               }}
             />
             <p className="font-mincho relative text-2xl">
-              <SwirlText text="人間個人間" seed={2.7} />
+              <SwirlText text="人間個人間" seed={2.1} />
             </p>
             <p className="text-pale relative mt-6 text-lg leading-loose">
               人間と、そのあいだにあるものに興味があります。

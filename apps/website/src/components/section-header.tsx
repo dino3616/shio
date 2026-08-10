@@ -28,6 +28,5 @@ export const SectionHeader = ({
         {jp}
       </span>
     </div>
-    <div className="from-pink/80 via-purple/50 mt-6 h-px w-28 bg-gradient-to-r to-transparent" />
   </Reveal>
 );
