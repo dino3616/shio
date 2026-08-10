@@ -20,6 +20,8 @@ type Channel = {
   lines: string[];
   tags: string;
   href: string;
+  /** 放送映像(リンク先の OG 画像などの静止画) */
+  image: string;
   soon?: boolean;
 };
 
@@ -31,6 +33,7 @@ const CHANNELS: Channel[] = [
     lines: ["LLM×スマートロッカーによる", "自動応対遺失物管理サービス"],
     tags: "LLM / IoT / 茨城高専",
     href: "https://dcon.ai/teams/ibaraki2025",
+    image: "/works/locker-ai-og.jpg",
   },
   {
     id: "02",
@@ -39,6 +42,7 @@ const CHANNELS: Channel[] = [
     lines: ["任意の AI クライアントと DAW と VST と", "人の Creativity を繋ぐ"],
     tags: "Rust / DAW / VST",
     href: "https://github.com/dino3616/sora",
+    image: "/works/sora-og.png",
   },
   {
     id: "03",
@@ -47,6 +51,7 @@ const CHANNELS: Channel[] = [
     lines: ["ドメイン別 Mixture-of-Experts による", "継続的汎用ウェブナビゲーションエージェント"],
     tags: "LLM / MoE / 研究論文",
     href: "https://www.ipsj.or.jp/event/taikai/87/WEB/data/pdf/5R-03.html",
+    image: "/works/webnavix-og.png",
   },
   {
     id: "04",
@@ -55,6 +60,7 @@ const CHANNELS: Channel[] = [
     lines: [],
     tags: "",
     href: "",
+    image: "",
     soon: true,
   },
 ];
@@ -222,35 +228,54 @@ const CrtTv = ({
               ) : (
                 <div
                   key={item.id}
-                  className={`relative z-0 col-start-1 row-start-1 p-9 ${index === current ? "" : "invisible"}`}
+                  className={`relative z-0 col-start-1 row-start-1 ${index === current ? "" : "invisible"}`}
                 >
-                  <p
-                    className="font-crt text-prism text-lg tracking-wider"
-                    style={{ textShadow: "0 0 10px rgba(242, 232, 92, 0.55)" }}
-                  >
-                    CH {item.id} ▸ {item.callSign}
-                    <span className="crt-blink ml-1.5">▮</span>
-                  </p>
-                  <h3
-                    className="glitch-hover font-crt text-star mt-3 cursor-default text-5xl md:text-6xl"
-                    style={{ textShadow: "0 0 14px rgba(247, 242, 250, 0.4)" }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p className="text-pale mt-4 leading-relaxed">
-                    {item.lines[0]}
-                    <br />
-                    {item.lines[1]}
-                  </p>
-                  <p className="font-mono text-ice mt-5 text-xs tracking-wider">{item.tags}</p>
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-mono text-pink mt-6 inline-block text-sm underline-offset-4 hover:underline"
-                  >
-                    view project →
-                  </a>
+                  {/* 放送映像: リンク先の OG 画像。左をスクリムで沈めてテキストを読ませる */}
+                  <img
+                    src={item.image}
+                    alt=""
+                    width={1200}
+                    height={630}
+                    loading="lazy"
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full object-cover opacity-60"
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(100deg, rgba(14, 10, 20, 0.95) 32%, rgba(14, 10, 20, 0.62) 66%, rgba(14, 10, 20, 0.32) 100%)",
+                    }}
+                  />
+                  <div className="relative p-9">
+                    <p
+                      className="font-crt text-prism text-lg tracking-wider"
+                      style={{ textShadow: "0 0 10px rgba(242, 232, 92, 0.55)" }}
+                    >
+                      CH {item.id} ▸ {item.callSign}
+                      <span className="crt-blink ml-1.5">▮</span>
+                    </p>
+                    <h3
+                      className="glitch-hover font-crt text-star mt-3 cursor-default text-5xl md:text-6xl"
+                      style={{ textShadow: "0 0 14px rgba(247, 242, 250, 0.4)" }}
+                    >
+                      {item.title}
+                    </h3>
+                    <p className="text-pale mt-4 leading-relaxed">
+                      {item.lines[0]}
+                      <br />
+                      {item.lines[1]}
+                    </p>
+                    <p className="font-mono text-ice mt-5 text-xs tracking-wider">{item.tags}</p>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-mono text-pink mt-6 inline-block text-sm underline-offset-4 hover:underline"
+                    >
+                      view project →
+                    </a>
+                  </div>
                 </div>
               ),
             )}
