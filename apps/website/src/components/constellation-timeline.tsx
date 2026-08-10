@@ -28,7 +28,7 @@ const MILESTONES: Milestone[] = [
   { date: "2025.12", label: "アクセンチュア株式会社 転籍", x: 75, y: 60, side: "bottom" },
   {
     date: "NOW",
-    label: "Accenture Song / Design & Digital Products Creative",
+    label: "Accenture Song / Design & Digital Products / Creative",
     detail: "Creative Technology Senior Analyst",
     now: true,
     x: 89,
