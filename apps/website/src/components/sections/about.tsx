@@ -284,8 +284,8 @@ const PerchedPlankton = () => (
 export const About = () => (
   <section id="about" className="relative z-10 px-8 py-28 md:px-28">
     <SectionHeader number="01" title="ABOUT" jp="こういう人間です" />
-    <div className="mt-12 flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-16">
-      <div className="max-w-2xl flex-1">
+    <div className="mt-12 flex flex-col gap-12 lg:flex-row lg:items-start lg:gap-20">
+      <div className="max-w-3xl flex-1">
         {/* アイデンティティ: 肩書き → 名前(主役) → ローマ字+ハンドルの階層 */}
         <Reveal delay={0.08}>
           <div className="relative">
@@ -314,7 +314,7 @@ export const About = () => (
 
         {/* ステートメント: 枠を持たず、縁の消える光だまりに浮かぶ言葉。名前の直後に密に置き、少し字下げして軸をずらす */}
         <Reveal delay={0.14}>
-          <div className="relative mt-7 max-w-xl md:ml-10">
+          <div className="relative mt-7 max-w-2xl md:ml-10">
             <div
               className="pointer-events-none absolute -inset-x-12 -inset-y-10"
               style={{
@@ -339,7 +339,7 @@ export const About = () => (
       </div>
 
       {/* 写真+イラストのコラージュ: モチーフと同じく傾けて貼る。溝に食い込ませる */}
-      <Reveal delay={0.2} className="relative self-center lg:mt-12 lg:-ml-16 lg:self-start">
+      <Reveal delay={0.2} className="relative self-center lg:mt-12 lg:self-start">
         <div className="relative h-64 w-64 md:h-72 md:w-72">
           {/* 写真とプランクトンを同じ回転に入れて、角に沿わせる */}
           <div className="relative h-full w-full rotate-3">
@@ -379,8 +379,8 @@ export const About = () => (
       </Reveal>
     </div>
 
-    {/* 仕事のスタンス: 3つの星を粒子が渡っていくミニ星座。ページ中央に置く */}
-    <Reveal delay={0.2} className="mt-20">
+    {/* 仕事のスタンス: 3つの星を粒子が渡っていくミニ星座。ページ中央に置き、上下に大きく間を取る */}
+    <Reveal delay={0.2} className="mt-36">
       <div className="mx-auto max-w-lg">
         <StanceFlow />
         <p className="text-star/50 mt-3 text-center text-sm leading-relaxed">
@@ -390,7 +390,7 @@ export const About = () => (
     </Reveal>
 
     {/* できること: ふたつの目(img11再解釈)。瞳の宇宙の狭間でふたりが寄り添う */}
-    <Reveal delay={0.1} className="mt-28">
+    <Reveal delay={0.1} className="mt-36">
       <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">できること</h3>
       <div className="mt-8">
         <SkillEyes />
