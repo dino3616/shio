@@ -658,19 +658,22 @@ export const SkillEyes = () => {
   }, []);
 
   return (
-    <div ref={containerRef} className="relative h-[30rem] md:h-[34rem]">
+    <div ref={containerRef} className="relative h-120 md:h-136">
       <canvas
         ref={canvasRef}
         className="absolute inset-0 h-full w-full"
         aria-hidden="true"
         role="presentation"
       />
-      {/* md+: 吹き出しは左右の縁に寄せる */}
+      {/* md+: 吹き出しは左右の縁に寄せる。ただし中心から40remを上限にして、
+          ワイド画面でチップ(=矢印の始点)が離れすぎて矢印が伸び続けるのを防ぐ */}
       {ALIENS.map((alien, alienIndex) => (
         <ul
           key={alien.title}
           className={`absolute top-1/2 hidden -translate-y-1/2 flex-col gap-3 md:flex ${
-            alienIndex === 0 ? "left-2 items-start" : "right-2 items-end"
+            alienIndex === 0
+              ? "left-[max(0.5rem,50%-40rem)] items-start"
+              : "right-[max(0.5rem,50%-40rem)] items-end"
           }`}
         >
           {alien.items.map((item, itemIndex) => (
