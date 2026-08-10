@@ -349,7 +349,7 @@ export const About = () => (
           <div className="mt-12">
             <StanceFlow />
             <p className="text-star/50 mt-3 text-sm leading-relaxed">
-              違和感に気づいて、名前を付けて、ひとつの世界に組み上げる。仕事の進め方はいつもこの順番です。
+              違和感に気づいて、名前を付けて、ひとつの世界に組み上げる。
             </p>
           </div>
         </Reveal>
@@ -379,12 +379,6 @@ export const About = () => (
               </li>
             ))}
           </ul>
-        </Reveal>
-
-        <Reveal delay={0.32}>
-          <p className="font-mono mt-12 text-xs text-[#666c96]">
-            {"\u{1F47D}"} &gt; you found nothing. yet.
-          </p>
         </Reveal>
       </div>
 
