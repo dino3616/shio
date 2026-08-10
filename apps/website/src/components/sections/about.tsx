@@ -10,13 +10,14 @@ import { mulberry32 } from "~/lib/random";
  * now 系は Logs、作品の熱量は Playground の管轄なのでここには置かない
  */
 
-const INTERESTS: { label: string; comment: string; tilt: number }[] = [
-  { label: "コード", comment: "Web標準と数学が好き", tilt: -2 },
-  { label: "グラフィック", comment: "かわいさと不穏、矛盾の同居が好き", tilt: 1.5 },
-  { label: "音楽", comment: "歌唱音声合成とメタルを行き来してる", tilt: -1 },
-  { label: "メイク", comment: "ベースメイクには一家言あり", tilt: 2 },
-  { label: "服", comment: "リメイクして着るのが好き", tilt: -1.5 },
-  { label: "ことば", comment: "倫理学を愛でてる", tilt: 1 },
+// 興味チップ: 写真の下に散らし貼りするため、傾きに加えて位置のばらつきを持つ
+const INTERESTS: { label: string; comment: string; tilt: number; dx: number; dy: number }[] = [
+  { label: "コード", comment: "Web標準と数学が好き", tilt: -3, dx: 0, dy: 0 },
+  { label: "グラフィック", comment: "かわいさと不穏、矛盾の同居が好き", tilt: 2, dx: 10, dy: 6 },
+  { label: "音楽", comment: "歌唱音声合成とメタルを行き来してる", tilt: -2, dx: -6, dy: -3 },
+  { label: "メイク", comment: "ベースメイクには一家言あり", tilt: 3, dx: 14, dy: 8 },
+  { label: "服", comment: "リメイクして着るのが好き", tilt: -4, dx: 2, dy: -5 },
+  { label: "ことば", comment: "倫理学を愛でてる", tilt: 1.5, dx: -10, dy: 10 },
 ];
 
 const STANCE_STEPS = [
@@ -321,9 +322,9 @@ export const About = () => (
           </div>
         </Reveal>
 
-        {/* ステートメント: 枠を持たず、縁の消える光だまりに浮かぶ言葉 */}
+        {/* ステートメント: 枠を持たず、縁の消える光だまりに浮かぶ言葉。名前の直後に密に置き、少し字下げして軸をずらす */}
         <Reveal delay={0.14}>
-          <div className="relative mt-10 max-w-xl">
+          <div className="relative mt-7 max-w-xl md:ml-10">
             <div
               className="pointer-events-none absolute -inset-x-12 -inset-y-10"
               style={{
@@ -333,57 +334,32 @@ export const About = () => (
             />
             <p className="text-pale relative text-lg leading-loose">
               人や物事の中にある違和感や矛盾を拾って、言葉や表現にするのが好きです。
-              デザイン、音楽、服、文章など手段は違っても、「その人らしさ」や
-              「まだ名前のない感覚」を形にすることに惹かれます。
+              デザイン、音楽、服、文章など手段は違っても、
+              <em className="font-mincho text-star not-italic">「その人らしさ」</em>や
+              <em className="font-mincho text-star not-italic">「まだ名前のない感覚」</em>
+              を形にすることに惹かれます。
             </p>
             <p className="text-pale relative mt-5 text-lg leading-loose">
               好奇心は強いけれど、考えすぎるところもあります。それでも結局、
               ずっと人に興味があります。自分の中の矛盾も含めて、面白がりながら、
-              かたちにしていきたい。
+              <em className="font-mincho text-pink not-italic">かたちにしていきたい</em>。
             </p>
           </div>
         </Reveal>
 
-        {/* 仕事のスタンス: 3つの星を粒子が渡っていくミニ星座 */}
+        {/* 仕事のスタンス: 3つの星を粒子が渡っていくミニ星座。さらに右へ流して対角線のリズムを作る */}
         <Reveal delay={0.2}>
-          <div className="mt-12">
+          <div className="mt-16 md:ml-20">
             <StanceFlow />
             <p className="text-star/50 mt-3 text-sm leading-relaxed">
               違和感に気づいて、名前を付けて、ひとつの世界に組み上げる。
             </p>
           </div>
         </Reveal>
-
-        {/* 興味: ステッカー風チップ+ホバー/フォーカスで人柄コメント */}
-        <Reveal delay={0.26}>
-          <ul className="mt-10 flex max-w-2xl flex-wrap gap-3">
-            {INTERESTS.map((interest) => (
-              <li
-                key={interest.label}
-                className="group relative"
-                style={{ rotate: `${interest.tilt}deg` }}
-              >
-                <button
-                  type="button"
-                  className="text-pale hover:border-star/70 hover:text-star focus-visible:border-star/70 bg-void/50 cursor-default rounded-full border border-white/15 px-5 py-2 text-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_6px_24px_rgba(247,242,250,0.18)] focus:outline-none"
-                >
-                  {interest.label}
-                </button>
-                {/* 人柄コメントの吹き出し */}
-                <span
-                  role="tooltip"
-                  className="bg-navy/90 text-pale pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 rounded-lg border border-white/15 px-3 py-1.5 font-mono text-[11px] whitespace-nowrap opacity-0 backdrop-blur-sm transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
-                >
-                  {interest.comment}
-                </span>
-              </li>
-            ))}
-          </ul>
-        </Reveal>
       </div>
 
-      {/* 写真+イラストのコラージュ: モチーフと同じく傾けて貼る */}
-      <Reveal delay={0.2} className="relative self-center lg:self-start">
+      {/* 写真+イラストのコラージュ: モチーフと同じく傾けて貼る。溝に食い込ませて下に興味チップを散らす */}
+      <Reveal delay={0.2} className="relative self-center lg:mt-12 lg:-ml-16 lg:self-start">
         <div className="relative h-64 w-64 md:h-72 md:w-72">
           {/* 写真とプランクトンを同じ回転に入れて、角に沿わせる */}
           <div className="relative h-full w-full rotate-3">
@@ -420,11 +396,39 @@ export const About = () => (
             />
           </div>
         </div>
+
+        {/* 興味: 写真の下にステッカーを散らし貼り。ホバー/フォーカスで人柄コメント */}
+        <ul className="relative mt-16 flex max-w-xs flex-wrap gap-x-3 gap-y-4 pl-14">
+          {INTERESTS.map((interest) => (
+            <li
+              key={interest.label}
+              className="group relative"
+              style={{
+                rotate: `${interest.tilt}deg`,
+                translate: `${interest.dx}px ${interest.dy}px`,
+              }}
+            >
+              <button
+                type="button"
+                className="text-pale hover:border-star/70 hover:text-star focus-visible:border-star/70 bg-void/50 cursor-default rounded-full border border-white/15 px-5 py-2 text-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_6px_24px_rgba(247,242,250,0.18)] focus:outline-none"
+              >
+                {interest.label}
+              </button>
+              {/* 人柄コメントの吹き出し */}
+              <span
+                role="tooltip"
+                className="bg-navy/90 text-pale pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 rounded-lg border border-white/15 px-3 py-1.5 font-mono text-[11px] whitespace-nowrap opacity-0 backdrop-blur-sm transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
+              >
+                {interest.comment}
+              </span>
+            </li>
+          ))}
+        </ul>
       </Reveal>
     </div>
 
     {/* できること: ふたつの目(img11再解釈)。瞳の宇宙の狭間でふたりが寄り添う */}
-    <Reveal delay={0.1} className="mt-20">
+    <Reveal delay={0.1} className="mt-28">
       <h3 className="font-mincho text-star/80 text-sm tracking-[0.3em]">できること</h3>
       <div className="mt-8">
         <SkillEyes />
