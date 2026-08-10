@@ -10,16 +10,6 @@ import { mulberry32 } from "~/lib/random";
  * now 系は Logs、作品の熱量は Playground の管轄なのでここには置かない
  */
 
-// 興味チップ: 写真の下に散らし貼りするため、傾きに加えて位置のばらつきを持つ
-const INTERESTS: { label: string; comment: string; tilt: number; dx: number; dy: number }[] = [
-  { label: "コード", comment: "Web標準と数学が好き", tilt: -3, dx: 0, dy: 0 },
-  { label: "グラフィック", comment: "かわいさと不穏、矛盾の同居が好き", tilt: 2, dx: 10, dy: 6 },
-  { label: "音楽", comment: "歌唱音声合成とメタルを行き来してる", tilt: -2, dx: -6, dy: -3 },
-  { label: "メイク", comment: "ベースメイクには一家言あり", tilt: 3, dx: 14, dy: 8 },
-  { label: "服", comment: "リメイクして着るのが好き", tilt: -4, dx: 2, dy: -5 },
-  { label: "ことば", comment: "倫理学を愛でてる", tilt: 1.5, dx: -10, dy: 10 },
-];
-
 const STANCE_STEPS = [
   { label: "観察する", color: "#f2c4dc" },
   { label: "ことばにする", color: "#c4a8f8" },
@@ -346,19 +336,9 @@ export const About = () => (
             </p>
           </div>
         </Reveal>
-
-        {/* 仕事のスタンス: 3つの星を粒子が渡っていくミニ星座。さらに右へ流して対角線のリズムを作る */}
-        <Reveal delay={0.2}>
-          <div className="mt-16 md:ml-20">
-            <StanceFlow />
-            <p className="text-star/50 mt-3 text-sm leading-relaxed">
-              違和感に気づいて、名前を付けて、ひとつの世界に組み上げる。
-            </p>
-          </div>
-        </Reveal>
       </div>
 
-      {/* 写真+イラストのコラージュ: モチーフと同じく傾けて貼る。溝に食い込ませて下に興味チップを散らす */}
+      {/* 写真+イラストのコラージュ: モチーフと同じく傾けて貼る。溝に食い込ませる */}
       <Reveal delay={0.2} className="relative self-center lg:mt-12 lg:-ml-16 lg:self-start">
         <div className="relative h-64 w-64 md:h-72 md:w-72">
           {/* 写真とプランクトンを同じ回転に入れて、角に沿わせる */}
@@ -396,36 +376,18 @@ export const About = () => (
             />
           </div>
         </div>
-
-        {/* 興味: 写真の下にステッカーを散らし貼り。ホバー/フォーカスで人柄コメント */}
-        <ul className="relative mt-16 flex max-w-xs flex-wrap gap-x-3 gap-y-4 pl-14">
-          {INTERESTS.map((interest) => (
-            <li
-              key={interest.label}
-              className="group relative"
-              style={{
-                rotate: `${interest.tilt}deg`,
-                translate: `${interest.dx}px ${interest.dy}px`,
-              }}
-            >
-              <button
-                type="button"
-                className="text-pale hover:border-star/70 hover:text-star focus-visible:border-star/70 bg-void/50 cursor-default rounded-full border border-white/15 px-5 py-2 text-sm backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:scale-105 hover:shadow-[0_6px_24px_rgba(247,242,250,0.18)] focus:outline-none"
-              >
-                {interest.label}
-              </button>
-              {/* 人柄コメントの吹き出し */}
-              <span
-                role="tooltip"
-                className="bg-navy/90 text-pale pointer-events-none absolute -top-9 left-1/2 -translate-x-1/2 rounded-lg border border-white/15 px-3 py-1.5 font-mono text-[11px] whitespace-nowrap opacity-0 backdrop-blur-sm transition-opacity duration-300 group-focus-within:opacity-100 group-hover:opacity-100"
-              >
-                {interest.comment}
-              </span>
-            </li>
-          ))}
-        </ul>
       </Reveal>
     </div>
+
+    {/* 仕事のスタンス: 3つの星を粒子が渡っていくミニ星座。ページ中央に置く */}
+    <Reveal delay={0.2} className="mt-20">
+      <div className="mx-auto max-w-lg">
+        <StanceFlow />
+        <p className="text-star/50 mt-3 text-center text-sm leading-relaxed">
+          違和感に気づいて、名前を付けて、ひとつの世界に組み上げる。
+        </p>
+      </div>
+    </Reveal>
 
     {/* できること: ふたつの目(img11再解釈)。瞳の宇宙の狭間でふたりが寄り添う */}
     <Reveal delay={0.1} className="mt-28">
