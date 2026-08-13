@@ -71,13 +71,17 @@ const STATIC_NOISE_SVG = encodeURIComponent(
 
 const NOISE_URL = `url("data:image/svg+xml,${STATIC_NOISE_SVG}")`;
 
-/** アンテナと、遠くの星から降ってくる点線の信号(できることの矢印と同じ言語) */
+/**
+ * アンテナと、遠くの星から降ってくる点線の信号(できることの矢印と同じ言語)。
+ * 基部は svg 座標 (70, 145) にあるので、left-1/2 から 70px 引いて水平中心を合わせ、
+ * 上方向は基部の楕円が筐体の天面(y=0)にちょうど載る高さまで引き上げる
+ */
 const Antenna = () => (
   <svg
     viewBox="0 0 380 150"
     width="380"
     height="150"
-    className="pointer-events-none absolute top-[-7.6rem] left-1/2 -translate-x-1/3 max-lg:hidden"
+    className="pointer-events-none absolute -top-37 left-1/2 -translate-x-17.5 max-lg:hidden"
     aria-hidden="true"
     role="presentation"
   >
